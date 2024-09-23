@@ -31,7 +31,6 @@
   <li> 🗓️ <strong>02/09</strong> Kickoff com a empresa Odontoprev </li>
   <li> 🗓️ <strong>30/09</strong> Mentoria online para apresentar a ideia do projeto </li>
   <li> 🗓️ <strong>07/10</strong> Entrega da Sprint 1 </li>
-  <li> 🗓️ <strong>02/09</strong> Kickoff com a empresa Odontoprev </li>
   <li> 🗓️ <strong>30/10</strong> Mentoria presencial com a empresa </li>
   <li> 🗓️ <strong>08/11</strong> Entrega da Sprint 2 </li>
 </ul>
