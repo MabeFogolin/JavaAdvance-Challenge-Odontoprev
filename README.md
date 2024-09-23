@@ -40,6 +40,23 @@
 <h2 align="left"> 🧑‍🤝‍🧑 Integrantes</h2>
 <ul>
   <li> Igor Gabriel Pereira Marcondes <strong>RM 553544 </strong></li>
+  <dl> 
+    <dt> <strong> Matérias responsáveis </strong></dt>
+    <dd>  COMPLIANCE & QUALITY ASSURANCE </dd>
+    <dd>  MOBILE APP DEVELOPMENT </dd>
+  </dl>
   <li> Maria Beatriz Reis Fogolin de Godoy <strong>RM 552669 </strong></li>
+   <dl> 
+    <dt> <strong> Matérias responsáveis </strong></dt>
+    <dd> MASTERING RELATIONAL AND NON RELATIONAL DATABASE </dd>
+    <dd> JAVA ADVANCED  </dd>
+  </dl>
   <li> Nicholas Pereira Paulo Lima Barbosa <strong>RM 552744 </strong></li>
+  <dl> 
+    <dt> <strong> Matérias responsáveis </strong></dt>
+    <dd>  ADVANCED BUSINESS DEVELOPMENT WITH .NET </dd>
+    <dd>  DEVOPS TOOLS E CLOUD COMPUTING </dd>
+    <dd>  DISRUPTIVE ARCHITECTURES: IOT, IOB & GENERATIVE IA </dd>
+ </dd>
+  </dl>
 </ul>
