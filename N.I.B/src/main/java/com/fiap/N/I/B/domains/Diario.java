@@ -18,6 +18,10 @@ import java.sql.Date;
 @Entity
 public class Diario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     private Date dataDiario;
 

@@ -33,6 +33,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    @GetMapping("/todos")
+    public ResponseEntity<List<Usuario>> buscarUsuarios() {
+        List<Usuario> usuarios = usuarioService.buscarTodos();
+        return ResponseEntity.ok(usuarios);
+    }
+
     // Buscar usuários por plano com paginação
     @GetMapping("/plano/{planoUser}/paginado")
     public ResponseEntity<Page<Usuario>> buscarPorPlanoPaginado(@PathVariable String planoUser, Pageable pageable) {
@@ -47,12 +53,31 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/usuarios/nascimento/{dataNascimento}")
+    // Buscar usuários por data de nascimento (sem paginação)
+    @GetMapping("/nascimento/{dataNascimento}")
     public ResponseEntity<List<Usuario>> getUsuariosPorDataNascimento(@PathVariable Date dataNascimento) {
-        // Lista é NullSafe
         List<Usuario> usuarios = usuarioService.buscarPorDataNascimentoEmLista(dataNascimento);
         return ResponseEntity.ok(usuarios);
     }
 
+    // Criar um novo usuário
+    @PostMapping("/usuario/criar")
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+        Usuario novoUsuario = usuarioService.criarUsuario(usuario);
+        return ResponseEntity.status(201).body(novoUsuario);
+    }
 
+    // Atualizar um usuário existente
+    @PutMapping("/cpf/{cpf}")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
+        Optional<Usuario> usuario = usuarioService.atualizarUsuario(cpf, usuarioAtualizado);
+        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Deletar um usuário
+    @DeleteMapping("/cpf/{cpf}")
+    public ResponseEntity<Void> deletarUsuario(@PathVariable String cpf) {
+        boolean deleted = usuarioService.deletarUsuario(cpf);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 }

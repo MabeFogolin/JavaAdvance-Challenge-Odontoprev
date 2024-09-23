@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Endereco {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     @Size(max = 25, message = "Rua deve ter no máximo 25 caracteres")
     private String ruaEndereco;

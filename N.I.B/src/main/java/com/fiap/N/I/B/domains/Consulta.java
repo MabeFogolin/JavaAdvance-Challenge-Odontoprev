@@ -17,6 +17,10 @@ import java.sql.Date;
 @Entity
 public class Consulta {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     private Date dataConsulta;
 

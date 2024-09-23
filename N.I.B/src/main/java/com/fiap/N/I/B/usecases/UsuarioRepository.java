@@ -11,11 +11,10 @@
 
     public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
-        Optional<Usuario> findUsuarioByCpf(String cpf);
+        Optional<Usuario> findUsuarioByCpfUser(String cpfUser);
         List<Usuario> findUsuariosByPlanoUser(String planoUser);
         Page<Usuario> findUsuariosByPlanoUser(String planoUser, Pageable pageable);
         Page<Usuario> findUsuariosByDataNascimentoUser(Date dataNascimentoUser, Pageable pageable);
         List<Usuario> findUsuariosByDataNascimentoUser(Date dataNascimentoUser);
-
 
     }

@@ -1,9 +1,6 @@
 package com.fiap.N.I.B.domains;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,9 +15,13 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Historico {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
-    @JoinColumn(name = "fk_user", referencedColumnName = "cpfUser")
-    private String fkUser;
+    @JoinColumn(name = "fk_user", referencedColumnName = "cpfUser", nullable = false)
+    private Usuario usuario; // Alterado para referenciar o objeto Usuario
 
     @NotNull
     @Size(max = 1, message = "Um caractere, podendo ser S ou N")
@@ -45,5 +46,4 @@ public class Historico {
     @NotNull
     @Size(max = 1, message = "Um caractere, podendo ser S ou N")
     private String cirurgiaHistorico;
-
 }

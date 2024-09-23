@@ -25,7 +25,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Optional<Usuario> buscarPorCpf(String cpf) {
-        return usuarioRepository.findUsuarioByCpf(cpf);
+        return usuarioRepository.findUsuarioByCpfUser(cpf);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Optional<Usuario> atualizarUsuario(String cpf, Usuario usuarioAtualizado) {
-        return usuarioRepository.findUsuarioByCpf(cpf)
+        return usuarioRepository.findUsuarioByCpfUser(cpf)
                 .map(usuario -> {
                     usuario.setNomeUser(usuarioAtualizado.getNomeUser());
                     usuario.setSobrenomeUser(usuarioAtualizado.getSobrenomeUser());
@@ -69,7 +69,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public boolean deletarUsuario(String cpf) {
-        return usuarioRepository.findUsuarioByCpf(cpf)
+        return usuarioRepository.findUsuarioByCpfUser(cpf)
                 .map(usuario -> {
                     usuarioRepository.delete(usuario);
                     return true;
