@@ -19,8 +19,7 @@ public class Historico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_user", referencedColumnName = "cpfUser", nullable = false)
+    @OneToOne
     private Usuario usuario; // Alterado para referenciar o objeto Usuario
 
     @NotNull

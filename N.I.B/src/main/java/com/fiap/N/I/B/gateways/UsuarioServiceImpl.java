@@ -1,6 +1,8 @@
 package com.fiap.N.I.B.gateways;
 
 import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
+import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
 import com.fiap.N.I.B.usecases.UsuarioService;
 import com.fiap.N.I.B.usecases.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     @Override
-    public Usuario criarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioPostResponse criarUsuario(Usuario usuarioEntrada) {
+        Optional<Usuario> usuarioBusca = usuarioRepository.findUsuarioByCpfUser(usuarioEntrada.getCpfUser());
+        if (usuarioBusca.isEmpty()) {
+            usuarioRepository.save(usuarioEntrada);
+            return new UsuarioPostResponse("Novo usuário cadastrado", usuarioEntrada);
+        } else {
+            return new UsuarioPostResponse("CPF já cadastrado no sistema", usuarioBusca.get());
+        }
     }
 
     @Override
@@ -66,6 +74,26 @@ public class UsuarioServiceImpl implements UsuarioService {
                     return usuarioRepository.save(usuario);
                 });
     }
+
+    @Override
+    public Optional<Usuario> atualizarEmailPlano(String cpf, UsuarioPatch usuarioNovoEmailPlano) {
+
+        Optional<Usuario> usuarioExistente = usuarioRepository.findUsuarioByCpfUser(cpf);
+
+        if (usuarioExistente.isPresent()) {
+            Usuario usuarioNovo = usuarioExistente.get();
+
+            usuarioNovo.setEmailUser(usuarioNovoEmailPlano.getEmailUser());
+            usuarioNovo.setPlanoUser(usuarioNovoEmailPlano.getPlanoUser());
+
+            Usuario usuarioAtualizado = usuarioRepository.save(usuarioNovo);
+
+            return Optional.of(usuarioAtualizado);
+        } else {
+            return Optional.empty();
+        }
+    }
+
 
     @Override
     public boolean deletarUsuario(String cpf) {

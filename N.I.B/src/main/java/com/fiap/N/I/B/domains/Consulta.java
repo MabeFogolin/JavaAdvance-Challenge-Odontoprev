@@ -29,10 +29,8 @@ public class Consulta {
     private String descricaoConsulta;
 
     @ManyToOne
-    @JoinColumn(name = "fk_user", referencedColumnName = "cpfUser")
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "fk_profissional", referencedColumnName = "registroProfissional")
     private Profissional profissional;
 }

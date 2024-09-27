@@ -1,7 +1,10 @@
 package com.fiap.N.I.B.gateways;
 
 import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
+import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
 import com.fiap.N.I.B.usecases.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/usuario")
 @RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+
 
     // Buscar um usuário por CPF
     @GetMapping("/cpf/{cpf}")
@@ -33,6 +37,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
+    //Buscar todos os usuários
     @GetMapping("/todos")
     public ResponseEntity<List<Usuario>> buscarUsuarios() {
         List<Usuario> usuarios = usuarioService.buscarTodos();
@@ -40,16 +45,16 @@ public class UsuarioController {
     }
 
     // Buscar usuários por plano com paginação
-    @GetMapping("/plano/{planoUser}/paginado")
-    public ResponseEntity<Page<Usuario>> buscarPorPlanoPaginado(@PathVariable String planoUser, Pageable pageable) {
-        Page<Usuario> usuarios = usuarioService.buscarPorPlanoPaginado(planoUser, pageable);
+    @GetMapping("/plano")
+    public ResponseEntity<Page<Usuario>> buscarPorPlanoPaginado(@RequestParam String planoUser, Pageable page) {
+        Page<Usuario> usuarios = usuarioService.buscarPorPlanoPaginado(planoUser, page);
         return ResponseEntity.ok(usuarios);
     }
 
     // Buscar usuários por data de nascimento com paginação
     @GetMapping("/nascimento")
-    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam Date dataNascimentoUser, Pageable pageable) {
-        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(dataNascimentoUser, pageable);
+    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam Date dataNascimentoUser, Pageable page) {
+        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(dataNascimentoUser, page);
         return ResponseEntity.ok(usuarios);
     }
 
@@ -61,10 +66,15 @@ public class UsuarioController {
     }
 
     // Criar um novo usuário
-    @PostMapping("/usuario/criar")
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-        Usuario novoUsuario = usuarioService.criarUsuario(usuario);
-        return ResponseEntity.status(201).body(novoUsuario);
+    @PostMapping("/criar")
+    public ResponseEntity<UsuarioPostResponse> criarUsuario(@RequestBody Usuario usuario) {
+        UsuarioPostResponse respostaCriacao = usuarioService.criarUsuario(usuario);
+        if(respostaCriacao.getMensagem().equals("Novo usuário cadastrado")){
+            return ResponseEntity.status(201).body(respostaCriacao);
+        }
+        else {
+            return ResponseEntity.status(409).body(respostaCriacao);
+        }
     }
 
     // Atualizar um usuário existente
@@ -80,4 +90,17 @@ public class UsuarioController {
         boolean deleted = usuarioService.deletarUsuario(cpf);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
+
+    @PatchMapping("/{cpfUser}/atualizar")
+    public ResponseEntity<Usuario> atualizarPlanoEmail(
+            @PathVariable String cpfUser,
+            @RequestBody @Valid UsuarioPatch userEmailPlano) {
+
+        Optional<Usuario> usuarioAtualizado = usuarioService.atualizarEmailPlano(cpfUser, userEmailPlano);
+
+        return usuarioAtualizado
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
