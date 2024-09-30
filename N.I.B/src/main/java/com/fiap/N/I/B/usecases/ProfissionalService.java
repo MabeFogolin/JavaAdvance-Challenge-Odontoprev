@@ -23,7 +23,6 @@ public interface ProfissionalService {
     //Retorna objetos do tipo Profissional com base no tipo cadastrado (Categoria do profissional)
     List<Profissional> buscarPorCategoria(String tipoProfissional);
 
-
     //Retorna o objeto Profissional atualizado totalmente
     Optional<Profissional> atualizarProfissional(String registroProfissional, Profissional profissionalParaAtualizar);
 

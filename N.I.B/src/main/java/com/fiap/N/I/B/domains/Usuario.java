@@ -1,7 +1,6 @@
 package com.fiap.N.I.B.domains;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,12 +12,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Embeddable
 public class Usuario {
 
     @Id
@@ -49,4 +50,5 @@ public class Usuario {
     @Email(message = "Informe um e-mail válido")
     @Size(max = 50, message = "Email deve ter no máximo 50 caracteres")
     private String emailUser;
+
 }

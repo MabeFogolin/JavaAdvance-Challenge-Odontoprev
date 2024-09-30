@@ -20,29 +20,29 @@ public class Historico {
     private Long id;
 
     @OneToOne
-    private Usuario usuario; // Alterado para referenciar o objeto Usuario
+    private Usuario usuario;
 
     @NotNull
-    @Size(max = 1, message = "Um caractere, podendo ser S ou N")
-    private String tratamentoHistorico;
+    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    private int tratamentoHistorico;
 
     @NotNull
-    @Size(max = 1, message = "Um caractere, podendo ser S ou N")
-    private String canalHistorico;
+    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    private int canalHistorico;
 
     @NotNull
-    @Size(max = 1, message = "Um caractere, podendo ser S ou N")
-    private String limpezaHistorico;
+    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    private int limpezaHistorico;
 
     @NotNull
-    @Size(max = 1, message = "Um caractere, podendo ser S ou N")
-    private String carieHistorico;
+    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    private int carieHistorico;
 
     @NotNull
-    @Size(max = 1, message = "Um caractere, podendo ser S ou N")
-    private String ortodonticoHistorico;
+    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    private int ortodonticoHistorico;
 
     @NotNull
-    @Size(max = 1, message = "Um caractere, podendo ser S ou N")
-    private String cirurgiaHistorico;
+    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    private int cirurgiaHistorico;
 }
