@@ -1,6 +1,8 @@
 package com.fiap.N.I.B.domains;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,26 +25,32 @@ public class Historico {
     private Usuario usuario;
 
     @NotNull
-    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    @Min(value = 0, message = "O valor mínimo permitido é 0")
+    @Max(value = 999, message = "O valor máximo permitido é 999")
     private int tratamentoHistorico;
 
     @NotNull
-    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    @Min(value = 0, message = "O valor mínimo permitido é 0")
+    @Max(value = 999, message = "O valor máximo permitido é 999")
     private int canalHistorico;
 
     @NotNull
-    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    @Min(value = 0, message = "O valor mínimo permitido é 0")
+    @Max(value = 999, message = "O valor máximo permitido é 999")
     private int limpezaHistorico;
 
     @NotNull
-    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    @Min(value = 0, message = "O valor mínimo permitido é 0")
+    @Max(value = 999, message = "O valor máximo permitido é 999")
     private int carieHistorico;
 
     @NotNull
-    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    @Min(value = 0, message = "O valor mínimo permitido é 0")
+    @Max(value = 999, message = "O valor máximo permitido é 999")
     private int ortodonticoHistorico;
 
     @NotNull
-    @Size(max = 3, message = "É necessário um valor inteiro, correspodente a quantidade de ocorrências")
+    @Min(value = 0, message = "O valor mínimo permitido é 0")
+    @Max(value = 999, message = "O valor máximo permitido é 999")
     private int cirurgiaHistorico;
 }

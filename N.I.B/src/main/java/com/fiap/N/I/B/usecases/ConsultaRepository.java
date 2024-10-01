@@ -3,5 +3,19 @@ package com.fiap.N.I.B.usecases;
 import com.fiap.N.I.B.domains.Consulta;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ConsultaRepository extends JpaRepository<Consulta, String> {
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+public interface ConsultaRepository extends JpaRepository<Consulta, String>{
+
+    List<Consulta> findByUsuario_CpfUser(String cpfUser);
+
+        Optional<Consulta> findConsultaByUsuario_CpfUserAndDataConsulta(String cpfUser, Date dataConsulta);
+
+    List<Consulta> findConsultaByProfissional_RegistroProfissional(String  registroProfissional);
+
+    Optional<Consulta> findConsultaByProfissional_RegistroProfissionalAndUsuario_CpfUserAndDataConsulta(String cpfUser, String registroProfissional, Date dataConsulta);
+
+
 }

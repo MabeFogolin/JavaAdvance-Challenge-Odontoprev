@@ -1,26 +1,30 @@
 package com.fiap.N.I.B.gateways.requests;
 
 import jakarta.validation.constraints.Null;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class HistoricoPatch {
 
     @Null
-    private int tratamentoHistorico;
+    private Integer tratamentoHistorico;
 
     @Null
-    private int canalHistorico;
+    private Integer canalHistorico;
 
     @Null
-    private int limpezaHistorico;
+    private Integer limpezaHistorico;
 
     @Null
-    private int carieHistorico;
+    private Integer carieHistorico;
 
     @Null
-    private int ortodonticoHistorico;
+    private Integer ortodonticoHistorico;
 
     @Null
-    private int cirurgiaHistorico;
-
-
+    private Integer cirurgiaHistorico;
 }

@@ -13,6 +13,5 @@ public interface DiarioRepository extends JpaRepository<Diario, Long> {
 
     Optional<Diario> findRegistroByUsuario_CpfUserAndDataRegistro(String cpfUser, Date dataRegistro);
 
-    Optional<Diario> findById(Long idDiario);
 }
 

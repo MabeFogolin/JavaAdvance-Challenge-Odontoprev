@@ -33,4 +33,6 @@ public class Consulta {
 
     @ManyToOne
     private Profissional profissional;
+
+
 }

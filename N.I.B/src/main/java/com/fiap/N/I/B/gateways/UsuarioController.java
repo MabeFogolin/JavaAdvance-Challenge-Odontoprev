@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,8 +55,10 @@ public class UsuarioController {
 
     // Buscar usuários por data de nascimento com paginação
     @GetMapping("/nascimento")
-    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam Date dataNascimentoUser, Pageable page) {
-        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(dataNascimentoUser, page);
+    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam String dataNascimentoUser, Pageable page) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(dataNascimentoUser, formatter);
+        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(Date.valueOf(date), page);
         return ResponseEntity.ok(usuarios);
     }
 
