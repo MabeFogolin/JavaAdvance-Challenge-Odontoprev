@@ -1,7 +1,6 @@
-package com.fiap.N.I.B.usecases;
+package com.fiap.N.I.B.usecases.Profissional;
 
 import com.fiap.N.I.B.domains.Profissional;
-import com.fiap.N.I.B.domains.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,14 +1,14 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Consulta;
 
 import com.fiap.N.I.B.domains.Consulta;
 import com.fiap.N.I.B.domains.Profissional;
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.ConsultaPatch;
 import com.fiap.N.I.B.gateways.responses.ConsultaPostResponse;
-import com.fiap.N.I.B.usecases.ConsultaRepository;
-import com.fiap.N.I.B.usecases.ConsultaService;
-import com.fiap.N.I.B.usecases.ProfissionalRepository;
-import com.fiap.N.I.B.usecases.UsuarioRepository;
+import com.fiap.N.I.B.usecases.Consulta.ConsultaRepository;
+import com.fiap.N.I.B.usecases.Consulta.ConsultaService;
+import com.fiap.N.I.B.usecases.Profissional.ProfissionalRepository;
+import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

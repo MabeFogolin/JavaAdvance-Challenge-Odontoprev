@@ -1,10 +1,8 @@
-package com.fiap.N.I.B.usecases;
+package com.fiap.N.I.B.usecases.Profissional;
 
 import com.fiap.N.I.B.domains.Profissional;
 import com.fiap.N.I.B.gateways.requests.ProfissionalPatch;
 import com.fiap.N.I.B.gateways.responses.ProfissionalPostResponse;
-import org.hibernate.query.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;

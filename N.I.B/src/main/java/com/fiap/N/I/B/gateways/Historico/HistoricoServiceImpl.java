@@ -1,12 +1,12 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Historico;
 
 import com.fiap.N.I.B.domains.Historico;
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.HistoricoPatch;
 import com.fiap.N.I.B.gateways.responses.HistoricoPostResponse;
-import com.fiap.N.I.B.usecases.HistoricoRepository;
-import com.fiap.N.I.B.usecases.HistoricoService;
-import com.fiap.N.I.B.usecases.UsuarioRepository;
+import com.fiap.N.I.B.usecases.Historico.HistoricoRepository;
+import com.fiap.N.I.B.usecases.Historico.HistoricoService;
+import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

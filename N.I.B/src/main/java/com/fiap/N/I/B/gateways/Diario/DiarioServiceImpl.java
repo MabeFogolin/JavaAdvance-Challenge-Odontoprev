@@ -1,12 +1,12 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Diario;
 
 import com.fiap.N.I.B.domains.Diario;
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.DiarioPatch;
 import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
-import com.fiap.N.I.B.usecases.DiarioRepository;
-import com.fiap.N.I.B.usecases.DiarioService;
-import com.fiap.N.I.B.usecases.UsuarioRepository;
+import com.fiap.N.I.B.usecases.Diario.DiarioRepository;
+import com.fiap.N.I.B.usecases.Diario.DiarioService;
+import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

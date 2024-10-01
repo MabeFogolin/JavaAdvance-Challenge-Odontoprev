@@ -1,9 +1,9 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Diario;
 
 import com.fiap.N.I.B.domains.Diario;
 import com.fiap.N.I.B.gateways.requests.DiarioPatch;
 import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
-import com.fiap.N.I.B.usecases.DiarioService;
+import com.fiap.N.I.B.usecases.Diario.DiarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;

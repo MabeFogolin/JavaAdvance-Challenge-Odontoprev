@@ -1,9 +1,9 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Historico;
 
 import com.fiap.N.I.B.domains.Historico;
 import com.fiap.N.I.B.gateways.requests.HistoricoPatch;
 import com.fiap.N.I.B.gateways.responses.HistoricoPostResponse;
-import com.fiap.N.I.B.usecases.HistoricoService;
+import com.fiap.N.I.B.usecases.Historico.HistoricoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

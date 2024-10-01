@@ -1,10 +1,10 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Usuario;
 
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
 import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
-import com.fiap.N.I.B.usecases.UsuarioService;
-import com.fiap.N.I.B.usecases.UsuarioRepository;
+import com.fiap.N.I.B.usecases.Usuario.UsuarioService;
+import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,4 +1,4 @@
-package com.fiap.N.I.B.usecases;
+package com.fiap.N.I.B.usecases.Consulta;
 
 import com.fiap.N.I.B.domains.Consulta;
 import org.springframework.data.jpa.repository.JpaRepository;

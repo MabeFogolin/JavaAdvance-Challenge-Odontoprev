@@ -1,4 +1,4 @@
-package com.fiap.N.I.B.usecases;
+package com.fiap.N.I.B.usecases.Usuario;
 
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.UsuarioPatch;

@@ -1,9 +1,9 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Consulta;
 
 import com.fiap.N.I.B.domains.Consulta;
 import com.fiap.N.I.B.gateways.requests.ConsultaPatch;
 import com.fiap.N.I.B.gateways.responses.ConsultaPostResponse;
-import com.fiap.N.I.B.usecases.ConsultaService;
+import com.fiap.N.I.B.usecases.Consulta.ConsultaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;

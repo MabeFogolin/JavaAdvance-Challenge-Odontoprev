@@ -1,4 +1,4 @@
-package com.fiap.N.I.B.usecases;
+package com.fiap.N.I.B.usecases.Diario;
 
 import com.fiap.N.I.B.domains.Diario;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,10 +1,10 @@
-package com.fiap.N.I.B.gateways;
+package com.fiap.N.I.B.gateways.Profissional;
 
 import com.fiap.N.I.B.domains.Profissional;
 import com.fiap.N.I.B.gateways.requests.ProfissionalPatch;
 import com.fiap.N.I.B.gateways.responses.ProfissionalPostResponse;
-import com.fiap.N.I.B.usecases.ProfissionalRepository;
-import com.fiap.N.I.B.usecases.ProfissionalService;
+import com.fiap.N.I.B.usecases.Profissional.ProfissionalRepository;
+import com.fiap.N.I.B.usecases.Profissional.ProfissionalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
