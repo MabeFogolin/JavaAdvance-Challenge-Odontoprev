@@ -73,7 +73,7 @@ public class EnderecoController {
     }
 
     // Listar todos os endereços
-    @GetMapping
+    @GetMapping("/todos")
     public ResponseEntity<List<Endereco>> listarTodos() {
         List<Endereco> enderecos = enderecoService.listarTodos();
         if (enderecos.isEmpty()) {

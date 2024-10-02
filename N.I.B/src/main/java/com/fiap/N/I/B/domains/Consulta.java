@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -22,7 +23,7 @@ public class Consulta {
     private Long id;
 
     @NotNull
-    private Date dataConsulta;
+    private LocalDate dataConsulta;
 
     @NotNull
     @Size(max = 150, message = "Descrição deve ter no máximo 150 caracteres")

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +29,10 @@ public interface UsuarioService {
     Page<Usuario> buscarPorPlanoPaginado(String planoUser, Pageable pageable);
 
     // Buscar usuários por data de nascimento com paginação
-    Page<Usuario> buscarPorDataNascimentoPaginado(Date dataNascimentoUser, Pageable pageable);
+    Page<Usuario> buscarPorDataNascimentoPaginado(LocalDate dataNascimentoUser, Pageable pageable);
 
     // Buscar usuários por data de nascimento em lista
-    List<Usuario> buscarPorDataNascimentoEmLista(Date dataNascimentoUser);
+    List<Usuario> buscarPorDataNascimentoEmLista(LocalDate dataNascimentoUser);
 
     // Atualizar um usuário existente
     Optional<Usuario> atualizarUsuario(String cpf, Usuario usuarioAtualizado);

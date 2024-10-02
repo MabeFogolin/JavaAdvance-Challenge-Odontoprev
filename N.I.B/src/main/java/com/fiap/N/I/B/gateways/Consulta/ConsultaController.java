@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +21,9 @@ public class ConsultaController {
     private final ConsultaService consultaService;
 
     // Criar nova consulta
-    @PostMapping("/criar/{cpfUser}/{registroProfissional}")
-    public ResponseEntity<ConsultaPostResponse> criarConsulta(@PathVariable String cpfUser,
-                                                              @PathVariable String registroProfissional,
+    @PostMapping("/criar")
+    public ResponseEntity<ConsultaPostResponse> criarConsulta(@RequestParam String cpfUser,
+                                                              @RequestParam String registroProfissional,
                                                               @RequestBody Consulta consultaParaInserir) {
         ConsultaPostResponse respostaCriacao = consultaService.criarConsulta(cpfUser, registroProfissional, consultaParaInserir);
         if (respostaCriacao.getMensagem().equals("Nova consulta adicionada")) {
@@ -34,8 +34,8 @@ public class ConsultaController {
     }
 
     // Buscar consultas por usuário
-    @GetMapping("/usuario/{cpfUser}")
-    public ResponseEntity<List<Consulta>> buscarConsultasPorUsuario(@PathVariable String cpfUser) {
+    @GetMapping("/usuario")
+    public ResponseEntity<List<Consulta>> buscarConsultasPorUsuario(@RequestParam String cpfUser) {
         List<Consulta> consultas = consultaService.consultasPorUsuario(cpfUser);
         if (consultas.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -45,8 +45,8 @@ public class ConsultaController {
     }
 
     // Buscar consultas por profissional
-    @GetMapping("/profissional/{registroProfissional}")
-    public ResponseEntity<List<Consulta>> buscarConsultasPorProfissional(@PathVariable String registroProfissional) {
+    @GetMapping("/profissional")
+    public ResponseEntity<List<Consulta>> buscarConsultasPorProfissional(@RequestParam String registroProfissional) {
         List<Consulta> consultas = consultaService.consultasPorProfissional(registroProfissional);
         if (consultas.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -55,29 +55,29 @@ public class ConsultaController {
         }
     }
 
-    // Atualizar uma consulta (PUT)
-    @PutMapping("/atualizar/{cpfUser}/{dataConsulta}")
-    public ResponseEntity<Consulta> atualizarConsulta(@PathVariable String cpfUser,
-                                                      @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataConsulta,
+    // Atualizar uma consulta (PUT) com data como query param
+    @PutMapping("/atualizar")
+    public ResponseEntity<Consulta> atualizarConsulta(@RequestParam String cpfUser,
+                                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta,
                                                       @RequestBody Consulta consultaParaAtualizar) {
         Optional<Consulta> consultaAtualizada = consultaService.atualizarConsultaTotalmente(cpfUser, dataConsulta, consultaParaAtualizar);
         return consultaAtualizada.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Atualizar informações específicas de uma consulta (PATCH)
-    @PatchMapping("/atualizar-informacoes/{cpfUser}/{dataConsulta}")
-    public ResponseEntity<Consulta> atualizarInformacoesConsulta(@PathVariable String cpfUser,
-                                                                 @PathVariable String registroProfissional,
-                                                                 @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataConsulta,
+    // Atualizar informações específicas de uma consulta (PATCH) com data como query param
+    @PatchMapping("/atualizar-informacoes")
+    public ResponseEntity<Consulta> atualizarInformacoesConsulta(@RequestParam String cpfUser,
+                                                                 @RequestParam String registroProfissional,
+                                                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta,
                                                                  @RequestBody ConsultaPatch consultaPatch) {
         Optional<Consulta> consultaAtualizada = consultaService.atualizarInformacoesConsulta(cpfUser, registroProfissional, dataConsulta, consultaPatch);
         return consultaAtualizada.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Deletar uma consulta
-    @DeleteMapping("/deletar/{cpfUser}/{dataConsulta}")
-    public ResponseEntity<Void> deletarConsulta(@PathVariable String cpfUser,
-                                                @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataConsulta) {
+    // Deletar uma consulta com data como query param
+    @DeleteMapping("/deletar")
+    public ResponseEntity<Void> deletarConsulta(@RequestParam String cpfUser,
+                                                @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta) {
         boolean deletado = consultaService.deletarRegistro(cpfUser, dataConsulta);
         if (deletado) {
             return ResponseEntity.noContent().build(); // 204 No Content
@@ -95,5 +95,12 @@ public class ConsultaController {
         } else {
             return ResponseEntity.ok(consultas);
         }
+    }
+
+    @GetMapping("/usuario/data")
+    public ResponseEntity<Consulta> buscarConsultaPorData(@RequestParam String cpfUser,
+                                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta) {
+        Optional<Consulta> consulta = consultaService.buscarConsultaPorData(cpfUser, dataConsulta);
+        return consulta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

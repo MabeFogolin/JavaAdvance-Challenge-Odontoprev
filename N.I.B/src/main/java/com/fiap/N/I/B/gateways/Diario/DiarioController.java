@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +21,10 @@ public class DiarioController {
     private final DiarioService diarioService;
 
     // Criar novo registro no diário
-    @PostMapping("/criar/{cpfUser}")
-    public ResponseEntity<DiarioPostResponse> criarRegistro(@PathVariable String cpfUser, @RequestBody Diario diarioParaCriar) {
+    @PostMapping("/criar")
+    public ResponseEntity<DiarioPostResponse> criarRegistro(
+            @RequestParam String cpfUser,
+            @RequestBody Diario diarioParaCriar) {
         DiarioPostResponse respostaCriacao = diarioService.inserirNoDiario(cpfUser, diarioParaCriar);
         if (respostaCriacao.getMensagem().equals("Novo registro adicionado ao diário")) {
             return ResponseEntity.status(201).body(respostaCriacao);
@@ -32,8 +34,8 @@ public class DiarioController {
     }
 
     // Buscar registros do diário por usuário
-    @GetMapping("/usuario/{cpfUser}")
-    public ResponseEntity<List<Diario>> buscarRegistrosPorUsuario(@PathVariable String cpfUser) {
+    @GetMapping("/usuario")
+    public ResponseEntity<List<Diario>> buscarRegistrosPorUsuario(@RequestParam String cpfUser) {
         List<Diario> registros = diarioService.buscarRegistrosPorUsuario(cpfUser);
         if (registros.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -42,7 +44,7 @@ public class DiarioController {
         }
     }
 
-    // Buscar registros do diário por usuário
+    // Buscar todos os registros do diário
     @GetMapping("/todos")
     public ResponseEntity<List<Diario>> buscarTodosRegistros() {
         List<Diario> registros = diarioService.buscarTodos();
@@ -53,29 +55,31 @@ public class DiarioController {
         }
     }
 
-
     // Atualizar um registro do diário
-    @PutMapping("/atualizar/{cpfUser}/{dataRegistro}")
-    public ResponseEntity<Diario> atualizarRegistro(@PathVariable String cpfUser,
-                                                    @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataRegistro,
-                                                    @RequestBody Diario diarioParaAtualizar) {
+    @PutMapping("/atualizar")
+    public ResponseEntity<Diario> atualizarRegistro(
+            @RequestParam String cpfUser,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataRegistro,
+            @RequestBody Diario diarioParaAtualizar) {
         Optional<Diario> diarioAtualizado = diarioService.atualizarRegistro(cpfUser, dataRegistro, diarioParaAtualizar);
         return diarioAtualizado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     // Atualizar informações específicas de um registro (patch)
-    @PatchMapping("/atualizar-informacoes/{cpfUser}/{dataRegistro}")
-    public ResponseEntity<Diario> atualizarInformacoesRegistro(@PathVariable String cpfUser,
-                                                               @PathVariable Date dataRegistro,
-                                                               @RequestBody DiarioPatch diarioPatch) {
+    @PatchMapping("/atualizar-informacoes")
+    public ResponseEntity<Diario> atualizarInformacoesRegistro(
+            @RequestParam String cpfUser,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataRegistro,
+            @RequestBody DiarioPatch diarioPatch) {
         Optional<Diario> diarioAtualizado = diarioService.atualizarInformacoesRegistro(cpfUser, dataRegistro, diarioPatch);
         return diarioAtualizado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Deletar um registro do diário
-    @DeleteMapping("/deletar/{cpfUser}/{dataRegistro}")
-    public ResponseEntity<Void> deletarRegistro(@PathVariable String cpfUser, @PathVariable Date dataRegistro) {
+    @DeleteMapping("/deletar")
+    public ResponseEntity<Void> deletarRegistro(
+            @RequestParam String cpfUser,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataRegistro) {
         boolean deletado = diarioService.deletarRegistro(cpfUser, dataRegistro);
         if (deletado) {
             return ResponseEntity.noContent().build(); // 204 No Content

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class ConsultaServiceImpl implements ConsultaService {
     }
 
     @Override
-    public Optional<Consulta> atualizarConsultaTotalmente(String cpfUser, Date dataConsulta, Consulta consultaParaAtualizar) {
+    public Optional<Consulta> atualizarConsultaTotalmente(String cpfUser, LocalDate dataConsulta, Consulta consultaParaAtualizar) {
         Optional<Consulta> consultaExistente = consultaRepository.findConsultaByUsuario_CpfUserAndDataConsulta(cpfUser, dataConsulta);
 
         if (consultaExistente.isPresent()) {
@@ -66,7 +67,7 @@ public class ConsultaServiceImpl implements ConsultaService {
     }
 
     @Override
-    public boolean deletarRegistro(String cpfUser, Date dataConsulta) {
+    public boolean deletarRegistro(String cpfUser, LocalDate dataConsulta) {
         return consultaRepository.findConsultaByUsuario_CpfUserAndDataConsulta(cpfUser, dataConsulta)
                 .map(consulta -> {
                     consultaRepository.delete(consulta);
@@ -75,7 +76,7 @@ public class ConsultaServiceImpl implements ConsultaService {
     }
 
     @Override
-    public Optional<Consulta> atualizarInformacoesConsulta(String cpfUser, String registroProfissional, Date dataConsulta, ConsultaPatch consultaPatch) {
+    public Optional<Consulta> atualizarInformacoesConsulta(String cpfUser, String registroProfissional, LocalDate dataConsulta, ConsultaPatch consultaPatch) {
         return consultaRepository.findConsultaByProfissional_RegistroProfissionalAndUsuario_CpfUserAndDataConsulta(cpfUser, registroProfissional, dataConsulta)
                 .map(consultaExistente -> {
                     if (consultaPatch.getDataConsulta() != null) {
@@ -96,5 +97,10 @@ public class ConsultaServiceImpl implements ConsultaService {
     @Override
     public List<Consulta> consultasPorProfissional(String registroProfissional) {
         return consultaRepository.findConsultaByProfissional_RegistroProfissional(registroProfissional);
+    }
+
+    @Override
+    public Optional<Consulta> buscarConsultaPorData(String cpfUser, LocalDate dataConsulta) {
+        return consultaRepository.findConsultaByUsuario_CpfUserAndDataConsulta(cpfUser, dataConsulta);
     }
 }

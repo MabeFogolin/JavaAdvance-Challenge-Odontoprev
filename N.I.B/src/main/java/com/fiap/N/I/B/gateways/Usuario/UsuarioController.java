@@ -11,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +21,6 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-
 
     // Buscar um usuário por CPF
     @GetMapping("/cpf/{cpf}")
@@ -39,7 +36,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    //Buscar todos os usuários
+    // Buscar todos os usuários
     @GetMapping("/todos")
     public ResponseEntity<List<Usuario>> buscarUsuarios() {
         List<Usuario> usuarios = usuarioService.buscarTodos();
@@ -55,16 +52,14 @@ public class UsuarioController {
 
     // Buscar usuários por data de nascimento com paginação
     @GetMapping("/nascimento")
-    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam String dataNascimentoUser, Pageable page) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(dataNascimentoUser, formatter);
-        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(Date.valueOf(date), page);
+    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam LocalDate dataNascimentoUser, Pageable page) {
+        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(dataNascimentoUser, page);
         return ResponseEntity.ok(usuarios);
     }
 
     // Buscar usuários por data de nascimento (sem paginação)
     @GetMapping("/nascimento/{dataNascimento}")
-    public ResponseEntity<List<Usuario>> getUsuariosPorDataNascimento(@PathVariable Date dataNascimento) {
+    public ResponseEntity<List<Usuario>> getUsuariosPorDataNascimento(@PathVariable LocalDate dataNascimento) {
         List<Usuario> usuarios = usuarioService.buscarPorDataNascimentoEmLista(dataNascimento);
         return ResponseEntity.ok(usuarios);
     }
@@ -73,10 +68,9 @@ public class UsuarioController {
     @PostMapping("/criar")
     public ResponseEntity<UsuarioPostResponse> criarUsuario(@RequestBody Usuario usuario) {
         UsuarioPostResponse respostaCriacao = usuarioService.criarUsuario(usuario);
-        if(respostaCriacao.getMensagem().equals("Novo usuário cadastrado")){
+        if (respostaCriacao.getMensagem().equals("Novo usuário cadastrado")) {
             return ResponseEntity.status(201).body(respostaCriacao);
-        }
-        else {
+        } else {
             return ResponseEntity.status(409).body(respostaCriacao);
         }
     }
@@ -95,6 +89,7 @@ public class UsuarioController {
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    // Atualizar plano e email do usuário
     @PatchMapping("/{cpfUser}/atualizar")
     public ResponseEntity<Usuario> atualizarPlanoEmail(
             @PathVariable String cpfUser,
@@ -106,5 +101,4 @@ public class UsuarioController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }

@@ -11,8 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
-import java.sql.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -40,7 +39,7 @@ public class Usuario {
     private String telefoneUser;
 
     @NotNull
-    private Date dataNascimentoUser;
+    private LocalDate dataNascimentoUser;
 
     @NotNull
     @Size(max = 20, message = "Tipo de plano deve ter no máximo 20 caracteres")

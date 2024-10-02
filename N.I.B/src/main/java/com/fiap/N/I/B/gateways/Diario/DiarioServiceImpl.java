@@ -10,6 +10,7 @@ import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class DiarioServiceImpl implements DiarioService {
     }
 
     @Override
-    public Optional<Diario> atualizarRegistro(String cpfUser, Date dataRegistro, Diario registroParaAtualizar) {
+    public Optional<Diario> atualizarRegistro(String cpfUser, LocalDate dataRegistro, Diario registroParaAtualizar) {
         Optional<Diario> retornoRegistro = diarioRepository.findRegistroByUsuario_CpfUserAndDataRegistro(cpfUser, dataRegistro);
 
         if (retornoRegistro.isPresent()) {
@@ -64,7 +65,7 @@ public class DiarioServiceImpl implements DiarioService {
     }
 
     @Override
-    public boolean deletarRegistro(String cpfUser, Date dataRegistro) {
+    public boolean deletarRegistro(String cpfUser, LocalDate dataRegistro) {
         return diarioRepository.findRegistroByUsuario_CpfUserAndDataRegistro(cpfUser, dataRegistro)
                 .map(registro -> {
                     diarioRepository.delete(registro);
@@ -73,7 +74,7 @@ public class DiarioServiceImpl implements DiarioService {
     }
 
     @Override
-    public Optional<Diario> atualizarInformacoesRegistro(String cpfUser, Date dataRegistro, DiarioPatch registroParaAtualizar) {
+    public Optional<Diario> atualizarInformacoesRegistro(String cpfUser, LocalDate dataRegistro, DiarioPatch registroParaAtualizar) {
         return diarioRepository.findRegistroByUsuario_CpfUserAndDataRegistro(cpfUser, dataRegistro)
                 .map(registroExistente -> {
                     // Atualiza os campos apenas se os valores do patch não forem nulos

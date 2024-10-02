@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,12 +52,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Page<Usuario> buscarPorDataNascimentoPaginado(Date dataNascimentoUser, Pageable pageable) {
+    public Page<Usuario> buscarPorDataNascimentoPaginado(LocalDate dataNascimentoUser, Pageable pageable) {
         return usuarioRepository.findUsuariosByDataNascimentoUser(dataNascimentoUser, pageable);
     }
 
     @Override
-    public List<Usuario> buscarPorDataNascimentoEmLista(Date dataNascimentoUser) {
+    public List<Usuario> buscarPorDataNascimentoEmLista(LocalDate dataNascimentoUser) {
         return usuarioRepository.findUsuariosByDataNascimentoUser(dataNascimentoUser);
     }
 
@@ -77,23 +77,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Optional<Usuario> atualizarEmailPlano(String cpf, UsuarioPatch usuarioNovoEmailPlano) {
-
         Optional<Usuario> usuarioExistente = usuarioRepository.findUsuarioByCpfUser(cpf);
-
         if (usuarioExistente.isPresent()) {
             Usuario usuarioNovo = usuarioExistente.get();
-
             usuarioNovo.setEmailUser(usuarioNovoEmailPlano.getEmailUser());
             usuarioNovo.setPlanoUser(usuarioNovoEmailPlano.getPlanoUser());
-
             Usuario usuarioAtualizado = usuarioRepository.save(usuarioNovo);
-
             return Optional.of(usuarioAtualizado);
         } else {
             return Optional.empty();
         }
     }
-
 
     @Override
     public boolean deletarUsuario(String cpf) {
