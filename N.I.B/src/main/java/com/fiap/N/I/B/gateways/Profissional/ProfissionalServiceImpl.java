@@ -74,14 +74,20 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         if (profissionalExistente.isPresent()) {
             Profissional profissionalNovo = profissionalExistente.get();
 
-            profissionalNovo.setEmailProfissional(profissionalPatch.getEmailProfissional());
-            profissionalNovo.setTelefoneProfissional(profissionalPatch.getTelefoneProfissional());
+            if (profissionalPatch.getEmailProfissional() != null) {
+                profissionalNovo.setEmailProfissional(profissionalPatch.getEmailProfissional());
+            }
 
-           Profissional profissionalAtualizado = profissionalRepository.save(profissionalNovo);
+            if (profissionalPatch.getTelefoneProfissional() != null) {
+                profissionalNovo.setTelefoneProfissional(profissionalPatch.getTelefoneProfissional());
+            }
+
+            Profissional profissionalAtualizado = profissionalRepository.save(profissionalNovo);
 
             return Optional.of(profissionalAtualizado);
         } else {
             return Optional.empty();
         }
     }
+
 }

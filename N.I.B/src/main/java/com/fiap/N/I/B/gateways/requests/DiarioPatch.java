@@ -1,7 +1,6 @@
 package com.fiap.N.I.B.gateways.requests;
 
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,19 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DiarioPatch {
 
-    @Null
-    @Max(1)
-    private int escovacaoDiario;
+    @Max(99)
+    private Integer escovacaoDiario; // Alterado para Integer
 
-    @Null
-    @Max(1)
-    private int usoFioDiario;
+    @Max(99)
+    private Integer usoFioDiario; // Alterado para Integer
 
-    @Null
-    @Max(1)
-    private int usoEnxaguanteDiario;
+    @Max(99)
+    private Integer usoEnxaguanteDiario; // Alterado para Integer
 
-    @Null
     @Size(max = 30, message = "Sintoma deve ter no máximo 30 caracteres")
     private String sintomaDiario;
 }

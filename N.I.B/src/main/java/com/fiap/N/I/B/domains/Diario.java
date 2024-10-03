@@ -27,15 +27,15 @@ public class Diario {
     private LocalDate dataRegistro;
 
     @NotNull
-    @Max(1)
+    @Max(99)
     private int escovacaoDiario;
 
     @NotNull
-    @Max(1)
+    @Max(99)
     private int usoFioDiario;
 
     @NotNull
-    @Max(1)
+    @Max(99)
     private int usoEnxaguanteDiario;
 
 
