@@ -76,27 +76,20 @@ public class DiarioServiceImpl implements DiarioService {
     public Optional<Diario> atualizarInformacoesRegistro(String cpfUser, LocalDate dataRegistro, DiarioPatch registroParaAtualizar) {
         return diarioRepository.findRegistroByUsuario_CpfUserAndDataRegistro(cpfUser, dataRegistro)
                 .map(registroExistente -> {
-                    // Verifica se o valor do patch não é nulo antes de atualizar
-                    if (registroParaAtualizar.getEscovacaoDiario() != null) {
-                        registroExistente.setEscovacaoDiario(registroParaAtualizar.getEscovacaoDiario());
-                    }
+                    // Atualiza os campos apenas se os valores do patch não forem nulos
+                    Optional.ofNullable(registroParaAtualizar.getEscovacaoDiario())
+                            .ifPresent(registroExistente::setEscovacaoDiario);
 
-                    if (registroParaAtualizar.getUsoFioDiario() != null) {
-                        registroExistente.setUsoFioDiario(registroParaAtualizar.getUsoFioDiario());
-                    }
+                    Optional.ofNullable(registroParaAtualizar.getUsoFioDiario())
+                            .ifPresent(registroExistente::setUsoFioDiario);
 
-                    if (registroParaAtualizar.getUsoEnxaguanteDiario() != null) {
-                        registroExistente.setUsoEnxaguanteDiario(registroParaAtualizar.getUsoEnxaguanteDiario());
-                    }
+                    Optional.ofNullable(registroParaAtualizar.getUsoEnxaguanteDiario())
+                            .ifPresent(registroExistente::setUsoEnxaguanteDiario);
 
-                    if (registroParaAtualizar.getSintomaDiario() != null) {
-                        registroExistente.setSintomaDiario(registroParaAtualizar.getSintomaDiario());
-                    }
-
+                    Optional.ofNullable(registroParaAtualizar.getSintomaDiario())
+                            .ifPresent(registroExistente::setSintomaDiario);
                     return diarioRepository.save(registroExistente);
                 });
     }
-
 }
-
 

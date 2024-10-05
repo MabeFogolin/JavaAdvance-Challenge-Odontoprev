@@ -66,6 +66,7 @@ public class ProfissionalServiceImpl implements ProfissionalService {
                 }).orElse(false);
     }
 
+
     @Override
     public Optional<Profissional> atualizarEmailTelefone(String registroProfissional, ProfissionalPatch profissionalPatch) {
         Optional<Profissional> profissionalExistente = profissionalRepository.findProfissionalByRegistroProfissional(registroProfissional);
@@ -73,20 +74,14 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         if (profissionalExistente.isPresent()) {
             Profissional profissionalNovo = profissionalExistente.get();
 
-            if (profissionalPatch.getEmailProfissional() != null) {
-                profissionalNovo.setEmailProfissional(profissionalPatch.getEmailProfissional());
-            }
+            profissionalNovo.setEmailProfissional(profissionalPatch.getEmailProfissional());
+            profissionalNovo.setTelefoneProfissional(profissionalPatch.getTelefoneProfissional());
 
-            if (profissionalPatch.getTelefoneProfissional() != null) {
-                profissionalNovo.setTelefoneProfissional(profissionalPatch.getTelefoneProfissional());
-            }
-
-            Profissional profissionalAtualizado = profissionalRepository.save(profissionalNovo);
+           Profissional profissionalAtualizado = profissionalRepository.save(profissionalNovo);
 
             return Optional.of(profissionalAtualizado);
         } else {
             return Optional.empty();
         }
     }
-
 }
