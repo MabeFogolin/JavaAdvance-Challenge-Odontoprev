@@ -1,0 +1,52 @@
+package com.fiap.N.I.B.domains;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Diario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+<<<<<<< HEAD
+=======
+
+    @NotNull
+    private LocalDate dataRegistro;
+>>>>>>> 52eb5227fa1e128f997f2972d78a3fef1af20287
+
+    @NotNull
+    private LocalDate dataRegistro;
+
+    @NotNull
+    @Max(1)
+    private int escovacaoDiario;
+
+    @NotNull
+    @Max(1)
+    private int usoFioDiario;
+
+    @NotNull
+    @Max(1)
+    private int usoEnxaguanteDiario;
+
+
+    @Size(max = 30, message = "Sintoma deve ter no máximo 30 caracteres")
+    private String sintomaDiario;
+
+    @ManyToOne
+    private Usuario usuario;
+}
