@@ -12,19 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DiarioPatch {
 
-    @Null
-    @Max(1)
+    @Max(99)
     private int escovacaoDiario;
 
-    @Null
-    @Max(1)
+    @Max(99)
     private int usoFioDiario;
 
-    @Null
-    @Max(1)
+    @Max(99)
     private int usoEnxaguanteDiario;
 
-    @Null
     @Size(max = 30, message = "Sintoma deve ter no máximo 30 caracteres")
     private String sintomaDiario;
 }

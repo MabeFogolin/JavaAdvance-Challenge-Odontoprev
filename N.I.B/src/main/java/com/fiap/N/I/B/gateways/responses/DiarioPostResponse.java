@@ -11,6 +11,4 @@ public class DiarioPostResponse {
     private String mensagem;
     private Diario diario;
 
-
-
 }

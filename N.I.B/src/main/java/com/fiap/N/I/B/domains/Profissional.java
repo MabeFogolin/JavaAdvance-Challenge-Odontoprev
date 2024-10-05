@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -37,7 +38,7 @@ public class Profissional {
     private String tipoProfissional;
 
     @NotNull
-    private Date dataInscricaoProfissional;
+    private LocalDate dataInscricaoProfissional;
 
     @Id
     @NotNull

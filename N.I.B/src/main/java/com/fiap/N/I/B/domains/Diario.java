@@ -23,7 +23,6 @@ public class Diario {
     private Long id;
 
     @NotNull
-//    @Temporal(TemporalType.DATE)
     private LocalDate dataRegistro;
 
     @NotNull

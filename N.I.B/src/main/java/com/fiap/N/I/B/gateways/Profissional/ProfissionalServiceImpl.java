@@ -66,7 +66,6 @@ public class ProfissionalServiceImpl implements ProfissionalService {
                 }).orElse(false);
     }
 
-
     @Override
     public Optional<Profissional> atualizarEmailTelefone(String registroProfissional, ProfissionalPatch profissionalPatch) {
         Optional<Profissional> profissionalExistente = profissionalRepository.findProfissionalByRegistroProfissional(registroProfissional);

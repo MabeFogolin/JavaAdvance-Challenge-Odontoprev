@@ -21,7 +21,7 @@ public class ProfissionalController {
 
     // Buscar profissional por registro
     @GetMapping("/registroProfissional/{registroProfissional}")
-    public ResponseEntity<Profissional> buscarPorRegistro(@PathVariable String registroProfissional) {
+        public ResponseEntity<Profissional> buscarPorRegistro(@PathVariable String registroProfissional) {
         Optional<Profissional> profissional = profissionalService.buscarProfissional(registroProfissional);
         return profissional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

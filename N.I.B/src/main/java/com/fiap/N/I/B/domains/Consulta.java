@@ -30,9 +30,11 @@ public class Consulta {
     private String descricaoConsulta;
 
     @ManyToOne
+    @NotNull
     private Usuario usuario;
 
     @ManyToOne
+    @NotNull
     private Profissional profissional;
 
 

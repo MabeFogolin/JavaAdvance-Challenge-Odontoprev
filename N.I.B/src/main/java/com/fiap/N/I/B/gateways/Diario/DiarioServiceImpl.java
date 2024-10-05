@@ -25,7 +25,6 @@ public class DiarioServiceImpl implements DiarioService {
     @Override
     public DiarioPostResponse inserirNoDiario(String cpfUser, Diario registroParaInserir) {
         Optional<Usuario> usuario = usuarioRepository.findUsuarioByCpfUser(cpfUser);
-
         if (usuario.isPresent()) {
             registroParaInserir.setUsuario(usuario.get());
             diarioRepository.save(registroParaInserir);
