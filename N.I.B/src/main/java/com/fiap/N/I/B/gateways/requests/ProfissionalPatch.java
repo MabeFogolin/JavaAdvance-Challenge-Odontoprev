@@ -8,8 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ProfissionalPatch {
 
-    @NotNull
+
     private String telefoneProfissional;
-    @NotNull
+
     private String emailProfissional;
 }
