@@ -40,5 +40,4 @@ public class Consulta {
     @JsonIgnore
     private Profissional profissional;
 
-
 }

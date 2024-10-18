@@ -46,15 +46,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findUsuariosByPlanoUser(planoUser);
     }
 
-    @Override
-    public Page<Usuario> buscarPorPlanoPaginado(String planoUser, Pageable pageable) {
-        return usuarioRepository.findUsuariosByPlanoUser(planoUser, pageable);
-    }
-
-    @Override
-    public Page<Usuario> buscarPorDataNascimentoPaginado(LocalDate dataNascimentoUser, Pageable pageable) {
-        return usuarioRepository.findUsuariosByDataNascimentoUser(dataNascimentoUser, pageable);
-    }
 
     @Override
     public List<Usuario> buscarPorDataNascimentoEmLista(LocalDate dataNascimentoUser) {

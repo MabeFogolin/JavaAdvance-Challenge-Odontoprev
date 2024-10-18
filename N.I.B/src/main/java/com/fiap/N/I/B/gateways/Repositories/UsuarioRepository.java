@@ -13,7 +13,5 @@
 
         Optional<Usuario> findByCpfUser(String cpf);
         List<Usuario> findUsuariosByPlanoUser(String planoUser);
-        Page<Usuario> findUsuariosByPlanoUser(String planoUser, Pageable pageable);
-        Page<Usuario> findUsuariosByDataNascimentoUser(LocalDate dataNascimentoUser, Pageable pageable);
         List<Usuario> findUsuariosByDataNascimentoUser(LocalDate dataNascimentoUser);
     }

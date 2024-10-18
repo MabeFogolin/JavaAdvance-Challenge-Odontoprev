@@ -8,14 +8,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -23,95 +24,135 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
-public class UsuarioController extends RepresentationModel<UsuarioController> {
+public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
     // Buscar um usuário por CPF
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<Usuario> buscarPorCpf(@PathVariable String cpf) {
+    public ResponseEntity<EntityModel<Usuario>> buscarPorCpf(@PathVariable String cpf) {
         Optional<Usuario> usuario = usuarioService.buscarPorCpf(cpf);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
-    // Buscar usuários por plano
-    @GetMapping("/plano/{planoUser}")
-    public ResponseEntity<List<Usuario>> buscarPorPlano(@PathVariable String planoUser) {
-        List<Usuario> usuarios = usuarioService.buscarPorPlano(planoUser);
-        return ResponseEntity.ok(usuarios);
-    }
-
-    // Buscar todos os usuários
-    @GetMapping("/todos")
-    public ResponseEntity<List<Usuario>> buscarUsuarios() {
-        List<Usuario> usuarios = usuarioService.buscarTodos();
-        return ResponseEntity.ok(usuarios);
-    }
-
-    // Buscar usuários por plano com paginação
-    @GetMapping("/plano")
-    public ResponseEntity<Page<Usuario>> buscarPorPlanoPaginado(@RequestParam String planoUser, Pageable page) {
-        Page<Usuario> usuarios = usuarioService.buscarPorPlanoPaginado(planoUser, page);
-        return ResponseEntity.ok(usuarios);
-    }
-
-    // Buscar usuários por data de nascimento com paginação
-    @GetMapping("/nascimento")
-    public ResponseEntity<Page<Usuario>> buscarPorDataNascimento(@RequestParam LocalDate dataNascimentoUser, Pageable page) {
-        Page<Usuario> usuarios = usuarioService.buscarPorDataNascimentoPaginado(dataNascimentoUser, page);
-        return ResponseEntity.ok(usuarios);
-    }
-
-    // Buscar usuários por data de nascimento (sem paginação)
-    @GetMapping("/nascimento/{dataNascimento}")
-    public ResponseEntity<List<Usuario>> getUsuariosPorDataNascimento(@PathVariable LocalDate dataNascimento) {
-        List<Usuario> usuarios = usuarioService.buscarPorDataNascimentoEmLista(dataNascimento);
-        return ResponseEntity.ok(usuarios);
-    }
-
-    // Criar um novo usuário
-    @PostMapping("/criar")
-    public ResponseEntity<UsuarioPostResponse> criarUsuario(@RequestBody Usuario usuario) {
-        UsuarioPostResponse respostaCriacao = usuarioService.criarUsuario(usuario);
-        if (respostaCriacao.getMensagem().equals("Novo usuário cadastrado")) {
-
-            Link link = linkTo(UsuarioController.class).slash(usuario.getCpfUser()).withSelfRel();
-            respostaCriacao.add(link);
-
-            return ResponseEntity.status(201).body(respostaCriacao);
-        } else {
-            return ResponseEntity.status(409).body(respostaCriacao);
-        }
-    }
-
-    @PutMapping("/cpf/{cpf}")
-    public ResponseEntity<RepresentationModel<Usuario>> atualizarUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
-        Optional<Usuario> usuario = usuarioService.atualizarUsuario(cpf, usuarioAtualizado);
         return usuario.map(u -> {
-            RepresentationModel<Usuario> resource = new RepresentationModel<>((Iterable<Link>) u);
+            EntityModel<Usuario> resource = EntityModel.of(u);
             Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(cpf)).withSelfRel();
+            Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
             resource.add(selfLink);
+            resource.add(allUsersLink);
             return ResponseEntity.ok(resource);
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Deletar um usuário
+    @GetMapping("/plano/{planoUser}")
+    public ResponseEntity<List<EntityModel<Usuario>>> buscarPorPlano(@PathVariable String planoUser) {
+        List<Usuario> usuarios = usuarioService.buscarPorPlano(planoUser);
+
+        List<EntityModel<Usuario>> usuariosPorPlanoComLinks = usuarios.stream().map(usuario -> {
+            EntityModel<Usuario> resource = EntityModel.of(usuario);
+            Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(usuario.getCpfUser())).withSelfRel();
+            Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
+            resource.add(selfLink);
+            resource.add(allUsersLink);
+            return resource;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(usuariosPorPlanoComLinks);
+    }
+
+    // Buscar todos os usuários
+    @GetMapping("/todos")
+    public ResponseEntity<List<EntityModel<Usuario>>> buscarUsuarios() {
+        List<Usuario> usuarios = usuarioService.buscarTodos();
+
+        List<EntityModel<Usuario>> todosUsuariosComLink = usuarios.stream().map(usuario -> {
+            EntityModel<Usuario> resource = EntityModel.of(usuario);
+            Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(usuario.getCpfUser())).withSelfRel();
+            Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
+
+            resource.add(selfLink);
+            resource.add(allUsersLink);
+
+            return resource;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(todosUsuariosComLink);
+    }
+
+    // Buscar usuários por data de nascimento (sem paginação)
+    @GetMapping("/nascimento/{dataNascimento}")
+    public ResponseEntity<List<EntityModel<Usuario>>> getUsuariosPorDataNascimento(@PathVariable LocalDate dataNascimento) {
+        List<Usuario> usuarios = usuarioService.buscarPorDataNascimentoEmLista(dataNascimento);
+
+        List<EntityModel<Usuario>> usuariosComLinks = usuarios.stream().map(usuario -> {
+            EntityModel<Usuario> resource = EntityModel.of(usuario);
+            Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(usuario.getCpfUser())).withSelfRel();
+            Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
+
+            resource.add(selfLink);
+            resource.add(allUsersLink);
+
+            return resource;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(usuariosComLinks);
+    }
+
+    // Criar um novo usuário
+    @PostMapping("/criar")
+    public ResponseEntity<EntityModel<UsuarioPostResponse>> criarUsuario(@RequestBody Usuario usuario) {
+        UsuarioPostResponse respostaCriacao = usuarioService.criarUsuario(usuario);
+
+        EntityModel<UsuarioPostResponse> resource = EntityModel.of(respostaCriacao);
+        Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(usuario.getCpfUser())).withSelfRel();
+        Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
+
+        resource.add(selfLink);
+        resource.add(allUsersLink);
+
+        return ResponseEntity.status(201).body(resource);
+    }
+
+    // Atualizar um usuário por CPF
+    @PutMapping("/cpf/{cpf}")
+    public ResponseEntity<EntityModel<Usuario>> atualizarUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
+        Optional<Usuario> usuario = usuarioService.atualizarUsuario(cpf, usuarioAtualizado);
+
+        return usuario.map(u -> {
+            EntityModel<Usuario> resource = EntityModel.of(u);
+            Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(cpf)).withSelfRel();
+            Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
+
+            resource.add(selfLink);
+            resource.add(allUsersLink);
+
+            return ResponseEntity.ok(resource);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Atualizar plano e email do usuário
+    @PatchMapping("/{cpfUser}/atualizar")
+    public ResponseEntity<EntityModel<Usuario>> atualizarPlanoEmail(
+            @PathVariable String cpfUser,
+            @RequestBody @Valid UsuarioPatch userEmailPlano) {
+
+        Optional<Usuario> usuarioAtualizado = usuarioService.atualizarEmailPlano(cpfUser, userEmailPlano);
+
+        return usuarioAtualizado.map(u -> {
+            EntityModel<Usuario> resource = EntityModel.of(u);
+            Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(cpfUser)).withSelfRel();
+            Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
+
+            resource.add(selfLink);
+            resource.add(allUsersLink);
+
+            return ResponseEntity.ok(resource);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/cpf/{cpf}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable String cpf) {
         boolean deleted = usuarioService.deletarUsuario(cpf);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // Atualizar plano e email do usuário
-    @PatchMapping("/{cpfUser}/atualizar")
-    public ResponseEntity<Usuario> atualizarPlanoEmail(
-            @PathVariable String cpfUser,
-            @RequestBody @Valid UsuarioPatch userEmailPlano) {
-
-        Optional<Usuario> usuarioAtualizado = usuarioService.atualizarEmailPlano(cpfUser, userEmailPlano);
-
-        return usuarioAtualizado
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 }

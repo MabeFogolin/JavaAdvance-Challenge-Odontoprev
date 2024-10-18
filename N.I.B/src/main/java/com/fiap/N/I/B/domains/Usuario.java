@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -53,6 +54,7 @@ public class Usuario extends RepresentationModel<Usuario> {
     @Size(max = 50, message = "Email deve ter no máximo 50 caracteres")
     private String emailUser;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Diario> diarios;
 

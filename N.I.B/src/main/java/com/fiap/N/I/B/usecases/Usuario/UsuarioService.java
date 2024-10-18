@@ -24,12 +24,6 @@ public interface UsuarioService {
     // Buscar usuários por plano
     List<Usuario> buscarPorPlano(String planoUser);
 
-    // Buscar usuários por plano com paginação
-    Page<Usuario> buscarPorPlanoPaginado(String planoUser, Pageable pageable);
-
-    // Buscar usuários por data de nascimento com paginação
-    Page<Usuario> buscarPorDataNascimentoPaginado(LocalDate dataNascimentoUser, Pageable pageable);
-
     // Buscar usuários por data de nascimento em lista
     List<Usuario> buscarPorDataNascimentoEmLista(LocalDate dataNascimentoUser);
 
