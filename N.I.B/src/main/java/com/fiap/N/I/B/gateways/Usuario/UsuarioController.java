@@ -108,7 +108,9 @@ public class UsuarioController {
 
         resource.add(selfLink);
         resource.add(allUsersLink);
-
+        if ("CPF já cadastrado no sistema".equals(respostaCriacao.getMensagem())) {
+            return ResponseEntity.status(409).body(resource);
+        }
         return ResponseEntity.status(201).body(resource);
     }
 
