@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +17,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
-public class UsuarioController {
+public class UsuarioController extends RepresentationModel<UsuarioController> {
 
     private final UsuarioService usuarioService;
 
@@ -69,17 +74,25 @@ public class UsuarioController {
     public ResponseEntity<UsuarioPostResponse> criarUsuario(@RequestBody Usuario usuario) {
         UsuarioPostResponse respostaCriacao = usuarioService.criarUsuario(usuario);
         if (respostaCriacao.getMensagem().equals("Novo usuário cadastrado")) {
+
+            Link link = linkTo(UsuarioController.class).slash(usuario.getCpfUser()).withSelfRel();
+            respostaCriacao.add(link);
+
             return ResponseEntity.status(201).body(respostaCriacao);
         } else {
             return ResponseEntity.status(409).body(respostaCriacao);
         }
     }
 
-    // Atualizar um usuário existente
     @PutMapping("/cpf/{cpf}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
+    public ResponseEntity<RepresentationModel<Usuario>> atualizarUsuario(@PathVariable String cpf, @RequestBody Usuario usuarioAtualizado) {
         Optional<Usuario> usuario = usuarioService.atualizarUsuario(cpf, usuarioAtualizado);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return usuario.map(u -> {
+            RepresentationModel<Usuario> resource = new RepresentationModel<>((Iterable<Link>) u);
+            Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(cpf)).withSelfRel();
+            resource.add(selfLink);
+            return ResponseEntity.ok(resource);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Deletar um usuário

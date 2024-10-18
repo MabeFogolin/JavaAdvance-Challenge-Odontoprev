@@ -4,14 +4,13 @@ import com.fiap.N.I.B.domains.Diario;
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.DiarioPatch;
 import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
-import com.fiap.N.I.B.usecases.Diario.DiarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.DiarioRepository;
 import com.fiap.N.I.B.usecases.Diario.DiarioService;
-import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public class DiarioServiceImpl implements DiarioService {
 
     @Override
     public DiarioPostResponse inserirNoDiario(String cpfUser, Diario registroParaInserir) {
-        Optional<Usuario> usuario = usuarioRepository.findUsuarioByCpfUser(cpfUser);
+        Optional<Usuario> usuario = usuarioRepository.findByCpfUser(cpfUser);
         if (usuario.isPresent()) {
             registroParaInserir.setUsuario(usuario.get());
             diarioRepository.save(registroParaInserir);

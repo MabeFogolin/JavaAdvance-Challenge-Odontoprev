@@ -10,8 +10,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,11 +22,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Embeddable
-public class Usuario {
+public class Usuario extends RepresentationModel<Usuario> {
 
     @Id
     @NotNull
-    @CPF(message ="CPF deve conter 11 dígitos numéricos" )
+    @CPF(message = "CPF deve conter 11 dígitos numéricos")
     private String cpfUser;
 
     @NotNull
@@ -50,4 +53,12 @@ public class Usuario {
     @Size(max = 50, message = "Email deve ter no máximo 50 caracteres")
     private String emailUser;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Diario> diarios;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Consulta> consultas = new ArrayList<>();
+
+    @ManyToOne
+    private Endereco endereco;
 }

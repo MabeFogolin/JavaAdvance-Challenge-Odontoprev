@@ -4,9 +4,9 @@ import com.fiap.N.I.B.domains.Historico;
 import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.HistoricoPatch;
 import com.fiap.N.I.B.gateways.responses.HistoricoPostResponse;
-import com.fiap.N.I.B.usecases.Historico.HistoricoRepository;
+import com.fiap.N.I.B.gateways.Repositories.HistoricoRepository;
 import com.fiap.N.I.B.usecases.Historico.HistoricoService;
-import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class HistoricoServiceImpl implements HistoricoService {
 
     @Override
     public HistoricoPostResponse inserirNoHistorico(String cpfUser, Historico historico) {
-        Optional<Usuario> usuario = usuarioRepository.findUsuarioByCpfUser(cpfUser);
+        Optional<Usuario> usuario = usuarioRepository.findByCpfUser(cpfUser);
 
         if (usuario.isPresent()) {
             historico.setUsuario(usuario.get());

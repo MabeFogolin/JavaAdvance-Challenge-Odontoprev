@@ -1,4 +1,4 @@
-package com.fiap.N.I.B.usecases.Profissional;
+package com.fiap.N.I.B.gateways.Repositories;
 
 import com.fiap.N.I.B.domains.Profissional;
 import org.springframework.data.domain.Page;

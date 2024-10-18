@@ -3,12 +3,12 @@ package com.fiap.N.I.B.gateways.Endereco;
 import com.fiap.N.I.B.domains.Endereco;
 import com.fiap.N.I.B.domains.Profissional;
 import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.gateways.Repositories.EnderecoRepository;
 import com.fiap.N.I.B.gateways.requests.EnderecoPatch;
 import com.fiap.N.I.B.gateways.responses.EnderecoPostResponse;
-import com.fiap.N.I.B.gateways.responses.HistoricoPostResponse;
 import com.fiap.N.I.B.usecases.Endereco.*;
-import com.fiap.N.I.B.usecases.Profissional.ProfissionalRepository;
-import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.ProfissionalRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -119,22 +119,33 @@ public class EnderecoServiceImpl implements EnderecoDeletar, EnderecoAtualiarPar
         return Optional.empty();
     }
 
-    @Override
     public EnderecoPostResponse criarEndereco(String idPessoa, Endereco endereco) {
-        Optional<Usuario> usuario = usuarioRepository.findUsuarioByCpfUser(idPessoa);
-        Optional<Profissional> profissional = profissionalRepository.findProfissionalByRegistroProfissional(idPessoa);
+        Optional<Usuario> usuario = usuarioRepository.findById(idPessoa); // Verifica se é um usuário
+        Optional<Profissional> profissional = profissionalRepository.findById(idPessoa); // Verifica se é um profissional
 
-        if(usuario.isPresent()){
+        if (usuario.isPresent()) {
             endereco.setUsuario(usuario.get());
-            enderecoRepository.save(endereco);
-            return new EnderecoPostResponse("Endereço do usuário cadastrado", endereco);
-        } else if (profissional.isPresent()) {
+            Endereco enderecoSalvo = enderecoRepository.save(endereco); // Salva o endereço
+
+            Usuario usuarioAtualizado = usuario.get();
+            usuarioAtualizado.setEndereco(enderecoSalvo);
+            usuarioRepository.save(usuarioAtualizado);
+
+            return new EnderecoPostResponse("Endereço criado e atribuído ao usuário com sucesso.", enderecoSalvo);
+            }else if (profissional.isPresent()) {
             endereco.setProfissional(profissional.get());
-            enderecoRepository.save(endereco);
-            return new EnderecoPostResponse("Endereço do profissional cadastrado", endereco);
-        } else{
-            return new EnderecoPostResponse("Cadastro não realizado, revise as informações de usuário/profissional", null);
+            Endereco enderecoSalvo = enderecoRepository.save(endereco);
+
+            Profissional profissionalAtualizado = profissional.get();
+            profissionalAtualizado.setEndereco(enderecoSalvo);
+            profissionalRepository.save(profissionalAtualizado);
+
+        } else {
+            return new EnderecoPostResponse("Usuário ou Profissional não encontrado.", null);
         }
+
+        Endereco enderecoSalvo = enderecoRepository.save(endereco);
+        return new EnderecoPostResponse("Endereço criado com sucesso.", enderecoSalvo);
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
 import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
 import com.fiap.N.I.B.usecases.Usuario.UsuarioService;
-import com.fiap.N.I.B.usecases.Usuario.UsuarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioPostResponse criarUsuario(Usuario usuarioEntrada) {
-        Optional<Usuario> usuarioBusca = usuarioRepository.findUsuarioByCpfUser(usuarioEntrada.getCpfUser());
+        Optional<Usuario> usuarioBusca = usuarioRepository.findByCpfUser(usuarioEntrada.getCpfUser());
         if (usuarioBusca.isEmpty()) {
             usuarioRepository.save(usuarioEntrada);
             return new UsuarioPostResponse("Novo usuário cadastrado", usuarioEntrada);
@@ -33,7 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Optional<Usuario> buscarPorCpf(String cpf) {
-        return usuarioRepository.findUsuarioByCpfUser(cpf);
+        return usuarioRepository.findByCpfUser(cpf);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Optional<Usuario> atualizarUsuario(String cpf, Usuario usuarioAtualizado) {
-        return usuarioRepository.findUsuarioByCpfUser(cpf)
+        return usuarioRepository.findByCpfUser(cpf)
                 .map(usuario -> {
                     usuario.setNomeUser(usuarioAtualizado.getNomeUser());
                     usuario.setSobrenomeUser(usuarioAtualizado.getSobrenomeUser());
@@ -77,7 +77,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Optional<Usuario> atualizarEmailPlano(String cpf, UsuarioPatch usuarioNovoEmailPlano) {
-        Optional<Usuario> usuarioExistente = usuarioRepository.findUsuarioByCpfUser(cpf);
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByCpfUser(cpf);
         if (usuarioExistente.isPresent()) {
             Usuario usuarioNovo = usuarioExistente.get();
             usuarioNovo.setEmailUser(usuarioNovoEmailPlano.getEmailUser());
@@ -91,7 +91,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public boolean deletarUsuario(String cpf) {
-        return usuarioRepository.findUsuarioByCpfUser(cpf)
+        return usuarioRepository.findByCpfUser(cpf)
                 .map(usuario -> {
                     usuarioRepository.delete(usuario);
                     return true;

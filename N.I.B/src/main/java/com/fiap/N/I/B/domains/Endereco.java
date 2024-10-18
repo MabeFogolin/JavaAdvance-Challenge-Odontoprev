@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -46,9 +47,11 @@ public class Endereco {
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
     private String estadoEndereco;
 
-    @ManyToOne
+    @OneToOne
+    @JsonIgnore
     private Usuario usuario;
 
-    @ManyToOne
+    @OneToOne
+    @JsonIgnore
     private Profissional profissional;
 }

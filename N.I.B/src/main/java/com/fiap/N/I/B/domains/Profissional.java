@@ -1,7 +1,6 @@
 package com.fiap.N.I.B.domains;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -47,4 +48,11 @@ public class Profissional {
     @NotNull
     @Email(message = "Informe um e-mail válido")
     private String emailProfissional;
+
+    @OneToMany(mappedBy = "profissional", cascade = CascadeType.ALL)
+    private List<Consulta> consultas = new ArrayList<>();
+
+    @ManyToOne
+    private Endereco endereco;
+
 }

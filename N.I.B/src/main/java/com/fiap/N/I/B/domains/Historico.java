@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -53,4 +54,5 @@ public class Historico {
     @Min(value = 0, message = "O valor mínimo permitido é 0")
     @Max(value = 999, message = "O valor máximo permitido é 999")
     private int cirurgiaHistorico;
+
 }

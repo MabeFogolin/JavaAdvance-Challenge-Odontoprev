@@ -1,4 +1,4 @@
-package com.fiap.N.I.B.usecases.Endereco;
+package com.fiap.N.I.B.gateways.Repositories;
 
 import com.fiap.N.I.B.domains.Endereco;
 import org.springframework.data.jpa.repository.JpaRepository;

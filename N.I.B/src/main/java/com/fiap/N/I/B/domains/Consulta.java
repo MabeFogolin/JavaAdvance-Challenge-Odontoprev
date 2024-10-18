@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,10 +32,12 @@ public class Consulta {
 
     @ManyToOne
     @NotNull
+    @JsonIgnore
     private Usuario usuario;
 
     @ManyToOne
     @NotNull
+    @JsonIgnore
     private Profissional profissional;
 
 

@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -42,5 +43,6 @@ public class Diario {
     private String sintomaDiario;
 
     @ManyToOne
+    @JsonIgnore
     private Usuario usuario;
 }
