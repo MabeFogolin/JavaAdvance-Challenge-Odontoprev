@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.LocalDate;
 
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Diario {
+public class Diario extends RepresentationModel<Diario> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

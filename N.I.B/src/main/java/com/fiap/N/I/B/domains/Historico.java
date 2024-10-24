@@ -10,13 +10,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Historico {
+public class Historico extends RepresentationModel<Historico> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -84,4 +84,19 @@ public class ProfissionalServiceImpl implements ProfissionalService {
             return Optional.empty();
         }
     }
+
+//    @Override
+//    public boolean deletarProfissionalProcedure(String registroProfissional) {
+//        Optional<Profissional> profissional = profissionalRepository.findProfissionalByRegistroProfissional(registroProfissional);
+//        if (profissional.isPresent()) {
+//            try {
+//                profissionalRepository.deletarProfissionalProcedure(registroProfissional);
+//                return true;
+//            } catch (Exception e) {
+//                System.err.println("Erro ao deletar profissional: " + e.getMessage());
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
 }

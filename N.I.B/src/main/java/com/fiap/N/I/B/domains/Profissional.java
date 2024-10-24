@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -19,7 +20,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Profissional {
+//@NamedStoredProcedureQuery(
+//        name = "deletarProfissionalProcedure",
+//        procedureName = "deletar_profissional_procedure",
+//        parameters = {
+//                @StoredProcedureParameter(mode = ParameterMode.IN, name = "p_registro_profissional", type =String.class)
+//        }
+//)
+public class Profissional extends RepresentationModel<Profissional> {
 
     @NotNull
     @Size(max = 20, message = "Nome deve ter no máximo 20 caracteres")
@@ -52,7 +60,7 @@ public class Profissional {
     @OneToMany(mappedBy = "profissional", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne
     private Endereco endereco;
 
 }

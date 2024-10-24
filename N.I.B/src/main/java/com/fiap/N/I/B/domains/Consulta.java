@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Consulta {
+public class Consulta extends RepresentationModel<Consulta> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

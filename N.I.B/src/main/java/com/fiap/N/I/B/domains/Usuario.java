@@ -61,6 +61,6 @@ public class Usuario extends RepresentationModel<Usuario> {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne
     private Endereco endereco;
 }

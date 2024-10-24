@@ -6,12 +6,17 @@ import com.fiap.N.I.B.gateways.responses.ConsultaPostResponse;
 import com.fiap.N.I.B.usecases.Consulta.ConsultaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/consultas")
@@ -22,59 +27,87 @@ public class ConsultaController {
 
     // Criar nova consulta
     @PostMapping("/criar")
-    public ResponseEntity<ConsultaPostResponse> criarConsulta(@RequestParam String cpfUser,
-                                                              @RequestParam String registroProfissional,
-                                                              @RequestBody Consulta consultaParaInserir) {
+    public ResponseEntity<EntityModel<ConsultaPostResponse>> criarConsulta(@RequestParam String cpfUser,
+                                                                           @RequestParam String registroProfissional,
+                                                                           @RequestBody Consulta consultaParaInserir) {
         ConsultaPostResponse respostaCriacao = consultaService.criarConsulta(cpfUser, registroProfissional, consultaParaInserir);
         if (respostaCriacao.getMensagem().equals("Nova consulta adicionada")) {
-            return ResponseEntity.status(201).body(respostaCriacao);
+            EntityModel<ConsultaPostResponse> resource = EntityModel.of(respostaCriacao);
+            resource.add(linkTo(methodOn(ConsultaController.class).buscarConsultasPorUsuario(cpfUser)).withRel("usuario-consultas"));
+            return ResponseEntity.status(201).body(resource);
         } else {
-            return ResponseEntity.status(409).body(respostaCriacao);
+            return ResponseEntity.status(409).body(EntityModel.of(respostaCriacao));
         }
     }
 
     // Buscar consultas por usuário
     @GetMapping("/usuario")
-    public ResponseEntity<List<Consulta>> buscarConsultasPorUsuario(@RequestParam String cpfUser) {
+    public ResponseEntity<CollectionModel<EntityModel<Consulta>>> buscarConsultasPorUsuario(@RequestParam String cpfUser) {
         List<Consulta> consultas = consultaService.consultasPorUsuario(cpfUser);
         if (consultas.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(consultas);
+            List<EntityModel<Consulta>> consultasModel = consultas.stream()
+                    .map(consulta -> EntityModel.of(consulta,
+                            linkTo(methodOn(ConsultaController.class).buscarConsultasPorUsuario(cpfUser)).withSelfRel(),
+                            linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas")
+                    ))
+                    .collect(Collectors.toList());
+            CollectionModel<EntityModel<Consulta>> collectionModel = CollectionModel.of(consultasModel);
+            collectionModel.add(linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas"));
+            return ResponseEntity.ok(collectionModel);
         }
     }
 
     // Buscar consultas por profissional
     @GetMapping("/profissional")
-    public ResponseEntity<List<Consulta>> buscarConsultasPorProfissional(@RequestParam String registroProfissional) {
+    public ResponseEntity<CollectionModel<EntityModel<Consulta>>> buscarConsultasPorProfissional(@RequestParam String registroProfissional) {
         List<Consulta> consultas = consultaService.consultasPorProfissional(registroProfissional);
         if (consultas.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(consultas);
+            List<EntityModel<Consulta>> consultasModel = consultas.stream()
+                    .map(consulta -> EntityModel.of(consulta,
+                            linkTo(methodOn(ConsultaController.class).buscarConsultasPorProfissional(registroProfissional)).withSelfRel(),
+                            linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas")
+                    ))
+                    .collect(Collectors.toList());
+            CollectionModel<EntityModel<Consulta>> collectionModel = CollectionModel.of(consultasModel);
+            collectionModel.add(linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas"));
+            return ResponseEntity.ok(collectionModel);
         }
     }
 
-    // Atualizar uma consulta (PUT) com data como query param
+    // Atualizar uma consulta (PUT)
     @PutMapping("/atualizar")
-    public ResponseEntity<Consulta> atualizarConsulta(@RequestParam String cpfUser,
-                                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta,
-                                                      @RequestBody Consulta consultaParaAtualizar) {
+    public ResponseEntity<EntityModel<Consulta>> atualizarConsulta(@RequestParam String cpfUser,
+                                                                   @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta,
+                                                                   @RequestBody Consulta consultaParaAtualizar) {
         Optional<Consulta> consultaAtualizada = consultaService.atualizarConsultaTotalmente(cpfUser, dataConsulta, consultaParaAtualizar);
-        return consultaAtualizada.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return consultaAtualizada.map(consulta -> {
+            EntityModel<Consulta> resource = EntityModel.of(consulta,
+                    linkTo(methodOn(ConsultaController.class).buscarConsultasPorUsuario(cpfUser)).withRel("usuario-consultas"),
+                    linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas"));
+            return ResponseEntity.ok(resource);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Atualizar informações específicas de uma consulta (PATCH) com data como query param
+    // Atualizar informações específicas de uma consulta (PATCH)
     @PatchMapping("/atualizar-informacoes")
-    public ResponseEntity<Consulta> atualizarInformacoesConsulta(@RequestParam String cpfUser,
-                                                                 @RequestParam String registroProfissional,
-                                                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta,
-                                                                 @RequestBody ConsultaPatch consultaPatch) {
+    public ResponseEntity<EntityModel<Consulta>> atualizarInformacoesConsulta(@RequestParam String cpfUser,
+                                                                              @RequestParam String registroProfissional,
+                                                                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta,
+                                                                              @RequestBody ConsultaPatch consultaPatch) {
         Optional<Consulta> consultaAtualizada = consultaService.atualizarInformacoesConsulta(cpfUser, registroProfissional, dataConsulta, consultaPatch);
-        return consultaAtualizada.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return consultaAtualizada.map(consulta -> {
+            EntityModel<Consulta> resource = EntityModel.of(consulta,
+                    linkTo(methodOn(ConsultaController.class).buscarConsultasPorUsuario(cpfUser)).withRel("usuario-consultas"),
+                    linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas"));
+            return ResponseEntity.ok(resource);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Deletar uma consulta com data como query param
+    // Deletar uma consulta
     @DeleteMapping("/deletar")
     public ResponseEntity<Void> deletarConsulta(@RequestParam String cpfUser,
                                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta) {
@@ -88,19 +121,32 @@ public class ConsultaController {
 
     // Buscar todos os registros de consultas
     @GetMapping("/todos")
-    public ResponseEntity<List<Consulta>> buscarTodasConsultas() {
+    public ResponseEntity<CollectionModel<EntityModel<Consulta>>> buscarTodasConsultas() {
         List<Consulta> consultas = consultaService.todosRegistros();
         if (consultas.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(consultas);
+            List<EntityModel<Consulta>> consultasModel = consultas.stream()
+                    .map(consulta -> EntityModel.of(consulta,
+                            linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withSelfRel()
+                    ))
+                    .collect(Collectors.toList());
+            CollectionModel<EntityModel<Consulta>> collectionModel = CollectionModel.of(consultasModel);
+            collectionModel.add(linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withSelfRel());
+            return ResponseEntity.ok(collectionModel);
         }
     }
 
+    // Buscar consulta por usuário e data
     @GetMapping("/usuario/data")
-    public ResponseEntity<Consulta> buscarConsultaPorData(@RequestParam String cpfUser,
-                                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta) {
+    public ResponseEntity<EntityModel<Consulta>> buscarConsultaPorData(@RequestParam String cpfUser,
+                                                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataConsulta) {
         Optional<Consulta> consulta = consultaService.buscarConsultaPorData(cpfUser, dataConsulta);
-        return consulta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return consulta.map(c -> {
+            EntityModel<Consulta> resource = EntityModel.of(c,
+                    linkTo(methodOn(ConsultaController.class).buscarConsultasPorUsuario(cpfUser)).withRel("usuario-consultas"),
+                    linkTo(methodOn(ConsultaController.class).buscarTodasConsultas()).withRel("todas-consultas"));
+            return ResponseEntity.ok(resource);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

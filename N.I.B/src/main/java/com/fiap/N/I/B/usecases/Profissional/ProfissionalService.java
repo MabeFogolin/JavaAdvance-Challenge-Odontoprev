@@ -27,4 +27,6 @@ public interface ProfissionalService {
     boolean deletarProfissional(String registroProfissional);
 
     Optional<Profissional> atualizarEmailTelefone(String registroProfissional, ProfissionalPatch profissionalPatch);
+
+//    boolean deletarProfissionalProcedure(String registroProfissional);
 }
