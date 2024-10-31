@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: N.I.B
+  datasource:
+    url: jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl
+    username: rm552669
+    password: fiap24
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.OracleDialect
+
+springdoc:
+  api-docs:
+    path: /api-docs
