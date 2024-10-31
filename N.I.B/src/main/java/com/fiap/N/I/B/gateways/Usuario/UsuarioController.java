@@ -4,6 +4,9 @@ import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
 import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
 import com.fiap.N.I.B.usecases.Usuario.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -59,7 +62,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuariosPorPlanoComLinks);
     }
 
-    // Buscar todos os usuários
+    @Operation(summary = "Busca todos os alunos", description = "Traz todos os alunos cadastrados, com os links atribuídos individualmente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", links = {
+                    @io.swagger.v3.oas.annotations.links.Link(name = "teste", operationRef = "GET")
+            }),
+            @ApiResponse(responseCode = "404")
+    })
     @GetMapping("/todos")
     public ResponseEntity<List<EntityModel<Usuario>>> buscarUsuarios() {
         List<Usuario> usuarios = usuarioService.buscarTodos();
