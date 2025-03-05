@@ -1,7 +1,7 @@
 package com.fiap.N.I.B.gateways.Diario;
 
-import com.fiap.N.I.B.domains.Diario;
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Diario;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.gateways.requests.DiarioPatch;
 import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
 import com.fiap.N.I.B.gateways.Repositories.DiarioRepository;

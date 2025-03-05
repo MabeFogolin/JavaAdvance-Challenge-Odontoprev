@@ -1,10 +1,9 @@
 package com.fiap.N.I.B.usecases.Consulta;
 
-import com.fiap.N.I.B.domains.Consulta;
+import com.fiap.N.I.B.model.Consulta;
 import com.fiap.N.I.B.gateways.requests.ConsultaPatch;
 import com.fiap.N.I.B.gateways.responses.ConsultaPostResponse;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

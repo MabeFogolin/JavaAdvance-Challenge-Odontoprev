@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.gateways.responses;
 
-import com.fiap.N.I.B.domains.Diario;
+import com.fiap.N.I.B.model.Diario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

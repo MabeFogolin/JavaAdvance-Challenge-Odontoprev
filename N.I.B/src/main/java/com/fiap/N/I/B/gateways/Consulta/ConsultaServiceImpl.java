@@ -1,8 +1,8 @@
 package com.fiap.N.I.B.gateways.Consulta;
 
-import com.fiap.N.I.B.domains.Consulta;
-import com.fiap.N.I.B.domains.Profissional;
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Consulta;
+import com.fiap.N.I.B.model.Profissional;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.gateways.Repositories.ConsultaRepository;
 import com.fiap.N.I.B.gateways.requests.ConsultaPatch;
 import com.fiap.N.I.B.gateways.responses.ConsultaPostResponse;

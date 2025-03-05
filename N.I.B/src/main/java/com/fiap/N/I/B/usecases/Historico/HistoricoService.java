@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.usecases.Historico;
 
-import com.fiap.N.I.B.domains.Historico;
+import com.fiap.N.I.B.model.Historico;
 import com.fiap.N.I.B.gateways.requests.HistoricoPatch;
 import com.fiap.N.I.B.gateways.responses.HistoricoPostResponse;
 

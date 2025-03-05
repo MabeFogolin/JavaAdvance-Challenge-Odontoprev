@@ -1,10 +1,9 @@
 package com.fiap.N.I.B.gateways.responses;
 
-import com.fiap.N.I.B.domains.Endereco;
+import com.fiap.N.I.B.model.Endereco;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

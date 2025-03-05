@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.usecases.Profissional;
 
-import com.fiap.N.I.B.domains.Profissional;
+import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.gateways.requests.ProfissionalPatch;
 import com.fiap.N.I.B.gateways.responses.ProfissionalPostResponse;
 

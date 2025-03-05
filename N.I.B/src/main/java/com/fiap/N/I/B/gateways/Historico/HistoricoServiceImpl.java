@@ -1,7 +1,7 @@
 package com.fiap.N.I.B.gateways.Historico;
 
-import com.fiap.N.I.B.domains.Historico;
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Historico;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.gateways.requests.HistoricoPatch;
 import com.fiap.N.I.B.gateways.responses.HistoricoPostResponse;
 import com.fiap.N.I.B.gateways.Repositories.HistoricoRepository;

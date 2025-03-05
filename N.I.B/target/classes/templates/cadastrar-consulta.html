@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Consulta</title>
+</head>
+<body>
+<!-- Exibição de mensagens de sucesso ou erro -->
+<div th:if="${sucesso}" class="alert alert-success">
+    <p th:text="${sucesso}"></p>
+</div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
+
+<h1>Nova Consulta</h1>
+<form action="/consultas/nova" method="post" th:object="${consulta}">
+    <label>CPF do Usuário:</label>
+    <label>
+        <input type="text" th:field="*{usuario.cpfUser}" required>
+    </label><br>
+
+    <label>Registro do Profissional:</label>
+    <label>
+        <input type="text" th:field="*{profissional.registroProfissional}" required>
+    </label><br>
+
+    <label>Data da Consulta:</label>
+    <label>
+        <input type="date" th:field="*{dataConsulta}" required>
+    </label><br>
+
+    <label>Descrição:</label>
+    <label>
+        <textarea th:field="*{descricaoConsulta}"></textarea>
+    </label><br>
+
+    <button type="submit">Salvar</button>
+</form>
+<br>
+<a href="/consultas">Voltar</a>
+</body>
+</html>

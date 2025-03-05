@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.gateways.Repositories;
 
-import com.fiap.N.I.B.domains.Diario;
+import com.fiap.N.I.B.model.Diario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

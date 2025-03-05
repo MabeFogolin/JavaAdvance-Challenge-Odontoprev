@@ -1,10 +1,7 @@
 package com.fiap.N.I.B.gateways.requests;
 
-import com.fiap.N.I.B.domains.Profissional;
-import com.fiap.N.I.B.domains.Usuario;
-import io.micrometer.common.lang.Nullable;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
+import com.fiap.N.I.B.model.Profissional;
+import com.fiap.N.I.B.model.Usuario;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.gateways.Usuario;
 
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
 import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
 import com.fiap.N.I.B.usecases.Usuario.UsuarioService;
@@ -9,8 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,8 @@
 package com.fiap.N.I.B.usecases.Usuario;
 
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
 import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.gateways.Repositories;
 
-import com.fiap.N.I.B.domains.Endereco;
+import com.fiap.N.I.B.model.Endereco;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

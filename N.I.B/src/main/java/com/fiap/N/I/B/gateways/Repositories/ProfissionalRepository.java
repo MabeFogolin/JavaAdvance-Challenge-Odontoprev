@@ -1,10 +1,9 @@
 package com.fiap.N.I.B.gateways.Repositories;
 
-import com.fiap.N.I.B.domains.Profissional;
+import com.fiap.N.I.B.model.Profissional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.query.Procedure;
 
 import java.util.List;
 import java.util.Optional;

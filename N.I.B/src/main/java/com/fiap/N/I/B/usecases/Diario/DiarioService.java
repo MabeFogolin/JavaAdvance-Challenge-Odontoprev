@@ -1,11 +1,10 @@
 package com.fiap.N.I.B.usecases.Diario;
 
-import com.fiap.N.I.B.domains.Diario;
+import com.fiap.N.I.B.model.Diario;
 import com.fiap.N.I.B.gateways.requests.DiarioPatch;
 import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

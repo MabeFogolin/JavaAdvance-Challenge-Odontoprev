@@ -1,6 +1,6 @@
 package com.fiap.N.I.B.gateways.responses;
 
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

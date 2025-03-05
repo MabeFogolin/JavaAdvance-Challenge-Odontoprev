@@ -1,8 +1,8 @@
 package com.fiap.N.I.B.gateways.Endereco;
 
-import com.fiap.N.I.B.domains.Endereco;
-import com.fiap.N.I.B.domains.Profissional;
-import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.model.Endereco;
+import com.fiap.N.I.B.model.Profissional;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.gateways.Repositories.EnderecoRepository;
 import com.fiap.N.I.B.gateways.requests.EnderecoPatch;
 import com.fiap.N.I.B.gateways.responses.EnderecoPostResponse;
