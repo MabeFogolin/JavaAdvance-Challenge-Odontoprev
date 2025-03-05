@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Consultas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .style-tabela table {
+            float: left;
+            border: 1px solid #ccc;
+            border-bottom: 0;
+            border-right: 0;
+            font-size: 0.8em;
+            width: 100%;
+        }
+        .style-tabela table tr td {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-top: 0;
+            border-left: 0;
+            text-align: center;
+        }
+        .style-tabela table td.top {
+            background-color: #00bcc4;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        .style-tabela table td.top.center {
+            text-align: center;
+        }
+        .style-tabela tbody tr {
+            background-color: #fff;
+            color: #666;
+        }
+        .style-tabela tbody tr:hover {
+            background-color: #f4f4f4;
+            color: #00bcc4;
+        }
+        .style-tabela tbody tr td .editar {
+            color: #00d549;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
+        }
+        .style-tabela tbody tr td .deletar {
+            color: #bf303c;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Consultas Realizadas</h1>
+<div class="style-tabela">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td class="top center"><i class="fa fa-user-md"></i></td>
+            <td class="top center"><strong>ID</strong></td>
+            <td class="top center"><strong>Usuário</strong></td>
+            <td class="top center"><strong>Profissional</strong></td>
+            <td class="top center"><strong>Data</strong></td>
+            <td class="top center" colspan="2" width="1"><strong>Ações</strong></td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr th:each="consulta : ${consultas}">
+            <td align="center"><i class="fa fa-calendar-check"></i></td>
+            <td align="center" th:text="${consulta.id}"></td>
+            <td align="center" th:text="${consulta.usuario.cpfUser}"></td>
+            <td align="center" th:text="${consulta.profissional.registroProfissional}"></td>
+            <td align="center" th:text="${consulta.dataConsulta}"></td>
+            <td align="center">
+                <a th:href="@{/consultas/editar/{id}(id=${consulta.id})}" class="editar fa fa-check-circle" title="Editar"></a>
+            </td>
+            <td align="center">
+                <a th:href="@{/consultas/deletar/{cpfUser}/{dataConsulta}(cpfUser=${consulta.usuario.cpfUser}, dataConsulta=${consulta.dataConsulta})}"
+                   class="deletar fa fa-times-circle" title="Deletar"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<a href="/consultas/nova">Nova Consulta</a>
+</body>
+</html>

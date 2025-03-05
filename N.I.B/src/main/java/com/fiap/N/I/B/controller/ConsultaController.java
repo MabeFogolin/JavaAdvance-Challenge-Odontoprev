@@ -26,10 +26,10 @@ public class ConsultaController {
 
     @GetMapping("/nova")
     public ModelAndView novaConsultaForm() {
-        // Cria um objeto Consulta vazio para preencher o formulário
         Consulta consultaVazia = new Consulta();
-        return new ModelAndView("cadastrar-consulta", "consulta", consultaVazia); // Renderiza o formulário de criação de uma nova consulta
+        return new ModelAndView("Consultas/cadastrar-consulta", "consulta", consultaVazia);
     }
+
     @PostMapping("/nova")
     public ModelAndView novaConsulta(@ModelAttribute Consulta consulta) {
         // Busca o usuário com o CPF fornecido
@@ -37,7 +37,6 @@ public class ConsultaController {
 
         Optional<Profissional> profissional = profissionalRepository.findProfissionalByRegistroProfissional(consulta.getProfissional().getRegistroProfissional());
 
-        // Verifica se o usuário e o profissional foram encontrados
         if (usuario.isPresent() && profissional.isPresent()) {
             // Construa a nova consulta com os dados fornecidos
             Consulta consulta1 = Consulta.builder()
@@ -57,23 +56,21 @@ public class ConsultaController {
                 return new ModelAndView("redirect:/consultas", "sucesso", "Consulta salva com sucesso!");
             } else {
                 // Caso haja erro de validação, retorna para a página de cadastro
-                return new ModelAndView("cadastrar-consulta", "erro", "Campos obrigatórios não preenchidos.");
+                return new ModelAndView("Consultas/cadastrar-consulta", "erro", "Campos obrigatórios não preenchidos.");
             }
         } else {
             // Caso o usuário ou o profissional não existam, retorna erro
-            return new ModelAndView("cadastrar-consulta", "erro", "Usuário ou Profissional não encontrados.");
+            return new ModelAndView("Consultas/cadastrar-consulta", "erro", "Usuário ou Profissional não encontrados.");
         }
     }
 
 
-    // Listar todas as consultas
     @GetMapping
     public ModelAndView listarConsultas() {
         List<Consulta> consultas = consultaRepository.findAll(); // Recupera todas as consultas
-        return new ModelAndView("lista", "consultas", consultas); // Passa as consultas para a view
+        return new ModelAndView("Consultas/lista", "consultas", consultas); // Passa as consultas para a view
     }
 
-    // Detalhar uma consulta
     @GetMapping("/{id}")
     public ModelAndView detalhesConsulta(@PathVariable Long id) {
         Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id)); // Busca a consulta pelo ID
@@ -85,19 +82,18 @@ public class ConsultaController {
         }
     }
 
-    // Atualizar uma consulta
     @GetMapping("/editar/{id}")
     public ModelAndView editarConsultaForm(@PathVariable Long id) {
         Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id));
 
         if (consultaOpt.isPresent()) {
-            return new ModelAndView("consulta/form", "consulta", consultaOpt.get()); // Passa a consulta para o formulário de edição
+            return new ModelAndView("consulta/editar-consulta", "consulta", consultaOpt.get()); // Passa a consulta para o formulário de edição
         } else {
             return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada para edição.");
         }
     }
 
-    @PostMapping("/editar/{id}")
+    @PutMapping("/editar/{id}")
     public ModelAndView atualizarConsulta(@PathVariable Long id, @ModelAttribute Consulta consulta) {
         Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id));
 
@@ -110,13 +106,13 @@ public class ConsultaController {
         }
     }
 
-    // Deletar uma consulta
+
     @GetMapping("/deletar/{id}")
     public ModelAndView deletarConsulta(@PathVariable Long id) {
         Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id));
 
         if (consultaOpt.isPresent()) {
-            consultaRepository.deleteById(String.valueOf(id)); // Deleta a consulta do banco de dados
+            consultaRepository.deleteById(String.valueOf(id));
             return new ModelAndView("redirect:/consultas", "sucesso", "Consulta deletada com sucesso!");
         } else {
             return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada para deletar.");

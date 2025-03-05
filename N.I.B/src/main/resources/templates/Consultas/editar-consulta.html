@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Consulta</title>
+</head>
+<body>
+<div th:if="${sucesso}" class="alert alert-success">
+    <p th:text="${sucesso}"></p>
+</div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
+<h2 class="titulo">Editar Consulta</h2>
+<form class="formulario" action="/consultas/editar/{id}" method="post" th:object="${consulta}">
+    <!-- Simula o método PUT -->
+    <input type="hidden" name="_method" value="put"/>
+
+    <label class="label">
+        <textarea class="input-bordas textarea" rows="4" placeholder="Descrição" th:field="*{descricaoConsulta}"></textarea>
+    </label>
+
+    <div class="botoes">
+        <a href="/consultas" class="button-form borda-inversa botao-voltar">Voltar</a>
+        <button class="button-form borda-inversa" type="submit">Salvar</button>
+    </div>
+</form>
+</body>
+</html>
