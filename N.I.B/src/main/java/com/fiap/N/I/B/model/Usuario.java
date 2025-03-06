@@ -22,7 +22,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Embeddable
 public class Usuario extends RepresentationModel<Usuario> {
 
     @Id

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuários</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .style-tabela table {
+            float: left;
+            border: 1px solid #ccc;
+            border-bottom: 0;
+            border-right: 0;
+            font-size: 0.8em;
+            width: 100%;
+        }
+        .style-tabela table tr td {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-top: 0;
+            border-left: 0;
+            text-align: center;
+        }
+        .style-tabela table td.top {
+            background-color: #00bcc4;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        .style-tabela table td.top.center {
+            text-align: center;
+        }
+        .style-tabela tbody tr {
+            background-color: #fff;
+            color: #666;
+        }
+        .style-tabela tbody tr:hover {
+            background-color: #f4f4f4;
+            color: #00bcc4;
+        }
+        .style-tabela tbody tr td .editar {
+            color: #00d549;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
+        }
+        .style-tabela tbody tr td .deletar {
+            color: #bf303c;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
+        }
+        .botoes {
+            display: flex;
+            justify-content: space-between; /* Mantém os botões afastados */
+            width: 100%; /* Faz a div ocupar toda a largura do formulário */
+            margin-top: 20px; /* Adiciona um espaçamento entre os inputs e os botões */
+        }
+
+        .button-form {
+            background-color: #39f;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            width: 48%; /* Garante que os botões fiquem com largura uniforme */
+            text-align: center;
+            text-decoration: none; /* Remove sublinhado do link */
+            border-radius: 5px; /* Deixa os botões arredondados */
+        }
+    </style>
+</head>
+<body>
+<h1>Usuários cadastrados</h1>
+<div class="style-tabela">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+            <td class="top center"><i class="fa fa-user-md"></i></td>
+            <td class="top center"><strong>CPF</strong></td>
+            <td class="top center"><strong>Nome</strong></td>
+            <td class="top center"><strong>Sobrenome</strong></td>
+            <td class="top center"><strong>Email</strong></td>
+            <td class="top center"><strong>Data de nascimento</strong></td>
+            <td class="top center" colspan="2" width="1"><strong>Ações</strong></td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr th:each="usuario : ${usuarios}">
+            <td><i class="fa fa-calendar-check"></i></td>
+            <td th:text="${usuario.cpfUser}"></td>
+            <td th:text="${usuario.nomeUser}"></td>
+            <td th:text="${usuario.sobrenomeUser}"></td>
+            <td th:text="${usuario.emailUser}"></td>
+            <td th:text="${usuario.dataNascimentoUser}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br>
+<div class="botoes">
+    <a href="/usuario/novo" class="button-form borda-inversa">Novo Usuário</a>
+</div>
+
+</body>
+</html>

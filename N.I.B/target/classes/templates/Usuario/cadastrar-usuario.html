@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+    <meta charset="UTF-8">
+        <html lang="pt-BR">
+        <head>
+        <meta charset="UTF-8">
+        <title>Nova Consulta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .formulario {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            overflow: hidden;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo {
+            color: #757575;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        .label {
+            float: left;
+            width: 100%;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-bordas {
+            font: 15px/24px "Lato", Arial, sans-serif;
+            color: #333;
+            width: 100%;
+            box-sizing: border-box;
+            letter-spacing: 1px;
+            border: 1px solid #ccc;
+            padding: 7px 14px 9px;
+            transition: 0.4s;
+        }
+        .botoes {
+            display: flex;
+            justify-content: center; /* Centraliza os botões */
+            gap: 20px; /* Espaçamento uniforme entre os botões */
+            margin-top: 15px; /* Espaço acima dos botões */
+        }
+
+        .botoes {
+            display: flex;
+            justify-content: space-between; /* Mantém os botões afastados */
+            width: 100%; /* Faz a div ocupar toda a largura do formulário */
+            margin-top: 20px; /* Adiciona um espaçamento entre os inputs e os botões */
+        }
+
+        .button-form {
+            background-color: #39f;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            width: 48%; /* Garante que os botões fiquem com largura uniforme */
+            text-align: center;
+            text-decoration: none; /* Remove sublinhado do link */
+            border-radius: 5px; /* Deixa os botões arredondados */
+        }
+
+        .botao-voltar {
+            background-color: #ccc; /* Cor diferente para o botão "Voltar" */
+            color: #333; /* Define a cor do texto */
+        }
+
+        .borda-inversa {
+            display: inline-block;
+            vertical-align: middle;
+            transition-duration: 0.5s;
+            transition-property: background;
+            box-shadow: inset 0 0 0 2px #39f, 0 0 1px rgba(0, 0, 0, 0);
+        }
+
+        .borda-inversa:hover, .borda-inversa:focus, .borda-inversa:active {
+            background: none;
+            color: #39f;
+        }
+
+        .naoexibir {
+            display: none;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+    </style>
+</head>
+<body>
+<div th:if="${sucesso}" class="alert alert-success">
+    <p th:text="${sucesso}"></p>
+</div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
+<h2 class="titulo">Novo Usuário</h2>
+<form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}">
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{cpfUser}" required>
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Nome do usuário" th:field="*{nomeUser}" required>
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Sobrenome do usuário" th:field="*{sobrenomeUser}" required>
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Telefone do usuário" th:field="*{telefoneUser}" required>
+    </label>
+
+    <label class="label">
+        <input type="date" class="input-bordas" th:field="*{dataNascimentoUser}" required>
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Plano do usuário" th:field="*{planoUser}" required>
+    </label>
+
+    <label class="label">
+        <input type="email" class="input-bordas" placeholder="Email do usuário" th:field="*{emailUser}" required>
+    </label>
+
+
+    <div class="botoes">
+        <a href="/usuario" class="button-form borda-inversa botao-voltar">Voltar</a>
+        <button class="button-form borda-inversa" type="submit">Salvar</button>
+    </div>
+
+
+</form>
+</body>
+</html>
