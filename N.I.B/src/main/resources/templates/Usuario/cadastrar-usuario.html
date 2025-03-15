@@ -3,7 +3,7 @@
         <html lang="pt-BR">
         <head>
         <meta charset="UTF-8">
-        <title>Nova Consulta</title>
+        <title>Novo Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
         }
 
         .titulo {
@@ -120,6 +121,8 @@
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
+            max-height: 100px; /* Define a altura máxima */
+
         }
 
     </style>
@@ -128,11 +131,11 @@
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
-<div th:if="${erro}" class="alert alert-danger">
-    <p th:text="${erro}"></p>
-</div>
 <h2 class="titulo">Novo Usuário</h2>
 <form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}">
+    <div th:if="${erro}" class="alert alert-danger">
+        <p th:text="${erro}"></p>
+    </div>
     <label class="label">
         <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{cpfUser}" required>
     </label>

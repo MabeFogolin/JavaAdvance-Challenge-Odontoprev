@@ -18,4 +18,5 @@ public interface ConsultaRepository extends JpaRepository<Consulta, String>{
     Optional<Consulta> findConsultaByProfissional_RegistroProfissionalAndUsuario_CpfUserAndDataConsulta(String cpfUser, String registroProfissional, LocalDate dataConsulta);
 
 
+    List<Consulta> id(Long id);
 }

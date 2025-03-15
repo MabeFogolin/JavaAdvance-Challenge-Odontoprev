@@ -1,14 +1,18 @@
 package com.fiap.N.I.B.controller;
 
+import com.fiap.N.I.B.gateways.Repositories.ProfissionalRepository;
 import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.gateways.requests.ProfissionalPatch;
 import com.fiap.N.I.B.gateways.responses.ProfissionalPostResponse;
+import com.fiap.N.I.B.model.Usuario;
 import com.fiap.N.I.B.usecases.Profissional.ProfissionalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,126 +21,103 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@RestController
+@Controller
 @RequestMapping("/profissional")
 @RequiredArgsConstructor
 public class ProfissionalController {
 
-    private final ProfissionalService profissionalService;
+    private final ProfissionalRepository profissionalRepository;
 
-    // Buscar profissional por registro
-    @GetMapping("/registroProfissional/{registroProfissional}")
-    public ResponseEntity<EntityModel<Profissional>> buscarPorRegistro(@PathVariable String registroProfissional) {
-        Optional<Profissional> profissional = profissionalService.buscarProfissional(registroProfissional);
-
-        return profissional.map(p -> {
-            EntityModel<Profissional> resource = EntityModel.of(p);
-            Link selfLink = linkTo(methodOn(ProfissionalController.class).buscarPorRegistro(registroProfissional)).withSelfRel();
-            Link allProfessionalsLink = linkTo(methodOn(ProfissionalController.class).buscarTodos()).withRel("all-professionals");
-            resource.add(selfLink);
-            resource.add(allProfessionalsLink);
-            return ResponseEntity.ok(resource);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping
+    public ModelAndView listarProfissionais() {
+        List<Profissional> profissionais = profissionalRepository.findAll();
+        return new ModelAndView("Profissional/lista", "profissionais", profissionais);
     }
 
-    // Criar um novo profissional
-    @PostMapping("/criar")
-    public ResponseEntity<EntityModel<ProfissionalPostResponse>> criarProfissional(@RequestBody Profissional profissionalParaCriar) {
-        ProfissionalPostResponse respostaCriacao = profissionalService.criarProfissional(profissionalParaCriar);
+    @GetMapping("/novo")
+    public ModelAndView novoProfissionalForm() {
+        Profissional profissionalVazio = new Profissional();
+        return new ModelAndView("Profissional/cadastrar-profissional", "profissional", profissionalVazio);
+    }
 
-        EntityModel<ProfissionalPostResponse> resource = EntityModel.of(respostaCriacao);
-        Link selfLink = linkTo(methodOn(ProfissionalController.class).buscarPorRegistro(profissionalParaCriar.getRegistroProfissional())).withSelfRel();
-        Link allProfessionalsLink = linkTo(methodOn(ProfissionalController.class).buscarTodos()).withRel("all-professionals");
+    @PostMapping("/novo")
+    public ModelAndView novoProfissional(@ModelAttribute Profissional profissionalParam) {
+        Optional<Profissional> profissionalExistente = profissionalRepository.findById(profissionalParam.getRegistroProfissional());
 
-        resource.add(selfLink);
-        resource.add(allProfessionalsLink);
-
-        if (respostaCriacao.getMensagem().equals("Novo profissional cadastrado")) {
-            return ResponseEntity.status(201).body(resource);
-        } else {
-            return ResponseEntity.status(409).body(resource);
+        if (profissionalExistente.isPresent()) {
+            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "Registro já cadastrado.");
         }
+
+        // Validações dos campos
+        if (profissionalParam.getNomeProfissional().length() > 20) {
+            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "O nome do profissional deve ter no máximo 20 caracteres.");
+        }
+
+        if (profissionalParam.getSobrenomeProfissional().length() > 30) {
+            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "O sobrenome do profissional deve ter no máximo 30 caracteres.");
+        }
+
+        if (!profissionalParam.getTelefoneProfissional().matches("\\d{11}")) {
+            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "O telefone deve conter exatamente 11 dígitos numéricos.");
+        }
+
+        Profissional novoProfissional = Profissional.builder()
+                .registroProfissional(profissionalParam.getRegistroProfissional())
+                .nomeProfissional(profissionalParam.getNomeProfissional())
+                .sobrenomeProfissional(profissionalParam.getSobrenomeProfissional())
+                .telefoneProfissional(profissionalParam.getTelefoneProfissional())
+                .emailProfissional(profissionalParam.getEmailProfissional())
+                .tipoProfissional(profissionalParam.getTipoProfissional())
+                .dataInscricaoProfissional(profissionalParam.getDataInscricaoProfissional())
+                .endereco(profissionalParam.getEndereco())
+                .consultas(profissionalParam.getConsultas())
+                .build();
+        profissionalRepository.save(novoProfissional);
+
+        return new ModelAndView("redirect:/profissional", "sucesso", "Profissional cadastrado com sucesso!");
     }
 
-    // Buscar todos os profissionais
-    @GetMapping("/todos")
-    public ResponseEntity<List<EntityModel<Profissional>>> buscarTodos() {
-        List<Profissional> todosProfissionais = profissionalService.buscarTodos();
 
-        List<EntityModel<Profissional>> todosProfissionaisComLink = todosProfissionais.stream().map(profissional -> {
-            EntityModel<Profissional> resource = EntityModel.of(profissional);
-            Link selfLink = linkTo(methodOn(ProfissionalController.class).buscarPorRegistro(profissional.getRegistroProfissional())).withSelfRel();
-            Link allProfessionalsLink = linkTo(methodOn(ProfissionalController.class).buscarTodos()).withRel("all-professionals");
-
-            resource.add(selfLink);
-            resource.add(allProfessionalsLink);
-
-            return resource;
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.ok(todosProfissionaisComLink);
+    @GetMapping("/editar/{registroProfissional}")
+    public ModelAndView editarProfissionalForm(@PathVariable String registroProfissional) {
+        Optional<Profissional> profissionalOptional = profissionalRepository.findById(registroProfissional);
+        if (profissionalOptional.isPresent()) {
+            return new ModelAndView("Profissional/editar-profissional", "profissional", profissionalOptional.get());
+        }
+        return new ModelAndView("redirect:/profissional", "erro", "Profissional não encontrado.");
     }
 
-    // Buscar profissionais por categoria (tipoProfissional)
-    @GetMapping("/categoria/{tipoProfissional}")
-    public ResponseEntity<List<EntityModel<Profissional>>> buscarPorCategoria(@PathVariable String tipoProfissional) {
-        List<Profissional> profissionaisPorCategoria = profissionalService.buscarPorCategoria(tipoProfissional);
+    @PostMapping("/editar")
+    public ModelAndView atualizarProfissional(@ModelAttribute Profissional profissionalParam) {
+        Optional<Profissional> profissionalOptional = profissionalRepository.findById(profissionalParam.getRegistroProfissional());
 
-        List<EntityModel<Profissional>> profissionaisComLink = profissionaisPorCategoria.stream().map(profissional -> {
-            EntityModel<Profissional> resource = EntityModel.of(profissional);
-            Link selfLink = linkTo(methodOn(ProfissionalController.class).buscarPorRegistro(profissional.getRegistroProfissional())).withSelfRel();
-            Link allProfessionalsLink = linkTo(methodOn(ProfissionalController.class).buscarTodos()).withRel("all-professionals");
+        if (profissionalOptional.isPresent()) {
+            Profissional profissionalAtualizado = Profissional.builder()
+                    .registroProfissional(profissionalParam.getRegistroProfissional())
+                    .nomeProfissional(profissionalParam.getNomeProfissional())
+                    .sobrenomeProfissional(profissionalParam.getSobrenomeProfissional())
+                    .telefoneProfissional(profissionalParam.getTelefoneProfissional())
+                    .emailProfissional(profissionalParam.getEmailProfissional())
+                    .tipoProfissional(profissionalParam.getTipoProfissional())
+                    .dataInscricaoProfissional(profissionalParam.getDataInscricaoProfissional())
+                    .endereco(profissionalParam.getEndereco())
+                    .consultas(profissionalParam.getConsultas())
+                    .build();
 
-            resource.add(selfLink);
-            resource.add(allProfessionalsLink);
+            profissionalRepository.save(profissionalAtualizado);
+            return new ModelAndView("redirect:/profissional", "sucesso", "Profissional atualizado com sucesso!");
+        }
 
-            return resource;
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.ok(profissionaisComLink);
+        return new ModelAndView("Profissional/editar-profissional", "erro", "Erro ao atualizar o profissional.");
     }
 
-    // Atualizar profissional
-    @PutMapping("/atualizar/{registroProfissional}")
-    public ResponseEntity<EntityModel<Profissional>> atualizarProfissional(@PathVariable String registroProfissional,
-                                                                           @RequestBody Profissional profissionalParaAtualizar) {
-        Optional<Profissional> profissionalAtualizado = profissionalService.atualizarProfissional(registroProfissional, profissionalParaAtualizar);
-
-        return profissionalAtualizado.map(p -> {
-            EntityModel<Profissional> resource = EntityModel.of(p);
-            Link selfLink = linkTo(methodOn(ProfissionalController.class).buscarPorRegistro(registroProfissional)).withSelfRel();
-            Link allProfessionalsLink = linkTo(methodOn(ProfissionalController.class).buscarTodos()).withRel("all-professionals");
-
-            resource.add(selfLink);
-            resource.add(allProfessionalsLink);
-
-            return ResponseEntity.ok(resource);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/deletar/{registro}")
+    public ModelAndView deletarProfissional(@PathVariable String registro) {
+        Optional<Profissional> profissionalOptional = profissionalRepository.findById(registro);
+        if (profissionalOptional.isPresent()) {
+            profissionalRepository.deleteById(registro);
+            return new ModelAndView("redirect:/profissional", "sucesso", "Profissional deletado com sucesso!");
+        }
+        return new ModelAndView("redirect:/profissional", "erro", "Profissional não encontrado para exclusão.");
     }
-
-    // Atualizar email e telefone de um profissional
-    @PatchMapping("/atualizar-email-telefone/{registroProfissional}")
-    public ResponseEntity<EntityModel<Profissional>> atualizarEmailTelefone(@PathVariable String registroProfissional,
-                                                                            @RequestBody ProfissionalPatch profissionalPatch) {
-        Optional<Profissional> profissionalAtualizado = profissionalService.atualizarEmailTelefone(registroProfissional, profissionalPatch);
-
-        return profissionalAtualizado.map(p -> {
-            EntityModel<Profissional> resource = EntityModel.of(p);
-            Link selfLink = linkTo(methodOn(ProfissionalController.class).buscarPorRegistro(registroProfissional)).withSelfRel();
-            Link allProfessionalsLink = linkTo(methodOn(ProfissionalController.class).buscarTodos()).withRel("all-professionals");
-
-            resource.add(selfLink);
-            resource.add(allProfessionalsLink);
-
-            return ResponseEntity.ok(resource);
-        }).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Deletar profissional
-    @DeleteMapping("/deletar/{registroProfissional}")
-    public ResponseEntity<Void> deletarProfissional(@PathVariable String registroProfissional) {
-        boolean deletado = profissionalService.deletarProfissional(registroProfissional);
-        return deletado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-    }
-
 }

@@ -32,34 +32,32 @@ public class ConsultaController {
 
     @PostMapping("/nova")
     public ModelAndView novaConsulta(@ModelAttribute Consulta consulta) {
-        // Busca o usuário com o CPF fornecido
         Optional<Usuario> usuario = usuarioRepository.findByCpfUser(consulta.getUsuario().getCpfUser());
 
         Optional<Profissional> profissional = profissionalRepository.findProfissionalByRegistroProfissional(consulta.getProfissional().getRegistroProfissional());
 
         if (usuario.isPresent() && profissional.isPresent()) {
-            // Construa a nova consulta com os dados fornecidos
             Consulta consulta1 = Consulta.builder()
                     .id(consulta.getId())
                     .dataConsulta(consulta.getDataConsulta())
                     .descricaoConsulta(consulta.getDescricaoConsulta())
-                    .usuario(usuario.get())  // Atribui o usuário encontrado
-                    .profissional(profissional.get())  // Atribui o profissional encontrado
+                    .usuario(usuario.get())
+                    .profissional(profissional.get())
                     .build();
 
-            // Verifica se os campos obrigatórios foram preenchidos
             if (consulta.getDataConsulta() != null && consulta.getDescricaoConsulta() != null) {
-                // Salva a nova consulta no banco de dados
                 consultaRepository.save(consulta1);
-
-                // Redireciona para a lista de consultas com uma mensagem de sucesso
+                Usuario usuarioAtualizado = usuario.get();
+                usuarioAtualizado.getConsultas().add(consulta1);
+                usuarioRepository.save(usuarioAtualizado);
+                Profissional profissionalAtualizado = profissional.get();
+                profissionalAtualizado.getConsultas().add(consulta1);
+                profissionalRepository.save(profissionalAtualizado);
                 return new ModelAndView("redirect:/consultas", "sucesso", "Consulta salva com sucesso!");
             } else {
-                // Caso haja erro de validação, retorna para a página de cadastro
                 return new ModelAndView("Consultas/cadastrar-consulta", "erro", "Campos obrigatórios não preenchidos.");
             }
         } else {
-            // Caso o usuário ou o profissional não existam, retorna erro
             return new ModelAndView("Consultas/cadastrar-consulta", "erro", "Usuário ou Profissional não encontrados.");
         }
     }
@@ -67,55 +65,49 @@ public class ConsultaController {
 
     @GetMapping
     public ModelAndView listarConsultas() {
-        List<Consulta> consultas = consultaRepository.findAll(); // Recupera todas as consultas
-        return new ModelAndView("Consultas/lista", "consultas", consultas); // Passa as consultas para a view
-    }
-
-    @GetMapping("/{id}")
-    public ModelAndView detalhesConsulta(@PathVariable Long id) {
-        Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id)); // Busca a consulta pelo ID
-
-        if (consultaOpt.isPresent()) {
-            return new ModelAndView("consulta/detalhes", "consulta", consultaOpt.get()); // Passa a consulta para a view
-        } else {
-            return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada.");
-        }
+        List<Consulta> consultas = consultaRepository.findAll();
+        return new ModelAndView("Consultas/lista", "consultas", consultas);
     }
 
     @GetMapping("/editar/{id}")
     public ModelAndView editarConsultaForm(@PathVariable Long id) {
-        Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id));
-
-        if (consultaOpt.isPresent()) {
-            return new ModelAndView("consulta/editar-consulta", "consulta", consultaOpt.get()); // Passa a consulta para o formulário de edição
-        } else {
-            return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada para edição.");
+        Optional<Consulta> consultaOptional = consultaRepository.findById(String.valueOf(id));
+        if (consultaOptional.isPresent()) {
+            return new ModelAndView("Consultas/editar-consulta", "consulta", consultaOptional.get());
         }
+        return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada.");
     }
 
-    @PutMapping("/editar/{id}")
-    public ModelAndView atualizarConsulta(@PathVariable Long id, @ModelAttribute Consulta consulta) {
-        Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id));
+    @PostMapping("/editar")
+    public ModelAndView atualizarConsulta(@ModelAttribute Consulta consultaParam) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(String.valueOf(consultaParam.getId()));
 
-        if (consultaOpt.isPresent()) {
-            consulta.setId(id); // Atribui o ID da consulta para garantir que estamos atualizando
-            consultaRepository.save(consulta); // Atualiza a consulta no banco de dados
+        if (consultaOptional.isPresent()) {
+            Consulta consultaTransacao = consultaOptional.get();
+            Consulta consultaAtualizada = Consulta.builder()
+                    .id(consultaParam.getId())
+                    .dataConsulta(consultaParam.getDataConsulta())
+                    .descricaoConsulta(consultaParam.getDescricaoConsulta())
+                    .usuario(consultaTransacao.getUsuario())
+                    .profissional(consultaTransacao.getProfissional())
+                    .build();
+
+            consultaRepository.save(consultaAtualizada);
             return new ModelAndView("redirect:/consultas", "sucesso", "Consulta atualizada com sucesso!");
-        } else {
-            return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada para atualização.");
         }
-    }
 
+        return new ModelAndView("Consultas/editar-consulta", "erro", "Erro ao atualizar a consulta.");
+    }
 
     @GetMapping("/deletar/{id}")
     public ModelAndView deletarConsulta(@PathVariable Long id) {
-        Optional<Consulta> consultaOpt = consultaRepository.findById(String.valueOf(id));
+        Optional<Consulta> consultaOptional = consultaRepository.findById(String.valueOf(id));
 
-        if (consultaOpt.isPresent()) {
+        if (consultaOptional.isPresent()) {
             consultaRepository.deleteById(String.valueOf(id));
             return new ModelAndView("redirect:/consultas", "sucesso", "Consulta deletada com sucesso!");
-        } else {
-            return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada para deletar.");
         }
+
+        return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada para exclusão.");
     }
 }

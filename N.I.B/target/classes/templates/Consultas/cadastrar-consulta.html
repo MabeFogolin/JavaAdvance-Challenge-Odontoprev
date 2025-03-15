@@ -1,19 +1,39 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova Consulta</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .cabecalho__menu {
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            gap: 2rem;
+        }
+
+        .cabecalho__menu__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cabecalho__menu__link:hover {
+            text-decoration: underline;
         }
 
         .formulario {
@@ -62,16 +82,16 @@
 
         .botoes {
             display: flex;
-            justify-content: center; /* Centraliza os botões */
-            gap: 20px; /* Espaçamento uniforme entre os botões */
-            margin-top: 15px; /* Espaço acima dos botões */
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
         }
 
         .botoes {
             display: flex;
-            justify-content: space-between; /* Mantém os botões afastados */
-            width: 100%; /* Faz a div ocupar toda a largura do formulário */
-            margin-top: 20px; /* Adiciona um espaçamento entre os inputs e os botões */
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
         }
 
         .button-form {
@@ -81,15 +101,15 @@
             font-size: 1.2em;
             border: none;
             cursor: pointer;
-            width: 48%; /* Garante que os botões fiquem com largura uniforme */
+            width: 48%;
             text-align: center;
-            text-decoration: none; /* Remove sublinhado do link */
-            border-radius: 5px; /* Deixa os botões arredondados */
+            text-decoration: none;
+            border-radius: 5px;
         }
 
         .botao-voltar {
-            background-color: #ccc; /* Cor diferente para o botão "Voltar" */
-            color: #333; /* Define a cor do texto */
+            background-color: #ccc;
+            color: #333;
         }
 
 
@@ -130,6 +150,14 @@
     </style>
 </head>
 <body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="index.html">Home</a>
+        <a class="cabecalho__menu__link" href="consultas.html">Consultas</a>
+        <a class="cabecalho__menu__link" href="servicos.html">Serviços</a>
+        <a class="cabecalho__menu__link" href="contato.html">Contato</a>
+    </nav>
+</header>
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
@@ -154,11 +182,9 @@
         <textarea class="input-bordas textarea" rows="4" placeholder="Descrição" th:field="*{descricaoConsulta}"></textarea>
     </label>
     <div class="botoes">
-        <a href="/consultas" class="button-form borda-inversa botao-voltar">Voltar</a>
+        <button class="button-form borda-inversa botao-voltar" type="button" onclick="window.location.href='/consultas'">Voltar</button>
         <button class="button-form borda-inversa" type="submit">Salvar</button>
     </div>
-
-
 </form>
 </body>
 </html>

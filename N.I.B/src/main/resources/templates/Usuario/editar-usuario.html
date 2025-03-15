@@ -1,9 +1,8 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
-        <html lang="pt-BR">
-        <head>
-        <meta charset="UTF-8">
-        <title>Novo Usuário</title>
+    <title>Editar Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +24,6 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
         }
 
         .titulo {
@@ -121,8 +119,6 @@
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
-            max-height: 100px; /* Define a altura máxima */
-
         }
 
     </style>
@@ -131,14 +127,14 @@
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
-<h2 class="titulo">Novo Usuário</h2>
-<form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}">
-    <div th:if="${erro}" class="alert alert-danger">
-        <p th:text="${erro}"></p>
-    </div>
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{cpfUser}" required>
-    </label>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
+<h2 class="titulo">Editar Usuário</h2>
+<form class="formulario" th:action="@{/usuario/editar}" method="post" th:object="${usuario}">
+    <!-- Campo oculto para armazenar o ID do usuário -->
+    <input type="hidden" th:field="*{cpfUser}" />
+
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Nome do usuário" th:field="*{nomeUser}" required>
@@ -164,13 +160,10 @@
         <input type="email" class="input-bordas" placeholder="Email do usuário" th:field="*{emailUser}" required>
     </label>
 
-
     <div class="botoes">
         <a href="/usuario" class="button-form borda-inversa botao-voltar">Voltar</a>
-        <button class="button-form borda-inversa" type="submit">Salvar</button>
+        <button class="button-form borda-inversa" type="submit">Atualizar</button>
     </div>
-
-
 </form>
 </body>
 </html>

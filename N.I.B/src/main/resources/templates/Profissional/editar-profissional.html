@@ -1,9 +1,8 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
-        <html lang="pt-BR">
-        <head>
-        <meta charset="UTF-8">
-        <title>Novo Usuário</title>
+    <title>Editar Profissional</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +24,6 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
         }
 
         .titulo {
@@ -85,8 +83,8 @@
         }
 
         .botao-voltar {
-            background-color: #ccc; /* Cor diferente para o botão "Voltar" */
-            color: #333; /* Define a cor do texto */
+            background-color: #ccc;
+            color: #333;
         }
 
         .borda-inversa {
@@ -121,56 +119,49 @@
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
-            max-height: 100px; /* Define a altura máxima */
-
         }
-
     </style>
 </head>
 <body>
+
+<h2 class="titulo">Editar Profissional</h2>
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
-<h2 class="titulo">Novo Usuário</h2>
-<form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}">
-    <div th:if="${erro}" class="alert alert-danger">
-        <p th:text="${erro}"></p>
-    </div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
+<form class="formulario" th:action="@{/profissional/editar}" method="post" th:object="${profissional}">
+    <input type="hidden" th:field="*{registroProfissional}" />
+
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{cpfUser}" required>
+        <input type="text" class="input-bordas" placeholder="Nome do Profissional" th:field="*{nomeProfissional}" required>
     </label>
 
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Nome do usuário" th:field="*{nomeUser}" required>
+        <input type="text" class="input-bordas" placeholder="Sobrenome do Profissional" th:field="*{sobrenomeProfissional}" required>
     </label>
 
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Sobrenome do usuário" th:field="*{sobrenomeUser}" required>
+        <input type="text" class="input-bordas" placeholder="Telefone do Profissional" th:field="*{telefoneProfissional}" required>
     </label>
 
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Telefone do usuário" th:field="*{telefoneUser}" required>
+        <input type="text" class="input-bordas" placeholder="Tipo de Profissional" th:field="*{tipoProfissional}" required>
     </label>
 
     <label class="label">
-        <input type="date" class="input-bordas" th:field="*{dataNascimentoUser}" required>
+        <input type="date" class="input-bordas" th:field="*{dataInscricaoProfissional}" required>
     </label>
 
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Plano do usuário" th:field="*{planoUser}" required>
+        <input type="email" class="input-bordas" placeholder="Email do Profissional" th:field="*{emailProfissional}" required>
     </label>
-
-    <label class="label">
-        <input type="email" class="input-bordas" placeholder="Email do usuário" th:field="*{emailUser}" required>
-    </label>
-
 
     <div class="botoes">
-        <a href="/usuario" class="button-form borda-inversa botao-voltar">Voltar</a>
-        <button class="button-form borda-inversa" type="submit">Salvar</button>
+        <a href="/profissional" class="button-form botao-voltar borda-inversar">Voltar</a>
+        <button class="button-form borda-inversa"  type="submit">Atualizar</button>
     </div>
-
-
 </form>
 </body>
 </html>

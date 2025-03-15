@@ -20,13 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@NamedStoredProcedureQuery(
-//        name = "deletarProfissionalProcedure",
-//        procedureName = "deletar_profissional_procedure",
-//        parameters = {
-//                @StoredProcedureParameter(mode = ParameterMode.IN, name = "p_registro_profissional", type =String.class)
-//        }
-//)
 public class Profissional extends RepresentationModel<Profissional> {
 
     @NotNull
