@@ -1,6 +1,7 @@
 package com.fiap.N.I.B.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -55,11 +56,16 @@ public class Usuario extends RepresentationModel<Usuario> {
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Diario> diarios;
+    private List<Diario> diarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
     @OneToOne
     private Endereco endereco;
+
+    @OneToOne
+    @JsonIgnore
+    private Historico historico;
+
 }

@@ -132,7 +132,7 @@
 </div>
 <h2 class="titulo">Editar Usuário</h2>
 <form class="formulario" th:action="@{/usuario/editar}" method="post" th:object="${usuario}">
-    <!-- Campo oculto para armazenar o ID do usuário -->
+
     <input type="hidden" th:field="*{cpfUser}" />
 
 

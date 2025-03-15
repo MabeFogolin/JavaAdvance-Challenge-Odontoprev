@@ -169,8 +169,8 @@
             </td>
             <td align="center">
                 <a th:href="@{/usuario/deletar/{cpf}(cpf=${usuario.cpfUser})}"
-                   class="deletar fa fa-times-circle"
-                   title="Deletar"></a>
+                   class="deletar fa fa-edit"
+                   title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
             </td>
         </tr>
         </tbody>

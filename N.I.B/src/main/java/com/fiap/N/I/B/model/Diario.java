@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -43,7 +44,7 @@ public class Diario extends RepresentationModel<Diario> {
     @Size(max = 30, message = "Sintoma deve ter no máximo 30 caracteres")
     private String sintomaDiario;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Usuario usuario;
 }

@@ -1,39 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Consulta</title>
+    <title>Editar Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        .cabecalho {
-            background-color: #0066ff;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-        }
-
-        .cabecalho__menu {
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            gap: 2rem;
-        }
-
-        .cabecalho__menu__link {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .cabecalho__menu__link:hover {
-            text-decoration: underline;
+            align-items: center;
+            height: 100vh;
         }
 
         .formulario {
@@ -75,23 +55,18 @@
             padding: 7px 14px 9px;
             transition: 0.4s;
         }
-
-        .textarea {
-            resize: none !important;
+        .botoes {
+            display: flex;
+            justify-content: center; /* Centraliza os botões */
+            gap: 20px; /* Espaçamento uniforme entre os botões */
+            margin-top: 15px; /* Espaço acima dos botões */
         }
 
         .botoes {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .botoes {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 20px;
+            justify-content: space-between; /* Mantém os botões afastados */
+            width: 100%; /* Faz a div ocupar toda a largura do formulário */
+            margin-top: 20px; /* Adiciona um espaçamento entre os inputs e os botões */
         }
 
         .button-form {
@@ -101,17 +76,16 @@
             font-size: 1.2em;
             border: none;
             cursor: pointer;
-            width: 48%;
+            width: 48%; /* Garante que os botões fiquem com largura uniforme */
             text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
+            text-decoration: none; /* Remove sublinhado do link */
+            border-radius: 5px; /* Deixa os botões arredondados */
         }
 
         .botao-voltar {
-            background-color: #ccc;
-            color: #333;
+            background-color: #ccc; /* Cor diferente para o botão "Voltar" */
+            color: #333; /* Define a cor do texto */
         }
-
 
         .borda-inversa {
             display: inline-block;
@@ -150,41 +124,37 @@
     </style>
 </head>
 <body>
-<header class="cabecalho">
-    <nav class="cabecalho__menu">
-        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
-        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
-        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
-        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
-    </nav>
-</header>
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
 <div th:if="${erro}" class="alert alert-danger">
     <p th:text="${erro}"></p>
 </div>
-<h2 class="titulo">Nova Consulta</h2>
-<form class="formulario" action="/consultas/nova" method="post" th:object="${consulta}">
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{usuario.cpfUser}" required>
-    </label>
+<h2 class="titulo">Editar Diário</h2>
 
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="Registro do Profissional" th:field="*{profissional.registroProfissional}" required>
-    </label>
+<form class="formulario" th:action="@{/diarios/editar}" method="post" th:object="${diario}">
 
-    <label class="label">
-        <input type="date" class="input-bordas" th:field="*{dataConsulta}" required>
-    </label>
+    <input type="hidden" th:field="*{id}" />
 
-    <label class="label">
-        <textarea class="input-bordas textarea" rows="4" placeholder="Descrição" th:field="*{descricaoConsulta}"></textarea>
-    </label>
+    <label>Escovação diária:</label>
+    <input type="number"  class="input-bordas" placeholder="Escovação diária"
+           th:field="*{escovacaoDiario}" required min="0" max="99">
+
+    <label>Uso de fio dental diário</label>
+    <input type="number" class="input-bordas"
+           placeholder="Uso de fio dental diário" th:field="*{usoFioDiario}" required min="0" max="99">
+
+    <label>Uso de enxaguante diário:</label>
+    <input type="number" class="input-bordas" placeholder="Uso de enxaguante diário" th:field="*{usoEnxaguanteDiario}" required min="0" max="99">
+
+    <label>Sintomas do dia</label>
+    <input type="text" class="input-bordas" placeholder="Sintomas" th:field="*{sintomaDiario}" maxlength="30">
+
     <div class="botoes">
-        <button class="button-form borda-inversa botao-voltar" type="button" onclick="window.location.href='/consultas'">Voltar</button>
-        <button class="button-form borda-inversa" type="submit">Salvar</button>
+        <a href="/diarios" class="button-form borda-inversa botao-voltar">Voltar</a>
+        <button class="button-form borda-inversa" type="submit">Atualizar</button>
     </div>
 </form>
 </body>
 </html>
+

@@ -124,11 +124,11 @@
             <td align="center" th:text="${consulta.profissional.registroProfissional}"></td>
             <td align="center" th:text="${consulta.dataConsulta}"></td>
             <td align="center">
-                <a th:href="@{/consultas/editar/{id}(id=${consulta.id})}" class="editar fa fa-check-circle" title="Editar"></a>
+                <a th:href="@{/consultas/editar/{id}(id=${consulta.id})}" class="editar fa fa-edit" title="Editar"></a>
             </td>
             <td align="center">
                 <a th:href="@{/consultas/deletar/{id}(id=${consulta.id})}"
-                   class="deletar fa fa-times-circle" title="Deletar"></a>
+                   class="deletar fa fa-times-circle"title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
             </td>
         </tr>
         </tbody>

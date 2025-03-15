@@ -152,11 +152,11 @@
             <td align="center" th:text="${profissional.dataInscricaoProfissional}"></td>
             <td align="center">
                 <a th:href="@{/profissional/editar/{registroProfissional}(registroProfissional=${profissional.registroProfissional})}"
-                   class="editar fa fa-check-circle" title="Editar"></a>
+                   class="editar fa fa-edit" title="Editar"></a>
             </td>
             <td align="center">
                 <a th:href="@{/profissional/deletar/{registroProfissional}(registroProfissional=${profissional.registroProfissional})}"
-                   class="deletar fa fa-times-circle" title="Deletar"></a>
+                   class="deletar fa fa-times-circle" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
             </td>
         </tr>
         </tbody>

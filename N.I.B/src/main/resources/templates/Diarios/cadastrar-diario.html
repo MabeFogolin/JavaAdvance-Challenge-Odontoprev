@@ -97,10 +97,10 @@
 <body>
 <header class="cabecalho">
     <nav class="cabecalho__menu">
-        <a class="cabecalho__menu__link" href="index.html">Home</a>
-        <a class="cabecalho__menu__link" href="diario.html">Diário</a>
-        <a class="cabecalho__menu__link" href="sobre.html">Sobre</a>
-        <a class="cabecalho__menu__link" href="contato.html">Contato</a>
+        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
     </nav>
 </header>
 <div th:if="${sucesso}" class="alert alert-success">
@@ -110,31 +110,33 @@
     <p th:text="${erro}"></p>
 </div>
 <h2 class="titulo">Novo Registro no Diário</h2>
-<form class="formulario" action="/diario/novo" method="post" th:object="${diario}">
-    <label>
-        <input type="date" class="input-bordas" th:field="*{dataRegistro}" required>
+
+<form class="formulario" action="/diarios/novo" method="post" th:object="${diario}">
+
+    <label for="dataRegistro">Data do Registro:</label>
+    <input type="date" id="dataRegistro" class="input-bordas" th:field="*{dataRegistro}" required>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{usuario.cpfUser}" required>
     </label>
 
-    <label>
-        <input type="number" class="input-bordas" placeholder="Escovação diária" th:field="*{escovacaoDiario}" required min="0" max="99">
-    </label>
+    <label for="escovacaoDiario">Escovação diária:</label>
+    <input type="number" id="escovacaoDiario" class="input-bordas" placeholder="Escovação diária" th:field="*{escovacaoDiario}" required min="0" max="99">
 
-    <label>
-        <input type="number" class="input-bordas" placeholder="Uso de fio dental diário" th:field="*{usoFioDiario}" required min="0" max="99">
-    </label>
+    <label for="usoFioDiario">Uso de fio dental diário:</label>
+    <input type="number" id="usoFioDiario" class="input-bordas" placeholder="Uso de fio dental diário" th:field="*{usoFioDiario}" required min="0" max="99">
 
-    <label>
-        <input type="number" class="input-bordas" placeholder="Uso de enxaguante diário" th:field="*{usoEnxaguanteDiario}" required min="0" max="99">
-    </label>
+    <label for="usoEnxaguanteDiario">Uso de enxaguante diário:</label>
+    <input type="number" id="usoEnxaguanteDiario" class="input-bordas" placeholder="Uso de enxaguante diário" th:field="*{usoEnxaguanteDiario}" required min="0" max="99">
 
-    <label>
-        <input type="text" class="input-bordas" placeholder="Sintomas" th:field="*{sintomaDiario}" maxlength="30">
-    </label>
+    <label for="sintomaDiario"></label>
+    <input type="text" id="sintomaDiario" class="input-bordas" placeholder="Sintomas" th:field="*{sintomaDiario}" maxlength="30">
 
     <div class="botoes">
-        <button class="button-form botao-voltar" type="button" onclick="window.location.href='/diario'">Voltar</button>
+        <button class="button-form botao-voltar" type="button" onclick="window.location.href='/diarios'">Voltar</button>
         <button class="button-form" type="submit">Salvar</button>
     </div>
 </form>
+
 </body>
 </html>

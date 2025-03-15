@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -22,6 +23,7 @@ public class Historico extends RepresentationModel<Historico> {
     private Long id;
 
     @OneToOne
+    @JsonIgnore
     private Usuario usuario;
 
     @NotNull

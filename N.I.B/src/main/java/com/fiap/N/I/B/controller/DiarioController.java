@@ -32,6 +32,8 @@ public class DiarioController {
         Optional<Usuario> usuario = usuarioRepository.findByCpfUser(diario.getUsuario().getCpfUser());
 
         if (usuario.isPresent()) {
+            Usuario usuarioExistente = usuario.get();
+
             Diario novoDiario = Diario.builder()
                     .id(diario.getId())
                     .dataRegistro(diario.getDataRegistro() != null ? diario.getDataRegistro() : LocalDate.now())
@@ -39,18 +41,15 @@ public class DiarioController {
                     .escovacaoDiario(diario.getEscovacaoDiario())
                     .usoFioDiario(diario.getUsoFioDiario())
                     .usoEnxaguanteDiario(diario.getUsoEnxaguanteDiario())
-                    .usuario(diario.getUsuario())
+                    .usuario(usuarioExistente)
                     .build();
 
-            if (diario.getSintomaDiario() != null) {
-                diarioRepository.save(novoDiario);
-                Usuario usuarioAtualizado = usuario.get();
-                usuarioAtualizado.getDiarios().add(novoDiario);
-                usuarioRepository.save(usuarioAtualizado);
-                return new ModelAndView("redirect:/diarios", "sucesso", "Registro no diário salvo com sucesso!");
-            } else {
-                return new ModelAndView("Diarios/cadastrar-diario", "erro", "Descrição é obrigatória.");
-            }
+            diarioRepository.save(novoDiario);
+
+            usuarioExistente.getDiarios().add(novoDiario);
+            usuarioRepository.save(usuarioExistente);
+
+            return new ModelAndView("redirect:/diarios", "sucesso", "Registro no diário salvo com sucesso!");
         } else {
             return new ModelAndView("Diarios/cadastrar-diario", "erro", "Usuário não encontrado.");
         }
@@ -66,7 +65,8 @@ public class DiarioController {
     public ModelAndView editarDiarioForm(@PathVariable Long id) {
         Optional<Diario> diarioOptional = diarioRepository.findById(id);
         if (diarioOptional.isPresent()) {
-            return new ModelAndView("Diarios/editar-diario", "diario", diarioOptional.get());
+            Diario diarioEditar = diarioOptional.get();
+            return new ModelAndView("Diarios/editar-diario", "diario", diarioEditar);
         }
         return new ModelAndView("redirect:/diarios", "erro", "Registro do diário não encontrado.");
     }
@@ -79,7 +79,7 @@ public class DiarioController {
             Diario diarioTransacao = diarioOptional.get();
             Diario diarioAtualizado = Diario.builder()
                     .id(diarioParam.getId())
-                    .dataRegistro(diarioParam.getDataRegistro())
+                    .dataRegistro(diarioTransacao.getDataRegistro())
                     .sintomaDiario(diarioParam.getSintomaDiario())
                     .escovacaoDiario(diarioParam.getEscovacaoDiario())
                     .usoFioDiario(diarioParam.getUsoFioDiario())
@@ -97,12 +97,10 @@ public class DiarioController {
     @GetMapping("/deletar/{id}")
     public ModelAndView deletarDiario(@PathVariable Long id) {
         Optional<Diario> diarioOptional = diarioRepository.findById(id);
-
         if (diarioOptional.isPresent()) {
             diarioRepository.deleteById(id);
             return new ModelAndView("redirect:/diarios", "sucesso", "Registro deletado com sucesso!");
         }
-
         return new ModelAndView("redirect:/diarios", "erro", "Registro não encontrado para exclusão.");
     }
 }

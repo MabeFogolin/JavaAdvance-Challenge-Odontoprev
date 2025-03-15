@@ -94,10 +94,10 @@
 <body>
 <header class="cabecalho">
     <nav class="cabecalho__menu">
-        <a class="cabecalho__menu__link" href="index.html">Home</a>
-        <a class="cabecalho__menu__link" href="/consultas/nova">Nova consulta</a>
-        <a class="cabecalho__menu__link" href="servicos.html">Serviços</a>
-        <a class="cabecalho__menu__link" href="contato.html">Contato</a>
+        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
     </nav>
 </header>
 <h2 class="titulo">Lista de Diários</h2>
@@ -105,20 +105,27 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Data</th>
-            <th>Descrição</th>
+            <th>Data do Registro</th>
+            <th>Usuário</th>
+            <th>Qtd de escovações</th>
+            <th>Qtd de uso do fio dental</th>
+            <th>Qtd de uso do enxaguante</th>
+            <th>Sintomas do dia</th>
             <th>Ações</th>
+
         </tr>
         </thead>
         <tbody>
         <tr th:each="diario : ${diarios}">
-            <td th:text="${diario.id}"></td>
-            <td th:text="${diario.data}"></td>
-            <td th:text="${diario.descricao}"></td>
+            <td th:text="${diario.dataRegistro}"></td>
+            <td th:text="${diario.usuario.cpfUser}"></td>
+            <td th:text="${diario.escovacaoDiario}"></td>
+            <td th:text="${diario.usoFioDiario}"></td>
+            <td th:text="${diario.usoEnxaguanteDiario}"></td>
+            <td th:text="${diario.sintomaDiario}"></td>
             <td>
                 <a th:href="@{/diarios/editar/{id}(id=${diario.id})}" class="editar fa fa-edit" title="Editar"></a>
-                <a th:href="@{/diarios/excluir/{id}(id=${diario.id})}" class="deletar fa fa-trash" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
+                <a th:href="@{/diarios/deletar/{id}(id=${diario.id})}" class="deletar fa fa-trash" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
             </td>
         </tr>
         </tbody>
