@@ -15,6 +15,28 @@
             align-items: center;
             height: 100vh;
         }
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .cabecalho__menu {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .cabecalho__menu__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cabecalho__menu__link:hover {
+            text-decoration: underline;
+        }
 
         .formulario {
             max-width: 500px;
@@ -131,6 +153,14 @@
     <p th:text="${erro}"></p>
 </div>
 <h2 class="titulo">Editar Diário</h2>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
+    </nav>
+</header>
 
 <form class="formulario" th:action="@{/diarios/editar}" method="post" th:object="${diario}">
 
