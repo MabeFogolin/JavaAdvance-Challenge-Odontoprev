@@ -1,126 +1,108 @@
 package com.fiap.N.I.B.controller;
 
+import com.fiap.N.I.B.gateways.Repositories.DiarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.model.Diario;
-import com.fiap.N.I.B.gateways.requests.DiarioPatch;
-import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
-import com.fiap.N.I.B.usecases.Diario.DiarioService;
+import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
-@RestController
-@RequestMapping("/diario")
+@Controller
+@RequestMapping("/diarios")
 @RequiredArgsConstructor
 public class DiarioController {
 
-    private final DiarioService diarioService;
+    private final DiarioRepository diarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    // Criar novo registro no diário
-    @PostMapping("/criar")
-    public ResponseEntity<EntityModel<DiarioPostResponse>> criarRegistro(
-            @RequestParam String cpfUser,
-            @RequestBody Diario diarioParaCriar) {
-        DiarioPostResponse respostaCriacao = diarioService.inserirNoDiario(cpfUser, diarioParaCriar);
-        if (respostaCriacao.getMensagem().equals("Novo registro adicionado ao diário")) {
-            EntityModel<DiarioPostResponse> resource = EntityModel.of(respostaCriacao);
-            resource.add(linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withRel("usuario-diario"));
-            return ResponseEntity.status(201).body(resource);
+    @GetMapping("/novo")
+    public ModelAndView novoDiarioForm() {
+        Diario diarioVazio = new Diario();
+        return new ModelAndView("Diarios/cadastrar-diario", "diario", diarioVazio);
+    }
+
+    @PostMapping("/novo")
+    public ModelAndView novoDiario(@ModelAttribute Diario diario) {
+        Optional<Usuario> usuario = usuarioRepository.findByCpfUser(diario.getUsuario().getCpfUser());
+
+        if (usuario.isPresent()) {
+            Diario novoDiario = Diario.builder()
+                    .id(diario.getId())
+                    .dataRegistro(diario.getDataRegistro() != null ? diario.getDataRegistro() : LocalDate.now())
+                    .sintomaDiario(diario.getSintomaDiario())
+                    .escovacaoDiario(diario.getEscovacaoDiario())
+                    .usoFioDiario(diario.getUsoFioDiario())
+                    .usoEnxaguanteDiario(diario.getUsoEnxaguanteDiario())
+                    .usuario(diario.getUsuario())
+                    .build();
+
+            if (diario.getSintomaDiario() != null) {
+                diarioRepository.save(novoDiario);
+                Usuario usuarioAtualizado = usuario.get();
+                usuarioAtualizado.getDiarios().add(novoDiario);
+                usuarioRepository.save(usuarioAtualizado);
+                return new ModelAndView("redirect:/diarios", "sucesso", "Registro no diário salvo com sucesso!");
+            } else {
+                return new ModelAndView("Diarios/cadastrar-diario", "erro", "Descrição é obrigatória.");
+            }
         } else {
-            return ResponseEntity.status(409).body(EntityModel.of(respostaCriacao));
+            return new ModelAndView("Diarios/cadastrar-diario", "erro", "Usuário não encontrado.");
         }
     }
 
-    // Buscar registros do diário por usuário
-    @GetMapping("/usuario")
-    public ResponseEntity<CollectionModel<EntityModel<Diario>>> buscarRegistrosPorUsuario(@RequestParam String cpfUser) {
-        List<Diario> registros = diarioService.buscarRegistrosPorUsuario(cpfUser);
-        if (registros.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            List<EntityModel<Diario>> registrosModel = registros.stream()
-                    .map(diario -> EntityModel.of(diario,
-                            linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withSelfRel(),
-                            linkTo(methodOn(DiarioController.class).buscarTodosRegistros()).withRel("todos-diarios")
-                    ))
-                    .collect(Collectors.toList());
-            CollectionModel<EntityModel<Diario>> collectionModel = CollectionModel.of(registrosModel);
-            collectionModel.add(linkTo(methodOn(DiarioController.class).buscarTodosRegistros()).withRel("todos-diarios"));
-            return ResponseEntity.ok(collectionModel);
-        }
+    @GetMapping
+    public ModelAndView listarDiarios() {
+        List<Diario> diarios = diarioRepository.findAll();
+        return new ModelAndView("Diarios/lista", "diarios", diarios);
     }
 
-    // Buscar todos os registros do diário
-    @GetMapping("/todos")
-    public ResponseEntity<CollectionModel<EntityModel<Diario>>> buscarTodosRegistros() {
-        List<Diario> registros = diarioService.buscarTodos();
-        if (registros.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            List<EntityModel<Diario>> registrosModel = registros.stream()
-                    .map(diario -> EntityModel.of(diario,
-                            linkTo(methodOn(DiarioController.class).buscarTodosRegistros()).withSelfRel()
-                    ))
-                    .collect(Collectors.toList());
-            CollectionModel<EntityModel<Diario>> collectionModel = CollectionModel.of(registrosModel);
-            collectionModel.add(linkTo(methodOn(DiarioController.class).buscarTodosRegistros()).withSelfRel());
-            return ResponseEntity.ok(collectionModel);
+    @GetMapping("/editar/{id}")
+    public ModelAndView editarDiarioForm(@PathVariable Long id) {
+        Optional<Diario> diarioOptional = diarioRepository.findById(id);
+        if (diarioOptional.isPresent()) {
+            return new ModelAndView("Diarios/editar-diario", "diario", diarioOptional.get());
         }
+        return new ModelAndView("redirect:/diarios", "erro", "Registro do diário não encontrado.");
     }
 
-    // Atualizar um registro do diário
-    @PutMapping("/atualizar")
-    public ResponseEntity<EntityModel<Diario>> atualizarRegistro(
-            @RequestParam String cpfUser,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataRegistro,
-            @RequestBody Diario diarioParaAtualizar) {
-        Optional<Diario> diarioAtualizado = diarioService.atualizarRegistro(cpfUser, dataRegistro, diarioParaAtualizar);
-        if (diarioAtualizado.isPresent()) {
-            EntityModel<Diario> resource = EntityModel.of(diarioAtualizado.get(),
-                    linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withRel("usuario-diario"),
-                    linkTo(methodOn(DiarioController.class).buscarTodosRegistros()).withRel("todos-diarios"));
-            return ResponseEntity.ok(resource);
-        } else {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/editar")
+    public ModelAndView atualizarDiario(@ModelAttribute Diario diarioParam) {
+        Optional<Diario> diarioOptional = diarioRepository.findById(diarioParam.getId());
+
+        if (diarioOptional.isPresent()) {
+            Diario diarioTransacao = diarioOptional.get();
+            Diario diarioAtualizado = Diario.builder()
+                    .id(diarioParam.getId())
+                    .dataRegistro(diarioParam.getDataRegistro())
+                    .sintomaDiario(diarioParam.getSintomaDiario())
+                    .escovacaoDiario(diarioParam.getEscovacaoDiario())
+                    .usoFioDiario(diarioParam.getUsoFioDiario())
+                    .usoEnxaguanteDiario(diarioParam.getUsoEnxaguanteDiario())
+                    .usuario(diarioTransacao.getUsuario())
+                    .build();
+
+            diarioRepository.save(diarioAtualizado);
+            return new ModelAndView("redirect:/diarios", "sucesso", "Registro do diário atualizado com sucesso!");
         }
+
+        return new ModelAndView("Diarios/editar-diario", "erro", "Erro ao atualizar o registro.");
     }
 
-    // Atualizar informações específicas de um registro (patch)
-    @PatchMapping("/atualizar-informacoes")
-    public ResponseEntity<EntityModel<Diario>> atualizarInformacoesRegistro(
-            @RequestParam String cpfUser,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataRegistro,
-            @RequestBody DiarioPatch diarioPatch) {
-        Optional<Diario> diarioAtualizado = diarioService.atualizarInformacoesRegistro(cpfUser, dataRegistro, diarioPatch);
-        if (diarioAtualizado.isPresent()) {
-            EntityModel<Diario> resource = EntityModel.of(diarioAtualizado.get(),
-                    linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withRel("usuario-diario"),
-                    linkTo(methodOn(DiarioController.class).buscarTodosRegistros()).withRel("todos-diarios"));
-            return ResponseEntity.ok(resource);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    @GetMapping("/deletar/{id}")
+    public ModelAndView deletarDiario(@PathVariable Long id) {
+        Optional<Diario> diarioOptional = diarioRepository.findById(id);
 
-    // Deletar um registro do diário
-    @DeleteMapping("/deletar")
-    public ResponseEntity<Void> deletarRegistro(
-            @RequestParam String cpfUser,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataRegistro) {
-        boolean deletado = diarioService.deletarRegistro(cpfUser, dataRegistro);
-        if (deletado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        if (diarioOptional.isPresent()) {
+            diarioRepository.deleteById(id);
+            return new ModelAndView("redirect:/diarios", "sucesso", "Registro deletado com sucesso!");
         }
+
+        return new ModelAndView("redirect:/diarios", "erro", "Registro não encontrado para exclusão.");
     }
 }

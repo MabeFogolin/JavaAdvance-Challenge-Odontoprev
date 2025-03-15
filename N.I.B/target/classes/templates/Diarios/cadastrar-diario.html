@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Registro no Diário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .cabecalho__menu {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .cabecalho__menu__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cabecalho__menu__link:hover {
+            text-decoration: underline;
+        }
+
+        .formulario {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            overflow: hidden;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo {
+            color: #757575;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .input-bordas {
+            font: 15px Arial, sans-serif;
+            color: #333;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            padding: 7px 14px;
+            margin-bottom: 15px;
+        }
+
+        .textarea {
+            resize: none !important;
+        }
+
+        .botoes {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .button-form {
+            background-color: #39f;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            width: 48%;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .botao-voltar {
+            background-color: #ccc;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="index.html">Home</a>
+        <a class="cabecalho__menu__link" href="diario.html">Diário</a>
+        <a class="cabecalho__menu__link" href="sobre.html">Sobre</a>
+        <a class="cabecalho__menu__link" href="contato.html">Contato</a>
+    </nav>
+</header>
+<div th:if="${sucesso}" class="alert alert-success">
+    <p th:text="${sucesso}"></p>
+</div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
+<h2 class="titulo">Novo Registro no Diário</h2>
+<form class="formulario" action="/diario/novo" method="post" th:object="${diario}">
+    <label>
+        <input type="date" class="input-bordas" th:field="*{dataRegistro}" required>
+    </label>
+
+    <label>
+        <input type="number" class="input-bordas" placeholder="Escovação diária" th:field="*{escovacaoDiario}" required min="0" max="99">
+    </label>
+
+    <label>
+        <input type="number" class="input-bordas" placeholder="Uso de fio dental diário" th:field="*{usoFioDiario}" required min="0" max="99">
+    </label>
+
+    <label>
+        <input type="number" class="input-bordas" placeholder="Uso de enxaguante diário" th:field="*{usoEnxaguanteDiario}" required min="0" max="99">
+    </label>
+
+    <label>
+        <input type="text" class="input-bordas" placeholder="Sintomas" th:field="*{sintomaDiario}" maxlength="30">
+    </label>
+
+    <div class="botoes">
+        <button class="button-form botao-voltar" type="button" onclick="window.location.href='/diario'">Voltar</button>
+        <button class="button-form" type="submit">Salvar</button>
+    </div>
+</form>
+</body>
+</html>
