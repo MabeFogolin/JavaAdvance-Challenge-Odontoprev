@@ -1,4 +1,3 @@
-
 <h1 align="left"> Challenge Odontoprev: Java Advanced</h1>
 <p align="left">O projeto N.I.B. visa desenvolver um aplicativo que permite aos segurados da Odontoprev monitorar suas rotinas diárias, coletando informações sobre hábitos de saúde e bem-estar. Utilizando modelos de inteligência artificial, o aplicativo prevê a probabilidade de acionamento de sinistros para procedimentos odontológicos mais custosos.</p>
 
@@ -12,50 +11,71 @@
 
 <h2 align="left">Objetivos do Projeto</h2>
 <ul>
-  <li>📊 <strong>Monitoramento de Rotinas:</strong> Registro das atividades diárias dos usuários. </li>
-  <li>🔍 <strong>Identificação de Tendências:</strong> Análise de dados para reconhecer perfis propensos a intervenções de alto custo. </li>
-  <li>🔒 <strong>Autenticidade e Confiabilidade:</strong> Verificação cruzada realizada por profissionais de odontologia. </li>
+  <li>📊 <strong>Monitoramento de Rotinas:</strong> Registro das atividades diárias dos usuários.</li>
+  <li>🔍 <strong>Identificação de Tendências:</strong> Análise de dados para reconhecer perfis propensos a intervenções de alto custo.</li>
+  <li>🔒 <strong>Autenticidade e Confiabilidade:</strong> Verificação cruzada realizada por profissionais de odontologia.</li>
 </ul>
 
 <h2 align="left">Tecnologias Utilizadas</h2>
 <ul>
-  <li>⚙️ <strong>Backend:</strong> Java com Spring. </li>
-  <li>🗄️ <strong>Banco de Dados:</strong> Oracle. </li>
-  <li>🧠 <strong>Inteligência Artificial:</strong> Modelos de machine learning com Python para análise de dados. </li>
-  <li> 📱 <strong>Aplicativo:</strong> Construção de aplicativo de tela com a linguagem Kotlin. </li>
-  
+  <li>⚙️ <strong>Backend:</strong> Java com Spring.</li>
+  <li>🐄️ <strong>Banco de Dados:</strong> Oracle.</li>
+  <li>🧠 <strong>Inteligência Artificial:</strong> Modelos de machine learning com Python para análise de dados.</li>
+  <li>📱 <strong>Aplicativo:</strong> Construção de aplicativo de tela com a linguagem Kotlin.</li>
 </ul>
 
-<h2 align="left"> 📆Prazos</h2>
+<h2 align="left"> 🏠 Relacionamentos: Visão banco</h2>
+
+<h3 align="left"> 🏠 Modelo Lógico </h3>
+  <img src="Imagens/2TDSPR_NIB_Logico.png">
+
+<h3 align="left"> 🏠 Modelo Físico </h3>
+  <img src="Imagens/2TDSPR_NIB_Fisico.png">
+
+<h2 align="left">	🧮 Testes 🧮</h2>
+
+<h3 align="left"> 🧙‍♀️ Usuário</h3>
 <ul>
-  <li> 🗓️ <strong>02/09</strong> Kickoff com a empresa Odontoprev </li> 
-  <li> 🗓️ <strong>30/09</strong> Mentoria online para apresentar a ideia do projeto <em> <strong>CANCELADO</strong> </em> </li>
-  <li> 🗓️ <strong>07/10</strong> Entrega da Sprint 1 <strong>Finalizado <em> <strong>CANCELADO</strong> </em> </strong> </li> 
-  <li> 🗓️ <strong>30/10</strong> Mentoria presencial com a empresa </li>
-  <li> 🗓️ <strong>08/11</strong> Entrega da Sprint 2 </li>
+  <li><strong>Nome:</strong> Usuário</li>
+  <li><strong>Sobrenome:</strong> Testte</li>
+  <li><strong>CPF:</strong> 98684948009</li>
+  <li><strong>Telefone:</strong> 1234567890</li>
+  <li><strong>E-mail:</strong> maria.fogolin@example.com</li>
+  <li><strong>Data de Nascimento:</strong> 01/01/1990</li>
+  <li><strong>Plano:</strong> Premium</li>
 </ul>
 
-
-<h2 align="left"> 🧑‍🤝‍🧑 Integrantes</h2>
+<h3 align="left"> 👷‍♀️ Profissional</h3>
 <ul>
-  <li> Igor Gabriel Pereira Marcondes <strong>RM 553544 </strong></li>
-  <dl> 
-    <dt> <strong> Matérias responsáveis </strong></dt>
-    <dd>  COMPLIANCE & QUALITY ASSURANCE </dd>
-    <dd>  MOBILE APP DEVELOPMENT </dd>
-  </dl>
-  <li> Maria Beatriz Reis Fogolin de Godoy <strong>RM 552669 </strong></li>
-   <dl> 
-    <dt> <strong> Matérias responsáveis </strong></dt>
-    <dd> MASTERING RELATIONAL AND NON RELATIONAL DATABASE </dd>
-    <dd> JAVA ADVANCED  </dd>
-  </dl>
-  <li> Nicholas Pereira Paulo Lima Barbosa <strong>RM 552744 </strong></li>
-  <dl> 
-    <dt> <strong> Matérias responsáveis </strong></dt>
-    <dd>  ADVANCED BUSINESS DEVELOPMENT WITH .NET </dd>
-    <dd>  DEVOPS TOOLS E CLOUD COMPUTING </dd>
-    <dd>  DISRUPTIVE ARCHITECTURES: IOT, IOB & GENERATIVE IA </dd>
- </dd>
-  </dl>
+  <li><strong>Nome:</strong> João</li>
+  <li><strong>Sobrenome:</strong> Silva</li>
+  <li><strong>Telefone:</strong> 11987654321</li>
+  <li><strong>E-mail:</strong> joao.silva@exemplo.com</li>
+  <li><strong>Data de cadastro:</strong> 27/09/2024</li>
+  <li><strong>Registro do Profissional:</strong> 0123456789</li>
+  <li><strong>Tipo do profissional:</strong> Dentista</li>
+</ul>
+
+<h3 align="left"> 📅 Diário</h3>
+<ul>
+  <li><strong>Data do Registro:</strong> 03/10/2024</li>
+  <li><strong>Escovação:</strong> 1 vez ao dia</li>
+  <li><strong>Uso de fio dental:</strong> 1 vez ao dia</li>
+  <li><strong>Uso de enxaguante:</strong> 1 vez ao dia</li>
+  <li><strong>Sintoma relatado:</strong> Registro com mês diferente</li>
+</ul>
+
+<h3 align="left"> 🏥 Consulta</h3>
+<ul>
+  <li><strong>Data da Consulta:</strong> 02/10/2024</li>
+  <li><strong>Descrição:</strong> Consulta de teste</li>
+  <li><strong>Registro do Profissional:</strong> 1234567890</li>
+  <li><strong>CPF do Usuário:</strong> 92712116003</li>
+</ul>
+
+<h2 align="left"> 🤝 Integrantes</h2>
+<ul>
+  <li>Igor Gabriel Pereira Marcondes <strong>RM 553544</strong></li>
+  <li>Maria Beatriz Reis Fogolin de Godoy <strong>RM 552669</strong></li>
+  <li>Nicholas Pereira Paulo Lima Barbosa <strong>RM 552744</strong></li>
 </ul>
