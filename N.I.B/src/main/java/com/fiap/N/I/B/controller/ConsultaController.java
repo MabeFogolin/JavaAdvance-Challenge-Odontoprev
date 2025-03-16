@@ -93,6 +93,7 @@ public class ConsultaController {
 
         if (consultaOptional.isPresent()) {
             Consulta consultaTransacao = consultaOptional.get();
+
             Consulta consultaAtualizada = Consulta.builder()
                     .id(consultaParam.getId())
                     .dataConsulta(consultaParam.getDataConsulta())

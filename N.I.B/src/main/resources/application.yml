@@ -6,9 +6,9 @@ spring:
   application:
     name: N.I.B
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: system
-    password: 251084
+    url: jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl
+    username: rm552669
+    password: fiap25
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       maximum-pool-size: 2

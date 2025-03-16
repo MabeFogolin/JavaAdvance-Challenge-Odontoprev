@@ -176,6 +176,20 @@
         </ul>
     </div>
 
+    <div class="secao">
+        <h2 class="titulo">Diários do Usuário</h2>
+        <ul class="lista-consultas">
+            <li th:each="diario : ${usuario.diarios}">
+                <i class="fa fa-calendar-check icon"></i>
+                <span><strong>Data:</strong> <span th:text="${diario.dataRegistro}"></span></span> |
+                <span><strong>Quantidade de escovações:</strong> <span th:text="${diario.escovacaoDiario}"></span></span>
+                <span><strong>Quantidade de uso do fio dental:</strong> <span th:text="${diario.usoFioDiario}"></span></span>
+                <span><strong>Quantidade de uso do enxaguante bucal:</strong> <span th:text="${diario.usoEnxaguanteDiario}"></span></span>
+                <span><strong>Sintomas registrados:</strong> <span th:text="${diario.sintomaDiario}"></span></span>
+            </li>
+        </ul>
+    </div>
+
     <a href="/usuario" class="button">Voltar</a>
 
 </div>
