@@ -69,6 +69,15 @@ public class ConsultaController {
         return new ModelAndView("Consultas/lista", "consultas", consultas);
     }
 
+    @GetMapping("/{id}")
+    public ModelAndView listarConsulta(@PathVariable Long id) {
+        Optional<Consulta> consultaOptional = consultaRepository.findById(String.valueOf(id));
+        if (consultaOptional.isPresent()) {
+            return new ModelAndView("Consultas/listar-consulta", "consulta", consultaOptional.get());
+        }
+        return new ModelAndView("redirect:/consultas", "erro", "Consulta não encontrada.");
+    }
+
     @GetMapping("/editar/{id}")
     public ModelAndView editarConsultaForm(@PathVariable Long id) {
         Optional<Consulta> consultaOptional = consultaRepository.findById(String.valueOf(id));

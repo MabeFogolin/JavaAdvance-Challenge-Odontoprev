@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Consulta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .cabecalho__menu {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .cabecalho__menu__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cabecalho__menu__link:hover {
+            text-decoration: underline;
+        }
+        .titulo {
+            color: #757575;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .info:last-child {
+            border-bottom: none;
+        }
+
+        .icon {
+            color: #003EA6;
+            margin-right: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #0066ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background-color: #0052cc;
+        }
+    </style>
+</head>
+<body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
+    </nav>
+</header>
+<div class="container">
+    <h2 class="titulo">Detalhes da Consulta</h2>
+
+    <div class="info">
+        <i class="fa fa-id-badge icon"></i>
+        <span><strong>ID:</strong> <span th:text="${consulta.id}"></span></span>
+    </div>
+    <div class="info">
+        <i class="fa fa-user icon"></i>
+        <span><strong>Usuário:</strong> <span th:text="${consulta.usuario.cpfUser}"></span></span>
+    </div>
+    <div class="info">
+        <i class="fa fa-user-md icon"></i>
+        <span><strong>Profissional:</strong> <span th:text="${consulta.profissional.registroProfissional}"></span></span>
+    </div>
+    <div class="info">
+        <i class="fa fa-calendar-alt icon"></i>
+        <span><strong>Data:</strong> <span th:text="${consulta.dataConsulta}"></span></span>
+    </div>
+    <div class="info">
+        <i class="fa fa-clipboard icon"></i>
+        <span><strong>Descrição</strong> <span th:text="${consulta.descricaoConsulta}"></span></span>
+    </div>
+
+    <a href="/consultas" class="button">Voltar</a>
+</div>
+</body>
+</html>

@@ -86,6 +86,18 @@
             display: inline;
             text-decoration: none;
         }
+        .button-form {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            background-color: #39f;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -113,7 +125,7 @@
             <td class="top center"><strong>Usuário</strong></td>
             <td class="top center"><strong>Profissional</strong></td>
             <td class="top center"><strong>Data</strong></td>
-            <td class="top center" colspan="2" width="1"><strong>Ações</strong></td>
+            <td class="top center" colspan="3" width="1"><strong>Ações</strong></td>
         </tr>
         </tbody>
         <tbody>
@@ -124,6 +136,9 @@
             <td align="center" th:text="${consulta.profissional.registroProfissional}"></td>
             <td align="center" th:text="${consulta.dataConsulta}"></td>
             <td align="center">
+                <a th:href="@{/consultas/{id}(id=${consulta.id})}" class="editar fas fa-search" title="Visualizar"></a>
+            </td>
+            <td align="center">
                 <a th:href="@{/consultas/editar/{id}(id=${consulta.id})}" class="editar fa fa-edit" title="Editar"></a>
             </td>
             <td align="center">
@@ -132,9 +147,14 @@
             </td>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="8" align="center">
+                <a th:href="@{/consultas/nova}" class="button-form borda-inversa">Nova Consulta</a>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 </div>
-<br>
-<a href="/consultas/nova">Nova Consulta</a>
 </body>
 </html>
