@@ -1,6 +1,7 @@
 package com.fiap.N.I.B.controller;
 
 import com.fiap.N.I.B.gateways.Repositories.ProfissionalRepository;
+import com.fiap.N.I.B.model.Diario;
 import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.gateways.requests.ProfissionalPatch;
 import com.fiap.N.I.B.gateways.responses.ProfissionalPostResponse;
@@ -77,6 +78,14 @@ public class ProfissionalController {
         return new ModelAndView("redirect:/profissional", "sucesso", "Profissional cadastrado com sucesso!");
     }
 
+    @GetMapping("/{registroProfissional}")
+    public ModelAndView listarDiario(@PathVariable String registroProfissional) {
+        Optional<Profissional> profissionalOptional = profissionalRepository.findById(registroProfissional);
+        if (profissionalOptional.isPresent()) {
+            return new ModelAndView("Profissional/listar-profissional", "profissional", profissionalOptional.get());
+        }
+        return new ModelAndView("redirect:/profissional", "erro", "Profissional não encontrado.");
+    }
 
     @GetMapping("/editar/{registroProfissional}")
     public ModelAndView editarProfissionalForm(@PathVariable String registroProfissional) {

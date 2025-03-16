@@ -54,6 +54,13 @@
             text-align: center;
         }
 
+        .label-estilizado {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+
         .input-bordas {
             font: 15px Arial, sans-serif;
             color: #333;
@@ -99,33 +106,34 @@
         <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
     </nav>
 </header>
+
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
 <div th:if="${erro}" class="alert alert-danger">
     <p th:text="${erro}"></p>
 </div>
+
 <h2 class="titulo">Novo Registro no Diário</h2>
 
 <form class="formulario" action="/diarios/novo" method="post" th:object="${diario}">
 
-    <label for="dataRegistro">Data do Registro:</label>
+    <label for="dataRegistro" class="label-estilizado">Data do Registro:</label>
     <input type="date" id="dataRegistro" class="input-bordas" th:field="*{dataRegistro}" required>
 
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{usuario.cpfUser}" required>
-    </label>
+    <label for="cpfUser" class="label-estilizado">CPF do Usuário:</label>
+    <input type="text" id="cpfUser" class="input-bordas" placeholder="CPF do Usuário" th:field="*{usuario.cpfUser}" required>
 
-    <label for="escovacaoDiario">Escovação diária:</label>
+    <label for="escovacaoDiario" class="label-estilizado">Escovação diária:</label>
     <input type="number" id="escovacaoDiario" class="input-bordas" placeholder="Escovação diária" th:field="*{escovacaoDiario}" required min="0" max="99">
 
-    <label for="usoFioDiario">Uso de fio dental diário:</label>
+    <label for="usoFioDiario" class="label-estilizado">Uso de fio dental diário:</label>
     <input type="number" id="usoFioDiario" class="input-bordas" placeholder="Uso de fio dental diário" th:field="*{usoFioDiario}" required min="0" max="99">
 
-    <label for="usoEnxaguanteDiario">Uso de enxaguante diário:</label>
+    <label for="usoEnxaguanteDiario" class="label-estilizado">Uso de enxaguante diário:</label>
     <input type="number" id="usoEnxaguanteDiario" class="input-bordas" placeholder="Uso de enxaguante diário" th:field="*{usoEnxaguanteDiario}" required min="0" max="99">
 
-    <label for="sintomaDiario"></label>
+    <label for="sintomaDiario" class="label-estilizado">Sintomas:</label>
     <input type="text" id="sintomaDiario" class="input-bordas" placeholder="Sintomas" th:field="*{sintomaDiario}" maxlength="30">
 
     <div class="botoes">

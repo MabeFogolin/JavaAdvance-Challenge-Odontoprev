@@ -139,7 +139,7 @@
             <td class="top center"><strong>Sobrenome</strong></td>
             <td class="top center"><strong>Email</strong></td>
             <td class="top center"><strong>Data de inscrição</strong></td>
-            <td class="top center" colspan="2" width="1"><strong>Ações</strong></td>
+            <td class="top center" colspan="3" width="1"><strong>Ações</strong></td>
         </tr>
         </tbody>
         <tbody>
@@ -150,6 +150,10 @@
             <td align="center" th:text="${profissional.sobrenomeProfissional}"></td>
             <td align="center" th:text="${profissional.emailProfissional}"></td>
             <td align="center" th:text="${profissional.dataInscricaoProfissional}"></td>
+            <td align="center">
+                <a th:href="@{/profissional/{registroProfissional}(registroProfissional=${profissional.registroProfissional})}"
+                   class="editar fas fa-search" title="Visualizar"></a>
+            </td>
             <td align="center">
                 <a th:href="@{/profissional/editar/{registroProfissional}(registroProfissional=${profissional.registroProfissional})}"
                    class="editar fa fa-edit" title="Editar"></a>

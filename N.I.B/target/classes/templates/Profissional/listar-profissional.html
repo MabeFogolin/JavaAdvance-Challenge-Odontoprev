@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Profissional</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    /* Reset e estilos globais */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    /* Cabeçalho */
+    .cabecalho {
+      background-color: #0066ff;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+    }
+
+    .cabecalho__menu {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .cabecalho__menu__link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .cabecalho__menu__link:hover {
+      text-decoration: underline;
+    }
+
+    /* Container principal */
+    .container {
+      background: white;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Seções */
+    .secao {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .titulo {
+      color: #333;
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    /* Informações do Profissional */
+    .info {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .info:last-child {
+      border-bottom: none;
+    }
+
+    .icon {
+      color: #003EA6;
+    }
+
+    /* Lista de Consultas */
+    .lista-consultas {
+      list-style: none;
+      padding: 0;
+    }
+
+    .lista-consultas li {
+      background: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Botão de Voltar */
+    .button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #0066ff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+      width: 150px;
+    }
+
+    .button:hover {
+      background-color: #0052cc;
+    }
+  </style>
+</head>
+<body>
+
+<header class="cabecalho">
+  <nav class="cabecalho__menu">
+    <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+    <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+    <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+    <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
+  </nav>
+</header>
+
+<div class="container">
+
+
+  <div class="secao">
+    <h2 class="titulo">Detalhes do Profissional</h2>
+
+    <div class="info">
+      <i class="fa fa-id-badge icon"></i>
+      <span><strong>Nº Registro:</strong> <span th:text="${profissional.registroProfissional}"></span></span>
+    </div>
+    <div class="info">
+      <i class="fa fa-calendar-alt icon"></i>
+      <span><strong>Data de Cadastro:</strong> <span th:text="${profissional.dataInscricaoProfissional}"></span></span>
+    </div>
+    <div class="info">
+      <i class="fa fa-user icon"></i>
+      <span><strong>Nome:</strong> <span th:text="${profissional.nomeProfissional}"></span></span>
+    </div>
+    <div class="info">
+      <i class="fa fa-file-text-o"></i>
+      <span><strong>Sobrenome:</strong> <span th:text="${profissional.sobrenomeProfissional}"></span></span>
+    </div>
+    <div class="info">
+      <i class="fa fa-volume-control-phone"></i>
+      <span><strong>Telefone:</strong> <span th:text="${profissional.telefoneProfissional}"></span></span>
+    </div>
+    <div class="info">
+      <i class="fa fa-tags icon"></i>
+      <span><strong>Tipo de profissional:</strong> <span th:text="${profissional.tipoProfissional}"></span></span>
+    </div>
+  </div>
+
+  <div class="secao">
+    <h2 class="titulo">Consultas do Profissional</h2>
+    <ul class="lista-consultas">
+      <li th:each="consulta : ${profissional.consultas}">
+        <i class="fa fa-calendar-check icon"></i>
+        <span><strong>Data:</strong> <span th:text="${consulta.dataConsulta}"></span></span> |
+        <span><strong>Paciente:</strong> <span th:text="${consulta.usuario.cpfUser}"></span></span> |
+        <span><strong>Descrição da consulta</strong> <span th:text="${consulta.descricaoConsulta}"></span></span>
+      </li>
+    </ul>
+  </div>
+
+  <a href="/profissional" class="button">Voltar</a>
+
+</div>
+
+</body>
+</html>
