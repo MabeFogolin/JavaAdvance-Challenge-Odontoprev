@@ -1,6 +1,7 @@
 package com.fiap.N.I.B.controller;
 
 import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
+import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -60,6 +61,15 @@ public class UsuarioController {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(cpf);
         if (usuarioOptional.isPresent()) {
             return new ModelAndView("Usuario/editar-usuario", "usuario", usuarioOptional.get());
+        }
+        return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado.");
+    }
+
+    @GetMapping("/{cpf}")
+    public ModelAndView listarUsuario(@PathVariable String cpf) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(cpf);
+        if (usuarioOptional.isPresent()) {
+            return new ModelAndView("Usuario/listar-usuario", "usuario", usuarioOptional.get());
         }
         return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado.");
     }

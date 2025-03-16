@@ -60,10 +60,6 @@
             font-size: 1.2em;
         }
 
-        .style-tabela table td.top.center {
-            text-align: center;
-        }
-
         .style-tabela tbody tr {
             background-color: #fff;
             color: #666;
@@ -90,16 +86,10 @@
             text-decoration: none;
         }
 
-        .botoes {
-            display: flex;
-            justify-content: space-evenly;
-            margin-top: 20px;
-        }
-
         .titulo {
             color: #757575;
             font-size: 1.5em;
-            font-weight: bold; /* Adiciona negrito */
+            font-weight: bold;
             margin-bottom: 10px;
             padding-bottom: 10px;
             text-align: center;
@@ -107,25 +97,22 @@
 
         .button-form {
             background-color: #39f;
-            padding: 5px 10px; /
+            padding: 5px 10px;
             color: #fff;
             font-size: 16px;
             border: none;
             cursor: pointer;
-            width: auto;
-            text-align: center;
             text-decoration: none;
             border-radius: 5px;
         }
+
         .borda-inversa {
-            display: inline-block;
-            vertical-align: middle;
             transition-duration: 0.5s;
             transition-property: background;
             box-shadow: inset 0 0 0 2px #39f, 0 0 1px rgba(0, 0, 0, 0);
         }
 
-        .borda-inversa:hover, .borda-inversa:focus, .borda-inversa:active {
+        .borda-inversa:hover {
             background: none;
             color: #39f;
         }
@@ -152,7 +139,7 @@
             <td class="top center"><strong>Sobrenome</strong></td>
             <td class="top center"><strong>Email</strong></td>
             <td class="top center"><strong>Data de nascimento</strong></td>
-            <td class="top center" colspan="2" width="1"><strong>Ações</strong></td>
+            <td class="top center" colspan="3" width="1"><strong>Ações</strong></td>
         </tr>
         </tbody>
         <tbody>
@@ -163,6 +150,10 @@
             <td align="center" th:text="${usuario.sobrenomeUser}"></td>
             <td align="center" th:text="${usuario.emailUser}"></td>
             <td align="center" th:text="${usuario.dataNascimentoUser}"></td>
+            <td align="center">
+                <a th:href="@{/usuario/{cpfUser}(cpfUser=${usuario.cpfUser})}"
+                   class="editar fas fa-search" title="Visualizar"></a>
+            </td>
             <td align="center">
                 <a th:href="@{/usuario/editar/{cpfUser}(cpfUser=${usuario.cpfUser})}"
                    class="editar fa fa-check-circle" title="Editar"></a>

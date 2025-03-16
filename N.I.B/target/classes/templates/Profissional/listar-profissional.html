@@ -6,7 +6,6 @@
   <title>Detalhes do Profissional</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
-    /* Reset e estilos globais */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -63,8 +62,6 @@
       margin-bottom: 15px;
       text-align: center;
     }
-
-    /* Informações do Profissional */
     .info {
       font-size: 1.1em;
       color: #666;
@@ -150,11 +147,11 @@
       <span><strong>Nome:</strong> <span th:text="${profissional.nomeProfissional}"></span></span>
     </div>
     <div class="info">
-      <i class="fa fa-file-text-o"></i>
+      <i class="fa fa-file icon"></i>
       <span><strong>Sobrenome:</strong> <span th:text="${profissional.sobrenomeProfissional}"></span></span>
     </div>
     <div class="info">
-      <i class="fa fa-volume-control-phone"></i>
+      <i class="fa fa-volume-control-phone icon"></i>
       <span><strong>Telefone:</strong> <span th:text="${profissional.telefoneProfissional}"></span></span>
     </div>
     <div class="info">

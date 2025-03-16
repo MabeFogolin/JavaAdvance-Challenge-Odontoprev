@@ -79,7 +79,7 @@ public class ProfissionalController {
     }
 
     @GetMapping("/{registroProfissional}")
-    public ModelAndView listarDiario(@PathVariable String registroProfissional) {
+    public ModelAndView listarProfissional(@PathVariable String registroProfissional) {
         Optional<Profissional> profissionalOptional = profissionalRepository.findById(registroProfissional);
         if (profissionalOptional.isPresent()) {
             return new ModelAndView("Profissional/listar-profissional", "profissional", profissionalOptional.get());
