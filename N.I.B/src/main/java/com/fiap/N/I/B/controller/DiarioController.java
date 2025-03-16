@@ -2,6 +2,7 @@ package com.fiap.N.I.B.controller;
 
 import com.fiap.N.I.B.gateways.Repositories.DiarioRepository;
 import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
+import com.fiap.N.I.B.model.Consulta;
 import com.fiap.N.I.B.model.Diario;
 import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,15 @@ public class DiarioController {
     public ModelAndView listarDiarios() {
         List<Diario> diarios = diarioRepository.findAll();
         return new ModelAndView("Diarios/lista", "diarios", diarios);
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView listarDiario(@PathVariable Long id) {
+        Optional<Diario> diarioOptional = diarioRepository.findById(id);
+        if (diarioOptional.isPresent()) {
+            return new ModelAndView("Diarios/listar-diario", "diario", diarioOptional.get());
+        }
+        return new ModelAndView("redirect:/diarios", "erro", "Registro diário não encontrada.");
     }
 
     @GetMapping("/editar/{id}")

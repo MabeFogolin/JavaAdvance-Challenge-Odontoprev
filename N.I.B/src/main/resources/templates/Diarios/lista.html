@@ -35,46 +35,65 @@
             text-decoration: underline;
         }
 
-        .style-tabela table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .style-tabela th, .style-tabela td {
-            border: 1px solid #ccc;
-            padding: 10px;
+        .titulo {
+            color: #757575;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
             text-align: center;
         }
 
-        .style-tabela th {
+        .style-tabela table {
+            float: left;
+            border: 1px solid #ccc;
+            border-bottom: 0;
+            border-right: 0;
+            font-size: 0.8em;
+            width: 100%;
+        }
+
+        .style-tabela table tr td {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-top: 0;
+            border-left: 0;
+            text-align: center;
+        }
+
+        .style-tabela table td.top {
             background-color: #003EA6;
-            color: white;
+            color: #fff;
             font-size: 1.2em;
+        }
+
+        .style-tabela table td.top.center {
+            text-align: center;
+        }
+
+        .style-tabela tbody tr {
+            background-color: #fff;
+            color: #666;
         }
 
         .style-tabela tbody tr:hover {
             background-color: #f4f4f4;
+            color: #00bcc4;
         }
 
-        .editar {
+        .style-tabela tbody tr td .editar {
             color: #00d549;
-            text-decoration: none;
             font-size: 1.2em;
-            margin-right: 10px;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
         }
 
-        .deletar {
+        .style-tabela tbody tr td .deletar {
             color: #bf303c;
-            text-decoration: none;
             font-size: 1.2em;
-        }
-
-        .titulo {
-            text-align: center;
-            color: #757575;
-            font-size: 1.5em;
-            margin-top: 20px;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
         }
 
         .button-form {
@@ -101,37 +120,48 @@
     </nav>
 </header>
 <h2 class="titulo">Lista de Diários</h2>
+<div th:if="${sucesso}" class="alert alert-success">
+    <p th:text="${sucesso}"></p>
+</div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
 <div class="style-tabela">
-    <table>
-        <thead>
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
         <tr>
-            <th>Data do Registro</th>
-            <th>Usuário</th>
-            <th>Qtd de escovações</th>
-            <th>Qtd de uso do fio dental</th>
-            <th>Qtd de uso do enxaguante</th>
-            <th>Sintomas do dia</th>
-            <th>Ações</th>
-
+            <td class="top center"><strong>Data do Registro</strong></td>
+            <td class="top center"><strong>Usuário</strong></td>
+            <td class="top center"><strong>Qtd de escovações</strong></td>
+            <td class="top center"><strong>Qtd de uso do fio dental</strong></td>
+            <td class="top center"><strong>Qtd de uso do enxaguante</strong></td>
+            <td class="top center"><strong>Sintomas do dia</strong></td>
+            <td class="top center" colspan="3" width="1"><strong>Ações</strong></td>
         </tr>
-        </thead>
+        </tbody>
         <tbody>
         <tr th:each="diario : ${diarios}">
-            <td th:text="${diario.dataRegistro}"></td>
-            <td th:text="${diario.usuario.cpfUser}"></td>
-            <td th:text="${diario.escovacaoDiario}"></td>
-            <td th:text="${diario.usoFioDiario}"></td>
-            <td th:text="${diario.usoEnxaguanteDiario}"></td>
-            <td th:text="${diario.sintomaDiario}"></td>
-            <td>
+            <td align="center" th:text="${diario.dataRegistro}"></td>
+            <td align="center" th:text="${diario.usuario.cpfUser}"></td>
+            <td align="center" th:text="${diario.escovacaoDiario}"></td>
+            <td align="center" th:text="${diario.usoFioDiario}"></td>
+            <td align="center" th:text="${diario.usoEnxaguanteDiario}"></td>
+            <td align="center" th:text="${diario.sintomaDiario}"></td>
+            <td align="center">
+                <a th:href="@{/diarios/{id}(id=${diario.id})}" class="editar fas fa-search" title="Visualizar"></a>
+            </td>
+            <td align="center">
                 <a th:href="@{/diarios/editar/{id}(id=${diario.id})}" class="editar fa fa-edit" title="Editar"></a>
-                <a th:href="@{/diarios/deletar/{id}(id=${diario.id})}" class="deletar fa fa-trash" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
+            </td>
+            <td align="center">
+                <a th:href="@{/diarios/deletar/{id}(id=${diario.id})}"
+                   class="deletar fa fa-times-circle" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
             </td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="8" align="center">
+            <td colspan="9" align="center">
                 <a th:href="@{/diarios/novo}" class="button-form borda-inversa">Novo Diário</a>
             </td>
         </tr>
