@@ -1,8 +1,8 @@
 package com.fiap.N.I.B.controller;
 
-import com.fiap.N.I.B.gateways.Repositories.ConsultaRepository;
-import com.fiap.N.I.B.gateways.Repositories.ProfissionalRepository;
-import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
+import com.fiap.N.I.B.Repositories.ConsultaRepository;
+import com.fiap.N.I.B.Repositories.ProfissionalRepository;
+import com.fiap.N.I.B.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.model.Consulta;
 
 import com.fiap.N.I.B.model.Profissional;

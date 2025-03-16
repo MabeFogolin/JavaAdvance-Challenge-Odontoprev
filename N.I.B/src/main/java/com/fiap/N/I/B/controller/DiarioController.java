@@ -1,8 +1,7 @@
 package com.fiap.N.I.B.controller;
 
-import com.fiap.N.I.B.gateways.Repositories.DiarioRepository;
-import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
-import com.fiap.N.I.B.model.Consulta;
+import com.fiap.N.I.B.Repositories.DiarioRepository;
+import com.fiap.N.I.B.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.model.Diario;
 import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;

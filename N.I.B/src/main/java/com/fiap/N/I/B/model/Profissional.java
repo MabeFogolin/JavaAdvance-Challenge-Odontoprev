@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.model;
 
+import com.fiap.N.I.B.ignore.Endereco;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

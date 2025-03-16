@@ -1,26 +1,16 @@
 package com.fiap.N.I.B.controller;
 
-import com.fiap.N.I.B.gateways.Repositories.ProfissionalRepository;
-import com.fiap.N.I.B.model.Diario;
+import com.fiap.N.I.B.Repositories.ProfissionalRepository;
 import com.fiap.N.I.B.model.Profissional;
-import com.fiap.N.I.B.gateways.requests.ProfissionalPatch;
-import com.fiap.N.I.B.gateways.responses.ProfissionalPostResponse;
-import com.fiap.N.I.B.model.Usuario;
-import com.fiap.N.I.B.usecases.Profissional.ProfissionalService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Controller
 @RequestMapping("/profissional")

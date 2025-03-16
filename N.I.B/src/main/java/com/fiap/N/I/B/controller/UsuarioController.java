@@ -1,7 +1,6 @@
 package com.fiap.N.I.B.controller;
 
-import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
-import com.fiap.N.I.B.model.Profissional;
+import com.fiap.N.I.B.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

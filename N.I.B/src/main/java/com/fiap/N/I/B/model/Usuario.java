@@ -1,7 +1,8 @@
 package com.fiap.N.I.B.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fiap.N.I.B.ignore.Endereco;
+import com.fiap.N.I.B.ignore.Historico;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
