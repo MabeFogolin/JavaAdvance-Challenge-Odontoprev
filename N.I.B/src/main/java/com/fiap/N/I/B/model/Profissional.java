@@ -57,4 +57,9 @@ public class Profissional extends RepresentationModel<Profissional> {
     @OneToOne
     private Endereco endereco;
 
+    public void adicionarConsulta(Consulta consulta) {
+        consulta.setProfissional(this);
+        this.consultas.add(consulta);
+    }
+
 }

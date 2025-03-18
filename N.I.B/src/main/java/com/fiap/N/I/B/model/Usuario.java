@@ -56,7 +56,7 @@ public class Usuario extends RepresentationModel<Usuario> {
     private String emailUser;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diario> diarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
@@ -68,5 +68,10 @@ public class Usuario extends RepresentationModel<Usuario> {
     @OneToOne
     @JsonIgnore
     private Historico historico;
+
+    public void adicionarConsulta(Consulta consulta) {
+        consulta.setUsuario(this);
+        this.consultas.add(consulta);
+    }
 
 }

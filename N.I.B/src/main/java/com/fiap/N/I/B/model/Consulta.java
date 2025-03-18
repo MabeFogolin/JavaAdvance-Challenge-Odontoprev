@@ -40,4 +40,5 @@ public class Consulta extends RepresentationModel<Consulta> {
     @JsonIgnore
     private Profissional profissional;
 
+
 }
