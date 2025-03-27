@@ -30,8 +30,6 @@ public class Application {
 	private final EnderecoRepository enderecoRepository;
 	private final ProfissionalRepository profissionalRepository;
 	private final HistoricoRepository historicoRepository;
-	private final DiarioRepository diarioRepository;
-	private final ConsultaRepository consultaRepository;
 
 
 	public static void main(String[] args) {
@@ -55,7 +53,7 @@ public class Application {
 				.build();
 		usuarioSalvo = usuarioRepository.save(usuarioSalvo);
 
-		// Criando e vinculando o endereço ao usuário
+
 		Endereco endereco = Endereco.builder()
 				.ruaEndereco("Rua 1")
 				.numeroEndereco(101)
@@ -66,10 +64,10 @@ public class Application {
 				.estadoEndereco("SP")
 				.usuario(usuarioSalvo)
 				.build();
-		enderecoRepository.save(endereco);
 
+		endereco = enderecoRepository.save(endereco);
 		usuarioSalvo.setEndereco(endereco);
-		usuarioSalvo = usuarioRepository.save(usuarioSalvo);
+		usuarioRepository.save(usuarioSalvo);
 
 		Profissional profissional = Profissional.builder()
 				.nomeProfissional("João")
@@ -94,12 +92,11 @@ public class Application {
 				.profissional(profissional)
 				.build();
 		endereco2 = enderecoRepository.save(endereco2);
-
 		profissional.setEndereco(endereco2);
 		profissionalRepository.save(profissional);
 
 
-		Historico historico = Historico.builder()
+        Historico historico = Historico.builder()
 				.tratamentoHistorico(1)
 				.canalHistorico(1)
 				.limpezaHistorico(0)
@@ -121,7 +118,7 @@ public class Application {
 				.usuario(usuarioSalvo)
 				.build();
 
-		usuarioRepository.save(usuarioSalvo);
+		usuarioSalvo.adicionarDiario(diario);
 
 
 		Consulta consulta = Consulta.builder()

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Endereços</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .cabecalho__menu {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .cabecalho__menu__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cabecalho__menu__link:hover {
+            text-decoration: underline;
+        }
+
+        .style-tabela table {
+            float: left;
+            border: 1px solid #ccc;
+            border-bottom: 0;
+            border-right: 0;
+            font-size: 0.8em;
+            width: 100%;
+        }
+
+        .style-tabela table tr td {
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-top: 0;
+            border-left: 0;
+            text-align: center;
+        }
+
+        .style-tabela table td.top {
+            background-color: #003EA6;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .style-tabela tbody tr {
+            background-color: #fff;
+            color: #666;
+        }
+
+        .style-tabela tbody tr:hover {
+            background-color: #f4f4f4;
+            color: #00bcc4;
+        }
+
+        .style-tabela tbody tr td .editar {
+            color: #00d549;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
+        }
+
+        .style-tabela tbody tr td .deletar {
+            color: #bf303c;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline;
+            text-decoration: none;
+        }
+
+        .titulo {
+            color: #757575;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .button-form {
+            background-color: #39f;
+            padding: 5px 10px;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .borda-inversa {
+            transition-duration: 0.5s;
+            transition-property: background;
+            box-shadow: inset 0 0 0 2px #39f, 0 0 1px rgba(0, 0, 0, 0);
+        }
+
+        .borda-inversa:hover {
+            background: none;
+            color: #39f;
+        }
+    </style>
+</head>
+<body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/enderecos">Endereços</a>
+    </nav>
+</header>
+<h2 class="titulo">Endereços Cadastrados</h2>
+
+<div class="style-tabela">
+    <table>
+        <thead>
+        <tr>
+            <td class="top center">ID</td>
+            <td class="top center">Rua</td>
+            <td class="top center">Número</td>
+            <td class="top center">Bairro</td>
+            <td class="top center">Cidade</td>
+            <td class="top center">CEP</td>
+            <td class="top center">Estado</td>
+            <td class="top center" colspan="3" width="1"><strong>Ações</strong></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="endereco : ${enderecos}">
+            <td th:text="${endereco.ruaEndereco}"></td>
+            <td th:text="${endereco.id}"></td>
+            <td th:text="${endereco.numeroEndereco}"></td>
+            <td th:text="${endereco.bairroEndereco}"></td>
+            <td th:text="${endereco.cidadeEndereco}"></td>
+            <td th:text="${endereco.cepEndereco}"></td>
+            <td th:text="${endereco.estadoEndereco}"></td>
+            <td align="center">
+                <a th:href="@{/enderecos/{id}(id=${endereco.getId()})}"
+                   class="editar fas fa-search" title="Visualizar"></a>
+            </td>
+            <td align="center">
+                <a th:href="@{/enderecos/editar/{id}(id=${endereco.getId()})}"
+                   class="editar fa fa-edit" title="Editar"></a>
+            </td>
+            <td align="center">
+                <a th:href="@{/enderecos/deletar/{id}(id=${endereco.getId()})}"
+                   class="deletar fa fa-times-circle" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="8" align="center">
+                <a href="/endereco/novo" class="button-form borda-inversa">Novo Endereço</a>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+</body>
+</html>

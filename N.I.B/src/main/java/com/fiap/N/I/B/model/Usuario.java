@@ -8,10 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -24,35 +21,43 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Usuario")
 public class Usuario extends RepresentationModel<Usuario> {
 
     @Id
     @NotNull
     @CPF(message = "CPF deve conter 11 dígitos numéricos")
+    @Column(name = "cpf_user", length = 11)
     private String cpfUser;
 
     @NotNull
     @Size(max = 30, message = "Nome deve ter no máximo 30 caracteres")
+    @Column(name = "nome_user", length = 30, nullable = false)
     private String nomeUser;
 
     @NotNull
     @Size(max = 30, message = "Sobrenome deve ter no máximo 30 caracteres")
+    @Column(name = "sobrenome_user", length = 30, nullable = false)
     private String sobrenomeUser;
 
     @NotNull
     @Pattern(regexp = "\\d{10,11}", message = "Telefone deve conter 10 a 11 dígitos")
+    @Column(name = "telefone_user", nullable = false)
     private String telefoneUser;
 
     @NotNull
+    @Column(name = "data_nascimento_user", nullable = false)
     private LocalDate dataNascimentoUser;
 
     @NotNull
     @Size(max = 20, message = "Tipo de plano deve ter no máximo 20 caracteres")
+    @Column(name = "plano_user", length = 20, nullable = false)
     private String planoUser;
 
     @NotNull
     @Email(message = "Informe um e-mail válido")
     @Size(max = 50, message = "Email deve ter no máximo 50 caracteres")
+    @Column(name = "email_user", length = 50, nullable = false)
     private String emailUser;
 
     @JsonIgnore
@@ -62,11 +67,12 @@ public class Usuario extends RepresentationModel<Usuario> {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @ToString.Exclude
     private Endereco endereco;
 
-    @OneToOne
-    @JsonIgnore
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Historico historico;
 
     public void adicionarConsulta(Consulta consulta) {
@@ -74,4 +80,8 @@ public class Usuario extends RepresentationModel<Usuario> {
         this.consultas.add(consulta);
     }
 
+    public void adicionarDiario(Diario diario) {
+        diario.setUsuario(this);
+        this.diarios.add(diario);
+    }
 }

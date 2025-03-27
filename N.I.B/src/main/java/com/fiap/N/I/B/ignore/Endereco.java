@@ -5,11 +5,9 @@ import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.model.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
@@ -49,11 +47,10 @@ public class Endereco extends RepresentationModel<Endereco> {
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
     private String estadoEndereco;
 
-    @OneToOne
-    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Profissional profissional;
 }

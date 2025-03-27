@@ -81,6 +81,7 @@ public class ProfissionalController {
     public ModelAndView editarProfissionalForm(@PathVariable String registroProfissional) {
         Optional<Profissional> profissionalOptional = profissionalRepository.findById(registroProfissional);
         if (profissionalOptional.isPresent()) {
+            System.out.println(profissionalOptional.get().getNomeProfissional());
             return new ModelAndView("Profissional/editar-profissional", "profissional", profissionalOptional.get());
         }
         return new ModelAndView("redirect:/profissional", "erro", "Profissional não encontrado.");
@@ -114,7 +115,7 @@ public class ProfissionalController {
     public ModelAndView deletarProfissional(@PathVariable String registro) {
         Optional<Profissional> profissionalOptional = profissionalRepository.findById(registro);
         if (profissionalOptional.isPresent()) {
-            profissionalRepository.deleteById(registro);
+            profissionalRepository.deletarProfissionalProcedure(registro);
             return new ModelAndView("redirect:/profissional", "sucesso", "Profissional deletado com sucesso!");
         }
         return new ModelAndView("redirect:/profissional", "erro", "Profissional não encontrado para exclusão.");

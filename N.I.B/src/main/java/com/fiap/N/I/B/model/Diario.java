@@ -44,7 +44,7 @@ public class Diario extends RepresentationModel<Diario> {
     @Size(max = 30, message = "Sintoma deve ter no máximo 30 caracteres")
     private String sintomaDiario;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JsonIgnore
     private Usuario usuario;
 }

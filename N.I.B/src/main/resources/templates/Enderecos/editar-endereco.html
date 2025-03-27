@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Endereço</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .cabecalho__menu {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .cabecalho__menu__link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .cabecalho__menu__link:hover {
+            text-decoration: underline;
+        }
+
+        .titulo {
+            color: #757575;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .formulario {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .formulario label {
+            font-weight: bold;
+            margin-top: 15px;
+            color: #003EA6;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .formulario label i {
+            font-size: 1.2em;
+            color: #0052cc;
+        }
+
+        .formulario label:hover {
+            color: #0052cc;
+        }
+
+        .input-bordas {
+            font: 15px "Lato", Arial, sans-serif;
+            color: #333;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 5px;
+            transition: 0.4s;
+            border-radius: 5px;
+        }
+
+        .botoes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button {
+            background-color: #0066ff;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #0052cc;
+        }
+
+        .button-voltar {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .button-voltar:hover {
+            background-color: #b3b3b3;
+        }
+    </style>
+</head>
+<body>
+<header class="cabecalho">
+    <nav class="cabecalho__menu">
+        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/enderecos">Endereços</a>
+    </nav>
+</header>
+<div class="container">
+    <h2 class="titulo">Editar Endereço</h2>
+    <form class="formulario" th:action="@{/enderecos/editar}" method="post" th:object="${endereco}">
+        <input type="hidden" th:field="*{id}" />
+
+        <label><i class="fas fa-map-marker-alt"></i> Rua</label>
+        <input type="text" class="input-bordas" th:field="*{ruaEndereco}" maxlength="25" required />
+
+        <label><i class="fas fa-hashtag"></i> Número</label>
+        <input type="number" class="input-bordas" th:field="*{numeroEndereco}" required />
+
+        <label><i class="fas fa-edit"></i> Complemento</label>
+        <input type="text" class="input-bordas" th:field="*{complementoEndereco}" maxlength="20" />
+
+        <label><i class="fas fa-building"></i> Bairro</label>
+        <input type="text" class="input-bordas" th:field="*{bairroEndereco}" maxlength="20" required />
+
+        <label><i class="fas fa-city"></i> Cidade</label>
+        <input type="text" class="input-bordas" th:field="*{cidadeEndereco}" maxlength="30" required />
+
+        <label><i class="fas fa-map-pin"></i> CEP</label>
+        <input type="text" class="input-bordas" th:field="*{cepEndereco}" maxlength="9" required />
+
+        <label><i class="fas fa-flag"></i> Estado</label>
+        <input type="text" class="input-bordas" th:field="*{estadoEndereco}" maxlength="2" required />
+
+        <input type="hidden" th:if="${endereco.usuario != null}" th:field="*{usuario}" />
+
+        <input type="hidden" th:if="${endereco.usuario == null}" th:field="*{profissional}" />
+
+
+        <div class="botoes">
+            <a href="/enderecos" class="button button-voltar">Voltar</a>
+            <button type="submit" class="button">Atualizar</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

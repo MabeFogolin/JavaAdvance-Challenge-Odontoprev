@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
-
 import java.time.LocalDate;
 
 @Data
@@ -17,6 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Consulta")
 public class Consulta extends RepresentationModel<Consulta> {
 
     @Id
@@ -24,21 +24,23 @@ public class Consulta extends RepresentationModel<Consulta> {
     private Long id;
 
     @NotNull
+    @Column(name = "data_consulta", nullable = false)
     private LocalDate dataConsulta;
 
     @NotNull
     @Size(max = 150, message = "Descrição deve ter no máximo 150 caracteres")
+    @Column(name = "descricao_consulta", nullable = false, length = 150)
     private String descricaoConsulta;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @NotNull
     @JsonIgnore
+    @JoinColumn(name = "fk_user", referencedColumnName = "cpf_user", nullable = false)
     private Usuario usuario;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @NotNull
     @JsonIgnore
+    @JoinColumn(name = "fk_profissional", referencedColumnName = "registro_profissional", nullable = false)
     private Profissional profissional;
-
-
 }

@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Cabeçalho */
+.cabecalho {
+    background-color: #0066ff;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.cabecalho__menu {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.cabecalho__menu__link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cabecalho__menu__link:hover {
+    text-decoration: underline;
+}
+
+/* Container principal */
+.container {
+    background: white;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Seções */
+.secao {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.info {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.info:last-child {
+    border-bottom: none;
+}
+
+.icon {
+    color: #003EA6;
+}
+
+/* Lista de Consultas */
+.lista-consultas {
+    list-style: none;
+    padding: 0;
+}
+
+.lista-consultas li {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão de Voltar */
+.button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0066ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    width: 150px;
+}
+
+.button:hover {
+    background-color: #0052cc;
+}

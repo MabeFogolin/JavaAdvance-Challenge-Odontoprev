@@ -62,7 +62,6 @@ public class ConsultaController {
         }
     }
 
-
     @GetMapping
     public ModelAndView listarConsultas() {
         List<Consulta> consultas = consultaRepository.findAll();

@@ -6,10 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @Data
@@ -23,8 +21,8 @@ public class Historico extends RepresentationModel<Historico> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
     @JsonIgnore
+    @OneToOne
     private Usuario usuario;
 
     @NotNull
