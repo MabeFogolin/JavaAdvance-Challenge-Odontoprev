@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head th:insert="~{fragments/head :: cabecalho}">
+<head>
     <meta charset="UTF-8">
-    <title>Informação do usuário</title>
-    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Usuário</title>
+    <link rel="stylesheet" href="/templates/styles/styles.css">
 </head>
+
 <body>
 
 <header class="cabecalho">
@@ -17,8 +19,6 @@
 </header>
 
 <div class="container">
-
-
     <div class="secao">
         <h2 class="titulo">Detalhes do Usuário</h2>
 
@@ -51,7 +51,7 @@
             <span><strong>Plano do user:</strong> <span th:text="${usuario.planoUser}"></span></span>
         </div>
         <div class="info">
-            <i class="fa fa-map-marker  icon"></i>
+            <i class="fa fa-map-marker icon"></i>
             <span><strong>Endereço:</strong> <span th:text="${usuario.endereco.ruaEndereco}"></span></span>
         </div>
     </div>

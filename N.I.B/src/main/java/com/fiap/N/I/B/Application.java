@@ -36,6 +36,8 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+
+
 	@EventListener(value = ApplicationReadyEvent.class)
 	public void setupDados() {
 		LocalDate now = LocalDate.now();

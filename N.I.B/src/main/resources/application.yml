@@ -16,6 +16,11 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.OracleDialect
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: 123456
 
 springdoc:
   api-docs:
