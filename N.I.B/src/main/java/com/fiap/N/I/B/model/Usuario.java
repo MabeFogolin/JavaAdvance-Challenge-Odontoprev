@@ -12,6 +12,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "Usuario")
-public class Usuario extends RepresentationModel<Usuario> {
+public class Usuario extends RepresentationModel<Usuario> implements Serializable {
 
     @Id
     @NotNull
@@ -67,9 +68,7 @@ public class Usuario extends RepresentationModel<Usuario> {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @ToString.Exclude
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Endereco endereco;
 
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)

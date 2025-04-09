@@ -3,8 +3,9 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-  application:
+  config:
     name: N.I.B
+
   datasource:
     url: jdbc:oracle:thin:@localhost:1521:xe
     username: system
@@ -16,12 +17,18 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.OracleDialect
+
   rabbitmq:
-    port: 5672
-    username: guest
-    password: guest
     host: localhost
-    virtual-host: mabe
+    port: 5672
+    username: admin
+    password: 123456
+    listener:
+      simple:
+        message-converter: jackson2JsonMessageConverter
+      deserialization:
+        trusted-packages: com.fiap.N.I.B.model
+
 
 springdoc:
   api-docs:

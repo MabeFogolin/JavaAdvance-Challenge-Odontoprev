@@ -1,5 +1,8 @@
 package com.fiap.N.I.B;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fiap.N.I.B.Repositories.ConsultaRepository;
 import com.fiap.N.I.B.Repositories.DiarioRepository;
 import com.fiap.N.I.B.Repositories.ProfissionalRepository;
@@ -13,6 +16,7 @@ import com.fiap.N.I.B.model.Diario;
 import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -30,12 +34,13 @@ public class Application {
 	private final EnderecoRepository enderecoRepository;
 	private final ProfissionalRepository profissionalRepository;
 	private final HistoricoRepository historicoRepository;
+	private final RabbitTemplate rabbitTemplate;
+	private final ObjectMapper objectMapper;
 
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
 
 
 	@EventListener(value = ApplicationReadyEvent.class)
@@ -136,6 +141,29 @@ public class Application {
 		System.out.println("Usuário, profissional e consulta criados com sucesso.");
 	}
 
+	@EventListener(ApplicationReadyEvent.class)
+	public void sendMessage() {
+		Usuario usuarioSalvo = Usuario.builder()
+				.cpfUser("26483142021")
+				.nomeUser("Teste fila")
+				.sobrenomeUser("Spring")
+				.telefoneUser("1234567890")
+				.dataNascimentoUser(LocalDate.of(1990, 1, 1))
+				.planoUser("Premium")
+				.emailUser("mariateste.fogolin@example.com")
+				.diarios(new ArrayList<>())
+				.consultas(new ArrayList<>())
+				.build();
+
+		try {
+			String usuarioJson = objectMapper.writeValueAsString(usuarioSalvo);
+			rabbitTemplate.convertAndSend("usuarioExchange", "routingKey", usuarioJson);
+			System.out.println("📩 Mensagem enviada para a fila: " + usuarioJson);
+
+		} catch (JsonProcessingException e) {
+			System.err.println("❌ Erro ao serializar o objeto Usuario: " + e.getMessage());
+		}
 
 
+	}
 }

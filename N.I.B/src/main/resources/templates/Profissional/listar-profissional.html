@@ -172,6 +172,25 @@
     </ul>
   </div>
 
+  <div class="secao">
+    <h2 class="titulo">Endereço do Profissional</h2>
+
+    <div th:if="${profissional.endereco != null}">
+      <div class="info"><i class="fa fa-road icon"></i><strong>Rua:</strong> <span th:text="${profissional.endereco.ruaEndereco}"></span></div>
+      <div class="info"><i class="fa fa-home icon"></i><strong>Número:</strong> <span th:text="${profissional.endereco.numeroEndereco}"></span></div>
+      <div class="info"><i class="fa fa-building icon"></i><strong>Complemento:</strong> <span th:text="${profissional.endereco.complementoEndereco}"></span></div>
+      <div class="info"><i class="fa fa-location-arrow icon"></i><strong>Bairro:</strong> <span th:text="${profissional.endereco.bairroEndereco}"></span></div>
+      <div class="info"><i class="fa fa-city icon"></i><strong>Cidade:</strong> <span th:text="${profissional.endereco.cidadeEndereco}"></span></div>
+      <div class="info"><i class="fa fa-flag icon"></i><strong>Estado:</strong> <span th:text="${profissional.endereco.estadoEndereco}"></span></div>
+      <div class="info"><i class="fa fa-mail-bulk icon"></i><strong>CEP:</strong> <span th:text="${profissional.endereco.cepEndereco}"></span></div>
+    </div>
+
+    <div class="info" th:unless="${profissional.endereco != null}">
+      <i class="fa fa-exclamation-triangle icon" style="color: #ff0000;"></i>
+      <strong>Endereço:</strong> Informação de endereço não disponível.
+    </div>
+  </div>
+
   <a href="/profissional" class="button">Voltar</a>
 
 </div>

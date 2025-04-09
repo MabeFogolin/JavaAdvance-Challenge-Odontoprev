@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Profissional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f4f4f4;
         }
+
         .cabecalho {
             background-color: #0066ff;
             color: white;
@@ -38,97 +35,93 @@
             text-decoration: underline;
         }
 
-        .formulario {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            overflow: hidden;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
         .titulo {
             color: #757575;
             font-size: 1.5em;
             margin-bottom: 10px;
-            padding-bottom: 10px;
             text-align: center;
         }
 
-        :focus {
-            outline: none;
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .label {
-            float: left;
-            width: 100%;
-            margin-bottom: 25px;
-            position: relative;
+        .formulario {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .formulario label {
+            font-weight: bold;
+            margin-top: 15px;
+            color: #003EA6;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .formulario label i {
+            font-size: 1.2em;
+            color: #0052cc;
+        }
+
+        .formulario label:hover {
+            color: #0052cc;
         }
 
         .input-bordas {
-            font: 15px/24px "Lato", Arial, sans-serif;
+            font: 15px "Lato", Arial, sans-serif;
             color: #333;
             width: 100%;
             box-sizing: border-box;
-            letter-spacing: 1px;
             border: 1px solid #ccc;
-            padding: 7px 14px 9px;
+            padding: 10px;
+            margin-top: 5px;
             transition: 0.4s;
-        }
-        .botoes {
-            display: flex;
-            justify-content: center; /* Centraliza os botões */
-            gap: 20px; /* Espaçamento uniforme entre os botões */
-            margin-top: 15px; /* Espaço acima dos botões */
+            border-radius: 5px;
         }
 
         .botoes {
             display: flex;
-            justify-content: space-between; /* Mantém os botões afastados */
-            width: 100%; /* Faz a div ocupar toda a largura do formulário */
-            margin-top: 20px; /* Adiciona um espaçamento entre os inputs e os botões */
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
-        .button-form {
-            background-color: #39f;
+        .button {
+            background-color: #0066ff;
             padding: 10px 20px;
             color: #fff;
-            font-size: 1.2em;
+            font-size: 1em;
             border: none;
             cursor: pointer;
-            width: 48%; /* Garante que os botões fiquem com largura uniforme */
             text-align: center;
-            text-decoration: none; /* Remove sublinhado do link */
-            border-radius: 5px; /* Deixa os botões arredondados */
+            border-radius: 5px;
         }
 
-        .botao-voltar {
+        .button:hover {
+            background-color: #0052cc;
+        }
+
+        .button-voltar {
             background-color: #ccc;
             color: #333;
         }
 
-        .borda-inversa {
-            display: inline-block;
-            vertical-align: middle;
-            transition-duration: 0.5s;
-            transition-property: background;
-            box-shadow: inset 0 0 0 2px #39f, 0 0 1px rgba(0, 0, 0, 0);
-        }
-
-        .borda-inversa:hover, .borda-inversa:focus, .borda-inversa:active {
-            background: none;
-            color: #39f;
-        }
-
-        .naoexibir {
-            display: none;
+        .button-voltar:hover {
+            background-color: #b3b3b3;
         }
 
         .alert {
             padding: 10px;
-            margin-bottom: 20px;
+            margin: 20px auto 0;
+            max-width: 500px;
             border-radius: 5px;
             font-size: 16px;
         }
@@ -145,14 +138,6 @@
     </style>
 </head>
 <body>
-
-<h2 class="titulo">Editar Profissional</h2>
-<div th:if="${sucesso}" class="alert alert-success">
-    <p th:text="${sucesso}"></p>
-</div>
-<div th:if="${erro}" class="alert alert-danger">
-    <p th:text="${erro}"></p>
-</div>
 <header class="cabecalho">
     <nav class="cabecalho__menu">
         <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
@@ -161,37 +146,33 @@
         <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
     </nav>
 </header>
-<form class="formulario" th:action="@{/profissional/editar}" method="post" th:object="${profissional}">
-    <input type="hidden" th:field="*{registroProfissional}" />
 
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="Nome do Profissional" th:field="*{nomeProfissional}" required>
-    </label>
+<div th:if="${sucesso}" class="alert alert-success">
+    <p th:text="${sucesso}"></p>
+</div>
+<div th:if="${erro}" class="alert alert-danger">
+    <p th:text="${erro}"></p>
+</div>
 
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="Sobrenome do Profissional" th:field="*{sobrenomeProfissional}" required>
-    </label>
+<div class="container">
+    <h2 class="titulo">Editar Profissional</h2>
+    <form class="formulario" th:action="@{/profissional/editar}" method="post" th:object="${profissional}">
+        <input type="hidden" th:field="*{registroProfissional}" />
 
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="Telefone do Profissional" th:field="*{telefoneProfissional}" required>
-    </label>
+        <label><i class="fas fa-user"></i> Nome do Profissional</label>
+        <input type="text" class="input-bordas" th:field="*{nomeProfissional}" required>
 
-    <label class="label">
-        <input type="text" class="input-bordas" placeholder="Tipo de Profissional" th:field="*{tipoProfissional}" required>
-    </label>
+        <label><i class="fas fa-user-tag"></i> Sobrenome do Profissional</label>
+        <input type="text" class="input-bordas" th:field="*{sobrenomeProfissional}" required>
 
-    <label class="label">
-        <input type="date" class="input-bordas" th:field="*{dataInscricaoProfissional}" required>
-    </label>
+        <label><i class="fas fa-phone"></i> Telefone do Profissional</label>
+        <input type="text" class="input-bordas" th:field="*{telefoneProfissional}" required>
 
-    <label class="label">
-        <input type="email" class="input-bordas" placeholder="Email do Profissional" th:field="*{emailProfissional}" required>
-    </label>
-
-    <div class="botoes">
-        <a href="/profissional" class="button-form botao-voltar borda-inversar">Voltar</a>
-        <button class="button-form borda-inversa"  type="submit">Atualizar</button>
-    </div>
-</form>
+        <div class="botoes">
+            <a href="/profissional" class="button button-voltar">Voltar</a>
+            <button type="submit" class="button">Atualizar</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

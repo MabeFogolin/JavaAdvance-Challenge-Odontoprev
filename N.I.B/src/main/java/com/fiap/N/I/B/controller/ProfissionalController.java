@@ -1,8 +1,13 @@
 package com.fiap.N.I.B.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.N.I.B.Repositories.ProfissionalRepository;
+import com.fiap.N.I.B.ignore.Endereco;
+import com.fiap.N.I.B.ignore.EnderecoRepository;
 import com.fiap.N.I.B.model.Profissional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +23,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class ProfissionalController {
 
     private final ProfissionalRepository profissionalRepository;
+    private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
+    private final EnderecoRepository enderecoRepository;
 
     @GetMapping
     public ModelAndView listarProfissionais() {
@@ -38,20 +46,6 @@ public class ProfissionalController {
         if (profissionalExistente.isPresent()) {
             return new ModelAndView("Profissional/cadastrar-profissional", "erro", "Registro já cadastrado.");
         }
-
-        // Validações dos campos
-        if (profissionalParam.getNomeProfissional().length() > 20) {
-            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "O nome do profissional deve ter no máximo 20 caracteres.");
-        }
-
-        if (profissionalParam.getSobrenomeProfissional().length() > 30) {
-            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "O sobrenome do profissional deve ter no máximo 30 caracteres.");
-        }
-
-        if (!profissionalParam.getTelefoneProfissional().matches("\\d{11}")) {
-            return new ModelAndView("Profissional/cadastrar-profissional", "erro", "O telefone deve conter exatamente 11 dígitos numéricos.");
-        }
-
         Profissional novoProfissional = Profissional.builder()
                 .registroProfissional(profissionalParam.getRegistroProfissional())
                 .nomeProfissional(profissionalParam.getNomeProfissional())
@@ -60,9 +54,27 @@ public class ProfissionalController {
                 .emailProfissional(profissionalParam.getEmailProfissional())
                 .tipoProfissional(profissionalParam.getTipoProfissional())
                 .dataInscricaoProfissional(profissionalParam.getDataInscricaoProfissional())
-                .endereco(profissionalParam.getEndereco())
                 .consultas(profissionalParam.getConsultas())
                 .build();
+
+        profissionalRepository.save(novoProfissional);
+
+        Endereco enderecoParam = profissionalParam.getEndereco();
+
+        Endereco endereco = Endereco.builder()
+                .ruaEndereco(enderecoParam.getRuaEndereco())
+                .numeroEndereco(enderecoParam.getNumeroEndereco())
+                .complementoEndereco(enderecoParam.getComplementoEndereco())
+                .bairroEndereco(enderecoParam.getBairroEndereco())
+                .cidadeEndereco(enderecoParam.getCidadeEndereco())
+                .cepEndereco(enderecoParam.getCepEndereco())
+                .estadoEndereco(enderecoParam.getEstadoEndereco())
+                .profissional(novoProfissional)
+                .build();
+
+        endereco = enderecoRepository.save(endereco);
+
+        novoProfissional.setEndereco(endereco);
         profissionalRepository.save(novoProfissional);
 
         return new ModelAndView("redirect:/profissional", "sucesso", "Profissional cadastrado com sucesso!");
@@ -104,7 +116,14 @@ public class ProfissionalController {
                     .consultas(profissionalParam.getConsultas())
                     .build();
 
-            profissionalRepository.save(profissionalAtualizado);
+            try {
+                String profissionalJson = objectMapper.writeValueAsString(profissionalAtualizado);
+                rabbitTemplate.convertAndSend("profissionalExchange", "routingKey", profissionalJson);
+                System.out.println("📩 Mensagem enviada para a fila: " + profissionalJson);
+            } catch (JsonProcessingException e) {
+                System.err.println("❌ Erro ao serializar o objeto Profissional: " + e.getMessage());
+            }
+
             return new ModelAndView("redirect:/profissional", "sucesso", "Profissional atualizado com sucesso!");
         }
 

@@ -181,9 +181,10 @@
         <input type="text" class="input-bordas" placeholder="Telefone do usuário" th:field="*{telefoneUser}" required>
     </label>
 
-    <label class="label">
-        <input type="date" class="input-bordas" th:field="*{dataNascimentoUser}" required>
+    <label for="dataNascimento" class="label">Data de Nascimento:
+    <input type="date" id="dataNascimento" class="input-bordas" th:field="*{dataNascimentoUser}" required>
     </label>
+
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Plano do usuário" th:field="*{planoUser}" required>
@@ -192,12 +193,43 @@
     <label class="label">
         <input type="email" class="input-bordas" placeholder="Email do usuário" th:field="*{emailUser}" required>
     </label>
+    <h3 class="titulo">Endereço</h3>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Rua" th:field="*{endereco.ruaEndereco}" required maxlength="25">
+    </label>
+
+    <label class="label">
+        <input type="number" class="input-bordas" placeholder="Número" th:field="*{endereco.numeroEndereco}" required>
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Complemento (opcional)" th:field="*{endereco.complementoEndereco}" maxlength="20">
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Bairro" th:field="*{endereco.bairroEndereco}" required maxlength="20">
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Cidade" th:field="*{endereco.cidadeEndereco}" required maxlength="30">
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="CEP (Ex: 00000-000)" th:field="*{endereco.cepEndereco}" required maxlength="9">
+    </label>
+
+    <label class="label">
+        <input type="text" class="input-bordas" placeholder="Estado (UF)" th:field="*{endereco.estadoEndereco}" required maxlength="2">
+    </label>
 
 
     <div class="botoes">
         <a href="/usuario" class="button-form borda-inversa botao-voltar">Voltar</a>
         <button class="button-form borda-inversa" type="submit">Salvar</button>
     </div>
+
+
 
 
 </form>

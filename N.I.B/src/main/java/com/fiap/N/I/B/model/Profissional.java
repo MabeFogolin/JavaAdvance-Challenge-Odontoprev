@@ -57,7 +57,6 @@ public class Profissional extends RepresentationModel<Profissional> {
     private String sobrenomeProfissional;
 
     @NotNull
-    @Pattern(regexp = "\\d{11}", message = "Telefone deve conter 11 dígitos numéricos")
     @Column(name = "telefone_profissional", nullable = false)
     private String telefoneProfissional;
 
