@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/usuario/security")
@@ -37,7 +43,10 @@ public class UsuarioSecurityController {
     })
     @GetMapping("/{cpf}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public Optional<Usuario> getUsuario(@PathVariable String cpf) {
-        return usuarioSecurityService.getUsuarioByCPF(cpf);
+    public ResponseEntity<?> getUsuario(@PathVariable String cpf) {
+        Optional<Usuario> usuario = usuarioSecurityService.getUsuarioByCPF(cpf);
+
+        return usuario.map(u -> ResponseEntity.ok(u))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
