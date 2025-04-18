@@ -3,11 +3,17 @@ package com.fiap.N.I.B.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.N.I.B.Repositories.UsuarioRepository;
+import com.fiap.N.I.B.configs.GetJwtToken;
 import com.fiap.N.I.B.ignore.Endereco;
 import com.fiap.N.I.B.ignore.EnderecoRepository;
 import com.fiap.N.I.B.model.Usuario;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +31,8 @@ public class UsuarioController {
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
     private final EnderecoRepository enderecoRepository;
+
+
 
     @GetMapping("/novo")
     public ModelAndView novoUsuarioForm() {

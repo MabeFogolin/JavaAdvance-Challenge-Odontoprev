@@ -22,6 +22,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Embeddable
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Usuario")
 public class Usuario extends RepresentationModel<Usuario> implements Serializable {
 

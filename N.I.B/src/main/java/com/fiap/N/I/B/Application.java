@@ -3,28 +3,24 @@ package com.fiap.N.I.B;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fiap.N.I.B.Repositories.ConsultaRepository;
-import com.fiap.N.I.B.Repositories.DiarioRepository;
-import com.fiap.N.I.B.Repositories.ProfissionalRepository;
-import com.fiap.N.I.B.Repositories.UsuarioRepository;
+import com.fiap.N.I.B.Repositories.*;
 import com.fiap.N.I.B.ignore.Endereco;
 import com.fiap.N.I.B.ignore.EnderecoRepository;
 import com.fiap.N.I.B.ignore.Historico;
 import com.fiap.N.I.B.ignore.HistoricoRepository;
-import com.fiap.N.I.B.model.Consulta;
-import com.fiap.N.I.B.model.Diario;
-import com.fiap.N.I.B.model.Profissional;
-import com.fiap.N.I.B.model.Usuario;
+import com.fiap.N.I.B.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @SpringBootApplication
@@ -34,8 +30,9 @@ public class Application {
 	private final EnderecoRepository enderecoRepository;
 	private final ProfissionalRepository profissionalRepository;
 	private final HistoricoRepository historicoRepository;
-	private final RabbitTemplate rabbitTemplate;
-	private final ObjectMapper objectMapper;
+	private final UsuarioSecurityRepository usuarioSecurityRepository;
+	private final RoleRepository roleRepository;
+	private final PasswordEncoder passwordEncoder;
 
 
 	public static void main(String[] args) {
@@ -139,31 +136,27 @@ public class Application {
 		usuarioRepository.save(usuarioSalvo);
 
 		System.out.println("Usuário, profissional e consulta criados com sucesso.");
-	}
+		RoleModel role = roleRepository.findByRoleName(RoleName.ROLE_USER)
+				.orElseGet(() -> {
+					RoleModel novaRole = new RoleModel();
+					novaRole.setRoleName(RoleName.valueOf("ROLE_USER"));
+					return roleRepository.save(novaRole);
+				});
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void sendMessage() {
-		Usuario usuarioSalvo = Usuario.builder()
-				.cpfUser("26483142021")
-				.nomeUser("Teste fila")
-				.sobrenomeUser("Spring")
-				.telefoneUser("1234567890")
-				.dataNascimentoUser(LocalDate.of(1990, 1, 1))
-				.planoUser("Premium")
-				.emailUser("mariateste.fogolin@example.com")
-				.diarios(new ArrayList<>())
-				.consultas(new ArrayList<>())
-				.build();
+		UsuarioSecurity usuarioSecurity = new UsuarioSecurity();
+		usuarioSecurity.setCpfUser("75481951096");
+		usuarioSecurity.setNomeUser("Usuário Segurança");
+		usuarioSecurity.setSobrenomeUser("Autenticado");
+		usuarioSecurity.setTelefoneUser("11999999999");
+		usuarioSecurity.setDataNascimentoUser(LocalDate.of(1995, 5, 5));
+		usuarioSecurity.setPlanoUser("Free");
+		usuarioSecurity.setEmailUser("auth.user@example.com");
+		usuarioSecurity.setSenha(passwordEncoder.encode("123456"));
+		usuarioSecurity.setRole(List.of(role));
 
-		try {
-			String usuarioJson = objectMapper.writeValueAsString(usuarioSalvo);
-			rabbitTemplate.convertAndSend("usuarioExchange", "routingKey", usuarioJson);
-			System.out.println("📩 Mensagem enviada para a fila: " + usuarioJson);
+		usuarioSecurityRepository.save(usuarioSecurity);
 
-		} catch (JsonProcessingException e) {
-			System.err.println("❌ Erro ao serializar o objeto Usuario: " + e.getMessage());
-		}
-
+		System.out.println("✅ UsuarioSecurity criado com sucesso: auth.user@example.com | senha: 123456");
 
 	}
 }

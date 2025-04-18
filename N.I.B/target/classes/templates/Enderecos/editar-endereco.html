@@ -2,7 +2,7 @@
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Profissional</title>
+    <title>Editar Endereço</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
@@ -117,24 +117,6 @@
         .button-voltar:hover {
             background-color: #b3b3b3;
         }
-
-        .alert {
-            padding: 10px;
-            margin: 20px auto 0;
-            max-width: 500px;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
     </style>
 </head>
 <body>
@@ -143,33 +125,42 @@
         <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
         <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
         <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
-        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
+        <a class="cabecalho__menu__link" href="/enderecos">Endereços</a>
     </nav>
 </header>
-
-<div th:if="${sucesso}" class="alert alert-success">
-    <p th:text="${sucesso}"></p>
-</div>
-<div th:if="${erro}" class="alert alert-danger">
-    <p th:text="${erro}"></p>
-</div>
-
 <div class="container">
-    <h2 class="titulo">Editar Profissional</h2>
-    <form class="formulario" th:action="@{/profissional/editar}" method="post" th:object="${profissional}">
-        <input type="hidden" th:field="*{registroProfissional}" />
+    <h2 class="titulo">Editar Endereço</h2>
+    <form class="formulario" th:action="@{/enderecos/editar}" method="post" th:object="${endereco}">
+        <input type="hidden" th:field="*{id}" />
 
-        <label><i class="fas fa-user"></i> Nome do Profissional</label>
-        <input type="text" class="input-bordas" th:field="*{nomeProfissional}" required>
+        <label><i class="fas fa-map-marker-alt"></i> Rua</label>
+        <input type="text" class="input-bordas" th:field="*{ruaEndereco}" maxlength="25" required />
 
-        <label><i class="fas fa-user-tag"></i> Sobrenome do Profissional</label>
-        <input type="text" class="input-bordas" th:field="*{sobrenomeProfissional}" required>
+        <label><i class="fas fa-hashtag"></i> Número</label>
+        <input type="number" class="input-bordas" th:field="*{numeroEndereco}" required />
 
-        <label><i class="fas fa-phone"></i> Telefone do Profissional</label>
-        <input type="text" class="input-bordas" th:field="*{telefoneProfissional}" required>
+        <label><i class="fas fa-edit"></i> Complemento</label>
+        <input type="text" class="input-bordas" th:field="*{complementoEndereco}" maxlength="20" />
+
+        <label><i class="fas fa-building"></i> Bairro</label>
+        <input type="text" class="input-bordas" th:field="*{bairroEndereco}" maxlength="20" required />
+
+        <label><i class="fas fa-city"></i> Cidade</label>
+        <input type="text" class="input-bordas" th:field="*{cidadeEndereco}" maxlength="30" required />
+
+        <label><i class="fas fa-map-pin"></i> CEP</label>
+        <input type="text" class="input-bordas" th:field="*{cepEndereco}" maxlength="9" required />
+
+        <label><i class="fas fa-flag"></i> Estado</label>
+        <input type="text" class="input-bordas" th:field="*{estadoEndereco}" maxlength="2" required />
+
+        <input type="hidden" th:if="${endereco.usuario != null}" th:field="*{usuario}" />
+
+        <input type="hidden" th:if="${endereco.usuario == null}" th:field="*{profissional}" />
+
 
         <div class="botoes">
-            <a href="/profissional" class="button button-voltar">Voltar</a>
+            <a href="/enderecos" class="button button-voltar">Voltar</a>
             <button type="submit" class="button">Atualizar</button>
         </div>
     </form>
