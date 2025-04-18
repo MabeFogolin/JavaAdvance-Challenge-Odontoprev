@@ -1,6 +1,7 @@
 package com.fiap.N.I.B.controller;
 
 import com.fiap.N.I.B.configs.GetJwtToken;
+import com.fiap.N.I.B.ignore.usecases.Usuario.UsuarioService;
 import com.fiap.N.I.B.model.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -29,6 +32,7 @@ public class UsuarioSecurityController {
 
     private final GetJwtToken getJwtToken;
     private final UsuarioSecurityService usuarioSecurityService;
+    private final UsuarioService usuarioService;
 
     @GetMapping()
     public String getJwt(Authentication authentication) {
@@ -49,4 +53,24 @@ public class UsuarioSecurityController {
         return usuario.map(u -> ResponseEntity.ok(u))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Busca todos os USUÁRIOS", description = "Traz todos os USUÁRIOS cadastrados, com os links atribuídos individualmente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", links = {
+                    @io.swagger.v3.oas.annotations.links.Link(name = "teste", operationRef = "GET")
+            }),
+            @ApiResponse(responseCode = "404")
+    })
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/todos")
+    public ResponseEntity<List<EntityModel<Usuario>>> buscarUsuarios() {
+        List<Usuario> usuarios = usuarioService.buscarTodos();
+
+        List<EntityModel<Usuario>> usuarioModels = usuarios.stream()
+                .map(usuario -> EntityModel.of(usuario)) 
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(usuarioModels);
+    }
+
 }
