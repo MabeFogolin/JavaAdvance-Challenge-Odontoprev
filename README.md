@@ -40,6 +40,29 @@ https://www.youtube.com/watch?v=4L5RpHhTqTg
 
 <h2 align="left">	🧮 Testes 🧮</h2>
 
+<h3 align="left"> 💂 Security</h3>
+
+<p align="left">Via postman, acesse o endpoint informado com a seguinte autentição para verificar o JWT Token:</p>
+
+```bash
+http://localhost:8080/usuario/security
+```
+<ul>
+  <li><strong>Username: </strong>auth.user@example.com</li>
+  <li><strong>Password: </strong>123456</li>
+</ul>
+
+<p align="left">Via postman, para recuperar o usuário cadastrado, acesse o seguinte endpoint e autenticação:</p>
+
+```bash
+http://localhost:8080/usuario/security/{cpf}
+```
+<ul>
+  <li><strong>Username: </strong>auth.user@example.com</li>
+  <li><strong>Password: </strong>123456</li>
+</ul>
+
+
 <h3 align="left"> 🧙‍♀️ Usuário</h3>
 <ul>
   <li><strong>Nome:</strong> Usuário</li>
