@@ -63,12 +63,13 @@ public class Usuario extends RepresentationModel<Usuario> implements Serializabl
     @Column(name = "email_user", length = 50, nullable = false)
     private String emailUser;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diario> diarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
+
 
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Endereco endereco;

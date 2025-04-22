@@ -28,15 +28,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/usuario/security")
 @RequiredArgsConstructor
-public class UsuarioSecurityController {
+public class    UsuarioSecurityController {
 
     private final GetJwtToken getJwtToken;
     private final UsuarioSecurityService usuarioSecurityService;
     private final UsuarioService usuarioService;
 
     @GetMapping()
-    public String getJwt(Authentication authentication) {
-        return "Olá, JWT válido " + getJwtToken.execute(authentication);
+    public ResponseEntity<String> getJwt(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).body("Não autorizado: autenticação ausente.");
+        }
+        return ResponseEntity.ok("Olá, JWT válido " + getJwtToken.execute(authentication));
     }
 
     @Operation(summary = "Buscar usuário por cpf", description = "Retorna as informações do usuário com base no CPF fornecido.")
