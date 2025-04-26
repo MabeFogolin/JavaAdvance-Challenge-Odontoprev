@@ -3,6 +3,7 @@ package com.fiap.N.I.B.configs;
 import com.fiap.N.I.B.Repositories.ProfissionalRepository;
 import com.fiap.N.I.B.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.ignore.Endereco;
+import com.fiap.N.I.B.ignore.EnderecoRepository;
 import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.model.Usuario;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class QueueListener {
     private final UsuarioRepository usuarioRepository;
     private final ObjectMapper objectMapper;
     private final ProfissionalRepository profissionalRepository;
+    private final EnderecoRepository enderecoRepository;
 
     @RabbitListener(queues = "fila-usuario")
     public void usuarioReceiveMessage(String message) {
@@ -34,7 +36,9 @@ public class QueueListener {
     public void profissionalReceiveMessage(String message) {
         try {
             Profissional profissional = objectMapper.readValue(message, Profissional.class);
+
             profissionalRepository.save(profissional);
+
             System.out.println("✅ Profissional atualizado no banco de dados com sucesso!");
         } catch (Exception e) {
             System.err.println("❌ Erro ao processar a mensagem: " + e.getMessage());

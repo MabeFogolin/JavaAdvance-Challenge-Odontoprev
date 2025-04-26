@@ -104,16 +104,16 @@ public class ProfissionalController {
         Optional<Profissional> profissionalOptional = profissionalRepository.findById(profissionalParam.getRegistroProfissional());
 
         if (profissionalOptional.isPresent()) {
+            Profissional antigo = profissionalOptional.get();
             Profissional profissionalAtualizado = Profissional.builder()
-                    .registroProfissional(profissionalParam.getRegistroProfissional())
                     .nomeProfissional(profissionalParam.getNomeProfissional())
+                    .registroProfissional(antigo.getRegistroProfissional())
                     .sobrenomeProfissional(profissionalParam.getSobrenomeProfissional())
                     .telefoneProfissional(profissionalParam.getTelefoneProfissional())
-                    .emailProfissional(profissionalParam.getEmailProfissional())
-                    .tipoProfissional(profissionalParam.getTipoProfissional())
-                    .dataInscricaoProfissional(profissionalParam.getDataInscricaoProfissional())
-                    .endereco(profissionalParam.getEndereco())
-                    .consultas(profissionalParam.getConsultas())
+                    .emailProfissional(antigo.getEmailProfissional())
+                    .tipoProfissional(antigo.getTipoProfissional())
+                    .dataInscricaoProfissional(antigo.getDataInscricaoProfissional())
+                    .consultas(antigo.getConsultas())
                     .build();
 
             try {

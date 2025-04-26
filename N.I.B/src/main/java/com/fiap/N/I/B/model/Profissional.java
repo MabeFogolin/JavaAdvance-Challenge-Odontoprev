@@ -83,7 +83,7 @@ public class Profissional extends RepresentationModel<Profissional> {
     @OneToMany(mappedBy = "profissional", cascade = CascadeType.ALL)
     private List<Consulta> consultas = new ArrayList<>();
 
-    @OneToOne(mappedBy = "profissional", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToOne(mappedBy = "profissional", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Endereco endereco;
 
     public void adicionarConsulta(Consulta consulta) {

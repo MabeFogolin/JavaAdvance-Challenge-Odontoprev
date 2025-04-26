@@ -47,11 +47,9 @@ public class Endereco extends RepresentationModel<Endereco> {
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
     private String estadoEndereco;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     private Profissional profissional;
 }

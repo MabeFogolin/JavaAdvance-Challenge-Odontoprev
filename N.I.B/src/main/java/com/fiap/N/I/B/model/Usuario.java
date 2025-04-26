@@ -64,14 +64,14 @@ public class Usuario extends RepresentationModel<Usuario> implements Serializabl
     private String emailUser;
 
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Diario> diarios = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Consulta> consultas = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, orphanRemoval = true)
     private Endereco endereco;
 
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)

@@ -32,15 +32,13 @@ public class Consulta extends RepresentationModel<Consulta> {
     @Column(name = "descricao_consulta", nullable = false, length = 150)
     private String descricaoConsulta;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JsonIgnore
     @JoinColumn(name = "fk_user", referencedColumnName = "cpf_user", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JsonIgnore
     @JoinColumn(name = "fk_profissional", referencedColumnName = "registro_profissional", nullable = false)
     private Profissional profissional;
 }
