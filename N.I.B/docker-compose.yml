@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -9,8 +11,58 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=123456
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - aw-network
+
+  admin:
+    image: slydeveloper/spring-boot-admin:latest
+    volumes:
+      - ./config/admin-application.yml:/application.yml
+    ports:
+      - "1111:1111"
+    networks:
+      - aw-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - aw-network
+
+  nib:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nib
+    ports:
+      - "8080:8080"
+      - "8082:8082"
+    depends_on:
+      - rabbitmq
+    networks:
+      - aw-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - aw-network
 
 volumes:
+  prometheus-data:
   rabbitmq_data:
+  grafana-data:
+
+networks:
+  aw-network:
+    driver: bridge

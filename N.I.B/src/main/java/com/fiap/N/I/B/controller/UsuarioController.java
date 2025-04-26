@@ -7,13 +7,18 @@ import com.fiap.N.I.B.configs.GetJwtToken;
 import com.fiap.N.I.B.ignore.Endereco;
 import com.fiap.N.I.B.ignore.EnderecoRepository;
 import com.fiap.N.I.B.model.Usuario;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +30,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class UsuarioController {
 
     private final UsuarioRepository usuarioRepository;
@@ -83,6 +89,8 @@ public class UsuarioController {
     }
 
 
+    @Counted(value = "usuario.count.listarUsuarios")
+    @Timed(value = "usuario.timed.listarUsuarios", longTask = true)
     @GetMapping
     public ModelAndView listarUsuarios() {
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -90,7 +98,10 @@ public class UsuarioController {
     }
 
     @GetMapping("/editar/{cpf}")
-    public ModelAndView editarUsuarioForm(@PathVariable String cpf) {
+    public ModelAndView editarUsuarioForm(@PathVariable String cpf, @AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return new ModelAndView("redirect:/login");
+        }
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(cpf);
         if (usuarioOptional.isPresent()) {
             return new ModelAndView("Usuario/editar-usuario", "usuario", usuarioOptional.get());
@@ -98,13 +109,19 @@ public class UsuarioController {
         return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado.");
     }
 
+
     @GetMapping("/{cpf}")
-    public ModelAndView listarUsuario(@PathVariable String cpf) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(cpf);
-        if (usuarioOptional.isPresent()) {
-            return new ModelAndView("Usuario/listar-usuario", "usuario", usuarioOptional.get());
+    public ModelAndView listarUsuario(@PathVariable String cpf, @AuthenticationPrincipal UserDetails user) {
+        if(user != null) {
+            Optional<Usuario> usuarioOptional = usuarioRepository.findById(cpf);
+            if (usuarioOptional.isPresent()) {
+                return new ModelAndView("Usuario/listar-usuario", "usuario", usuarioOptional.get());
+            }
+            return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado.");
+
         }
-        return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado.");
+        return new ModelAndView("redirect:/usuario", "erro", "Usuário não autenticado");
+
     }
 
     @PostMapping("/editar")

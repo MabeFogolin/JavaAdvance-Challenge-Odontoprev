@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -151,17 +151,21 @@
             <td align="center" th:text="${usuario.emailUser}"></td>
             <td align="center" th:text="${usuario.dataNascimentoUser}"></td>
             <td align="center">
+
                 <a th:href="@{/usuario/{cpfUser}(cpfUser=${usuario.cpfUser})}"
-                   class="editar fas fa-search" title="Visualizar"></a>
+                   class="editar fas fa-search" title="Visualizar" sec:authorize="hasAnyRole('ROLE_USER')"></a>
             </td>
             <td align="center">
+
                 <a th:href="@{/usuario/editar/{cpfUser}(cpfUser=${usuario.cpfUser})}"
-                   class="editar fa fa-check-circle" title="Editar"></a>
+                   class="editar fa fa-check-circle" title="Editar" sec:authorize="isAuthenticated()"></a>
+
             </td>
             <td align="center">
+                <!-- Link para excluir (Autenticado) -->
                 <a th:href="@{/usuario/deletar/{cpf}(cpf=${usuario.cpfUser})}"
                    class="deletar fa fa-edit"
-                   title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');"></a>
+                   title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');" sec:authorize="isAuthenticated()"></a>
             </td>
         </tr>
         </tbody>
