@@ -40,6 +40,26 @@ https://www.youtube.com/watch?v=4L5RpHhTqTg
 
 <h2 align="left">	🧮 Testes 🧮</h2>
 
+<h3 align="left"> ℹ️ Instruções</h3>
+
+<p align="left">Acesse a pasta N.I.B via terminal e, use o seguinte comando:/p>
+
+```bash
+mvn clean package
+```
+
+<p align="left">Após a mensagem de sucesso do build, digite os seguintes comandos via terminal:/p>
+
+```bash
+docker-compose up --build
+```
+
+<p align="left">Assim que finalizar a construção do container, acesse a seguinte url para visualizar aas informações da aplicação via Prometheus:/p>
+
+```bash
+http://localhost:9090/targets
+```
+
 <h3 align="left"> 💂 Security</h3>
 
 <p align="left">Via postman, acesse o endpoint informado com a seguinte autentição para verificar o JWT Token:</p>
