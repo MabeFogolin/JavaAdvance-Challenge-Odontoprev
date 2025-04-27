@@ -83,3 +83,6 @@ info:
 
   admin:
     image:
+    
+server:
+  port: ${PORT:8080}
