@@ -33,16 +33,16 @@ spring:
     database-platform: org.hibernate.dialect.OracleDialect
     properties:
       "[hibernate.generate_statistics]" : false
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: guest
-    password: guest
-    listener:
-      simple:
-        message-converter: jackson2JsonMessageConverter
-      deserialization:
-        trusted-packages: com.fiap.N.I.B.model
+  # rabbitmq:
+  #   host: rabbitmq
+  #   port: 5672
+  #   username: guest
+  #   password: guest
+  #   listener:
+  #     simple:
+  #       message-converter: jackson2JsonMessageConverter
+  #     deserialization:
+  #       trusted-packages: com.fiap.N.I.B.model
 
 
 springdoc:
