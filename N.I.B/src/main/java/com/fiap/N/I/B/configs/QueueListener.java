@@ -20,31 +20,31 @@ public class QueueListener {
     private final ProfissionalRepository profissionalRepository;
     private final EnderecoRepository enderecoRepository;
 
-    // @RabbitListener(queues = "fila-usuario")
-    // public void usuarioReceiveMessage(String message) {
-    //     try {
-    //         Usuario usuario = objectMapper.readValue(message, Usuario.class);
-    //         usuarioRepository.save(usuario);
-    //         System.out.println("✅ Usuário atualizado no banco de dados com sucesso!");
-    //     } catch (Exception e) {
-    //         System.err.println("❌ Erro ao processar a mensagem: " + e.getMessage());
-    //         e.printStackTrace();
-    //     }
-    // }
+     @RabbitListener(queues = "fila-usuario")
+     public void usuarioReceiveMessage(String message) {
+         try {
+             Usuario usuario = objectMapper.readValue(message, Usuario.class);
+             usuarioRepository.save(usuario);
+             System.out.println("✅ Usuário atualizado no banco de dados com sucesso!");
+         } catch (Exception e) {
+             System.err.println("❌ Erro ao processar a mensagem: " + e.getMessage());
+             e.printStackTrace();
+         }
+     }
 
-    // @RabbitListener(queues = "fila-profissional")
-    // public void profissionalReceiveMessage(String message) {
-    //     try {
-    //         Profissional profissional = objectMapper.readValue(message, Profissional.class);
+     @RabbitListener(queues = "fila-profissional")
+     public void profissionalReceiveMessage(String message) {
+         try {
+             Profissional profissional = objectMapper.readValue(message, Profissional.class);
 
-    //         profissionalRepository.save(profissional);
+             profissionalRepository.save(profissional);
 
-    //         System.out.println("✅ Profissional atualizado no banco de dados com sucesso!");
-    //     } catch (Exception e) {
-    //         System.err.println("❌ Erro ao processar a mensagem: " + e.getMessage());
-    //         e.printStackTrace();
-    //     }
-    // }
+             System.out.println("✅ Profissional atualizado no banco de dados com sucesso!");
+         } catch (Exception e) {
+             System.err.println("❌ Erro ao processar a mensagem: " + e.getMessage());
+             e.printStackTrace();
+         }
+     }
 
 
 }
