@@ -91,7 +91,7 @@ public class UsuarioController {
                     .build();
 
             usuarioRepository.save(usuarioAtualizado);
-            return new ModelAndView("redirect:/usuario", "sucesso", "Usuário atualizado com sucesso!");
+            return new ModelAndView("redirect:/usuario", "sucesso", "Usuário atualizado com sucesso!!");
         }
 
         return new ModelAndView("Usuario/editar-usuario", "erro", "Erro ao atualizar o usuário.");
