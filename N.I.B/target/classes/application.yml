@@ -1,10 +1,25 @@
 spring:
+#  boot:
+#    admin:
+#      client:
+#        url: http://localhost:1111
+#        username: admin
+#        password: 123
+#        instance:
+#          prefer-ip: true
+#          metadata:
+#            user.name: admin
+#            user.password: admin
+#          management-base-url: http://localhost:8081
   mvc:
     hiddenmethod:
       filter:
         enabled: true
-  application:
+  config:
     name: N.I.B
+  application:
+    name: N.I.B Challenge Odontoprev
+
   datasource:
     url: jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl
     username: rm552669
@@ -16,7 +31,55 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.OracleDialect
+    properties:
+      "[hibernate.generate_statistics]" : false
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        message-converter: jackson2JsonMessageConverter
+      deserialization:
+        trusted-packages: com.fiap.N.I.B.model
+
 
 springdoc:
   api-docs:
     path: /api-docs
+
+jwt:
+  secret-key: 890uirwjggifokrwjpgeo5yldfsopgis80f7erw8fuyw9f8ew9f7w4r67347f397tyfg347f367ferw7fr7efger77rtgw7erfw7yfeuyfwe67rfwef67w78erfwe7
+
+management:
+  server:
+    port: 8082
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    #      show-details: when_authorized
+#      roles: 'USER'
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+    auditevents:
+      enabled: true
+    prometheus:
+      enabled: true
+info:
+  application:
+    nome: ${spring.application.name}
+    descricao: Aplicação MVC com endpoints REST para atender aos requisitos da Sprint 4
+
+  admin:
+    image:

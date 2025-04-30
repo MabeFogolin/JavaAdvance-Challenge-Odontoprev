@@ -70,7 +70,7 @@ public class UsuarioController {
         if (usuarioOptional.isPresent()) {
             return new ModelAndView("Usuario/listar-usuario", "usuario", usuarioOptional.get());
         }
-        return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado.");
+        return new ModelAndView("redirect:/usuario", "erro", "Usuário não encontrado pelo cpf.");
     }
 
     @PostMapping("/editar")
