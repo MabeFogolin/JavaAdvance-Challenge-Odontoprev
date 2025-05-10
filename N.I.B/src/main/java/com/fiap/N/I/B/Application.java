@@ -36,8 +36,8 @@ public class Application {
 	private final EnderecoRepository enderecoRepository;
 	private final ProfissionalRepository profissionalRepository;
 	private final HistoricoRepository historicoRepository;
-	private final UsuarioSecurityRepository usuarioSecurityRepository;
 	private final RoleRepository roleRepository;
+	private final UserRepository userSecurityRepository;
 	private final PasswordEncoder passwordEncoder;
 
 
@@ -142,27 +142,19 @@ public class Application {
 		usuarioRepository.save(usuarioSalvo);
 
 		System.out.println("Usuário, profissional e consulta criados com sucesso.");
-		RoleModel role = roleRepository.findByRoleName(RoleName.ROLE_USER)
-				.orElseGet(() -> {
-					RoleModel novaRole = new RoleModel();
-					novaRole.setRoleName(RoleName.valueOf("ROLE_USER"));
-					return roleRepository.save(novaRole);
-				});
 
-		UsuarioSecurity usuarioSecurity = new UsuarioSecurity();
-		usuarioSecurity.setCpfUser("75481951096");
-		usuarioSecurity.setNomeUser("Usuário Segurança");
-		usuarioSecurity.setSobrenomeUser("Autenticado");
-		usuarioSecurity.setTelefoneUser("11999999999");
-		usuarioSecurity.setDataNascimentoUser(LocalDate.of(1995, 5, 5));
-		usuarioSecurity.setPlanoUser("Free");
-		usuarioSecurity.setEmailUser("auth.user@example.com");
-		usuarioSecurity.setSenha(passwordEncoder.encode("123456"));
-		usuarioSecurity.setRole(List.of(role));
+		Role roleAdmin = roleRepository.findByName("ROLE_ADMIN")
+				.orElseGet(() -> roleRepository.save(new Role(null, "ROLE_ADMIN")));
 
-		usuarioSecurityRepository.save(usuarioSecurity);
+		UserSecurity admin = new UserSecurity();
+		admin.setUsername("admin");
+		admin.setPassword(passwordEncoder.encode("admin123"));
+		admin.setEnabled(true);
+		admin.getRoles().add(roleAdmin);
 
-		System.out.println("✅ UsuarioSecurity criado com sucesso: auth.user@example.com | senha: 123456");
+		userSecurityRepository.save(admin);
+
+		System.out.println("Usuário de segurança 'admin' criado com sucesso.");
 
 	}
 }

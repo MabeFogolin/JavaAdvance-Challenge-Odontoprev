@@ -11,6 +11,11 @@ spring:
 #            user.name: admin
 #            user.password: admin
 #          management-base-url: http://localhost:8081
+  messages:
+    locale-resolver: session
+    basename: messages
+    encoding: UTF-8
+
   mvc:
     hiddenmethod:
       filter:
@@ -33,6 +38,7 @@ spring:
     database-platform: org.hibernate.dialect.OracleDialect
     properties:
       "[hibernate.generate_statistics]" : false
+
   rabbitmq:
     host: localhost
     port: 5672
@@ -43,6 +49,7 @@ spring:
         message-converter: jackson2JsonMessageConverter
       deserialization:
         trusted-packages: com.fiap.N.I.B.model
+
 
 
 springdoc:
@@ -83,3 +90,6 @@ info:
 
   admin:
     image:
+    
+server:
+  port: ${PORT:8080}

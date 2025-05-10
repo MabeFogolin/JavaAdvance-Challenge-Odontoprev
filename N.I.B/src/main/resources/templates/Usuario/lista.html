@@ -121,63 +121,68 @@
 <body>
 <header class="cabecalho">
     <nav class="cabecalho__menu">
-        <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
-        <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
-        <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
-        <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
+        <a class="cabecalho__menu__link" href="/usuario" th:text="#{menu.usuarios}">Usuários</a>
+        <a class="cabecalho__menu__link" href="/consultas" th:text="#{menu.consultas}">Consultas</a>
+        <a class="cabecalho__menu__link" href="/profissional" th:text="#{menu.profissionais}">Profissionais</a>
+        <a class="cabecalho__menu__link" href="/diarios" th:text="#{menu.registros}">Registros diários dos usuários</a>
     </nav>
 </header>
-<h2 class="titulo">Usuários Cadastrados</h2>
+
+<!-- Seletor de idioma -->
+<div style="text-align: right; margin: 1rem;">
+    <a href="?lang=pt">Português</a> | <a href="?lang=en">English</a>
+</div>
+
+<h2 class="titulo" th:text="#{usuarios.cadastrados}">Usuários Cadastrados</h2>
 
 <div class="style-tabela">
-    <table border="0" cellpadding="0" cellspacing="0">
-        <tbody>
+    <table>
+        <thead>
         <tr>
             <td class="top center"><i class="fa fa-user-md"></i></td>
-            <td class="top center"><strong>CPF</strong></td>
-            <td class="top center"><strong>Nome</strong></td>
-            <td class="top center"><strong>Sobrenome</strong></td>
-            <td class="top center"><strong>Email</strong></td>
-            <td class="top center"><strong>Data de nascimento</strong></td>
-            <td class="top center" colspan="3" width="1"><strong>Ações</strong></td>
+            <td class="top center"><strong th:text="#{usuario.cpf}">CPF</strong></td>
+            <td class="top center"><strong th:text="#{usuario.nome}">Nome</strong></td>
+            <td class="top center"><strong th:text="#{usuario.sobrenome}">Sobrenome</strong></td>
+            <td class="top center"><strong th:text="#{usuario.email}">Email</strong></td>
+            <td class="top center"><strong th:text="#{usuario.dataNascimento}">Data de nascimento</strong></td>
+            <td class="top center" colspan="3"><strong th:text="#{acoes}">Ações</strong></td>
         </tr>
-        </tbody>
+        </thead>
         <tbody>
         <tr th:each="usuario : ${usuarios}">
             <td align="center"><i class="fa fa-calendar-check"></i></td>
-            <td align="center" th:text="${usuario.cpfUser}"></td>
-            <td align="center" th:text="${usuario.nomeUser}"></td>
-            <td align="center" th:text="${usuario.sobrenomeUser}"></td>
-            <td align="center" th:text="${usuario.emailUser}"></td>
-            <td align="center" th:text="${usuario.dataNascimentoUser}"></td>
+            <td align="center" th:text="${usuario.cpfUser}">CPF</td>
+            <td align="center" th:text="${usuario.nomeUser}">Nome</td>
+            <td align="center" th:text="${usuario.sobrenomeUser}">Sobrenome</td>
+            <td align="center" th:text="${usuario.emailUser}">Email</td>
+            <td align="center" th:text="${usuario.dataNascimentoUser}">Data</td>
             <td align="center">
-
                 <a th:href="@{/usuario/{cpfUser}(cpfUser=${usuario.cpfUser})}"
-                   class="editar fas fa-search" title="Visualizar" sec:authorize="hasAnyRole('ROLE_USER')"></a>
+                   class="editar fas fa-search"
+                   th:title="#{visualizar}">Visualizar</a>
             </td>
             <td align="center">
-
                 <a th:href="@{/usuario/editar/{cpfUser}(cpfUser=${usuario.cpfUser})}"
-                   class="editar fa fa-check-circle" title="Editar" sec:authorize="isAuthenticated()"></a>
-
+                   class="editar fa fa-check-circle"
+                   th:title="#{editar}">Editar</a>
             </td>
             <td align="center">
-                <!-- Link para excluir (Autenticado) -->
                 <a th:href="@{/usuario/deletar/{cpf}(cpf=${usuario.cpfUser})}"
                    class="deletar fa fa-edit"
-                   title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?');" sec:authorize="isAuthenticated()"></a>
+                   th:title="#{excluir}"
+                   th:onclick="'return confirm(\'' + #{confirmar.exclusao} + '\');'"
+                   sec:authorize="isAuthenticated()">Excluir</a>
             </td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
             <td colspan="8" align="center">
-                <a href="/usuario/novo" class="button-form borda-inversa">Novo Usuário</a>
+                <a href="/usuario/novo" class="button-form borda-inversa" th:text="#{novo.usuario}">Novo Usuário</a>
             </td>
         </tr>
         </tfoot>
     </table>
 </div>
-
 </body>
 </html>

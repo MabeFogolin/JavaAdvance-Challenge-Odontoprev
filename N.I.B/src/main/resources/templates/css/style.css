@@ -1,0 +1,92 @@
+/* style.css */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+}
+
+/* Container principal */
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+/* Título */
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Parágrafo */
+p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+/* Alinhamento dos botões */
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Estilização dos botões */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 1em;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 120px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+/* Botão ADMIN com cor diferenciada */
+.admin-btn {
+    background-color: #dc3545;
+    width: 150px;
+    font-weight: bold;
+}
+
+/* Efeito hover */
+.btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.admin-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+/* Botão desabilitado */
+.disabled {
+    background-color: #6c757d !important;
+    cursor: not-allowed;
+    pointer-events: none;  /* Impede o clique */
+    opacity: 0.6;
+}

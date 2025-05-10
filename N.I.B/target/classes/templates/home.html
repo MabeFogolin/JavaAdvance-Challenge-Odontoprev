@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="preload" href="/css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
+</head>
+<body>
+
+<div class="container">
+    <h1>Seja bem-vindo, <span th:text="${username}">Convidado</span>!</h1>
+    <div class="button-container">
+        <a href="/login" class="btn">Login</a>
+        <a href="/usuario" class="btn" sec:authorize="hasAnyRole('USER','ADMIN','MANAGER')"> usuário</a>
+    </div>
+</div>
+
+</body>
+</html>
