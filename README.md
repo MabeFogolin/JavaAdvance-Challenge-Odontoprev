@@ -42,19 +42,19 @@ https://www.youtube.com/watch?v=4L5RpHhTqTg
 
 <h3 align="left"> ℹ️ Instruções</h3>
 
-<p align="left">Acesse a pasta N.I.B via terminal e, use o seguinte comando:/p>
+<p align="left">Acesse a pasta N.I.B via terminal e, use o seguinte comando:
 
 ```bash
 mvn clean package
 ```
 
-<p align="left">Após a mensagem de sucesso do build, digite os seguintes comandos via terminal:/p>
+<p align="left">Após a mensagem de sucesso do build, digite os seguintes comandos via terminal:
 
 ```bash
 docker-compose up --build
 ```
 
-<p align="left">Assim que finalizar a construção do container, acesse a seguinte url para visualizar aas informações da aplicação via Prometheus:/p>
+<p align="left">Assim que finalizar a construção do container, acesse a seguinte url para visualizar aas informações da aplicação via Prometheus:
 
 ```bash
 http://localhost:9090/targets
@@ -62,26 +62,11 @@ http://localhost:9090/targets
 
 <h3 align="left"> 💂 Security</h3>
 
-<p align="left">Via postman, acesse o endpoint informado com a seguinte autentição para verificar o JWT Token:</p>
-
-```bash
-http://localhost:8080/usuario/security
-```
+<p align="left">Na página do login, use a seguinte credencial</p>
 <ul>
-  <li><strong>Username: </strong>auth.user@example.com</li>
-  <li><strong>Password: </strong>123456</li>
+  <li><strong>Username: </strong>admin</li>
+  <li><strong>Password: </strong>admin123</li>
 </ul>
-
-<p align="left">Via postman, para recuperar o usuário cadastrado, acesse o seguinte endpoint e autenticação:</p>
-
-```bash
-http://localhost:8080/usuario/security/{cpf}
-```
-<ul>
-  <li><strong>Username: </strong>auth.user@example.com</li>
-  <li><strong>Password: </strong>123456</li>
-</ul>
-
 
 <h3 align="left"> 🧙‍♀️ Usuário</h3>
 <ul>
