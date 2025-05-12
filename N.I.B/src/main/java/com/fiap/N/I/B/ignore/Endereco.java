@@ -1,5 +1,6 @@
 package com.fiap.N.I.B.ignore;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fiap.N.I.B.model.Profissional;
 import com.fiap.N.I.B.model.Usuario;
@@ -47,6 +48,7 @@ public class Endereco extends RepresentationModel<Endereco> {
     @Size(min = 2, max = 2, message = "Estado deve ter 2 caracteres")
     private String estadoEndereco;
 
+    @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
 

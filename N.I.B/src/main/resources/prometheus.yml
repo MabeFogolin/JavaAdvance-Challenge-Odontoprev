@@ -6,6 +6,10 @@ scrape_configs:
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets: ["nib:8082"]
+    basic_auth:
+      username: "admin"
+      password: "admin123"
+
 
   - job_name: "rabbitmq"
     metrics_path: "/metrics"

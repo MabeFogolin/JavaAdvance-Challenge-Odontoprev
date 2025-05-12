@@ -1,6 +1,7 @@
 package com.fiap.N.I.B.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiap.N.I.B.ignore.Endereco;
 import com.fiap.N.I.B.ignore.Historico;
 import jakarta.persistence.*;
@@ -64,14 +65,17 @@ public class Usuario extends RepresentationModel<Usuario> implements Serializabl
     private String emailUser;
 
 
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private List<Diario> diarios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Consulta> consultas = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
+    @OneToOne(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL)
     private Endereco endereco;
 
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)

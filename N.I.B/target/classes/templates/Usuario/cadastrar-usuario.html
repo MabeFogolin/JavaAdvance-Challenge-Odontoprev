@@ -165,73 +165,84 @@
     <div th:if="${erro}" class="alert alert-danger">
         <p th:text="${erro}"></p>
     </div>
+
     <label class="label">
         <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{cpfUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('cpfUser')}" th:errors="*{cpfUser}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Nome do usuário" th:field="*{nomeUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('nomeUser')}" th:errors="*{nomeUser}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Sobrenome do usuário" th:field="*{sobrenomeUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('sobrenomeUser')}" th:errors="*{sobrenomeUser}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Telefone do usuário" th:field="*{telefoneUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('telefoneUser')}" th:errors="*{telefoneUser}"></div>
     </label>
 
     <label for="dataNascimento" class="label">Data de Nascimento:
-    <input type="date" id="dataNascimento" class="input-bordas" th:field="*{dataNascimentoUser}" required>
+        <input type="date" id="dataNascimento" class="input-bordas" th:field="*{dataNascimentoUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('dataNascimentoUser')}" th:errors="*{dataNascimentoUser}"></div>
     </label>
-
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Plano do usuário" th:field="*{planoUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('planoUser')}" th:errors="*{planoUser}"></div>
     </label>
 
     <label class="label">
         <input type="email" class="input-bordas" placeholder="Email do usuário" th:field="*{emailUser}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('emailUser')}" th:errors="*{emailUser}"></div>
     </label>
+
     <h3 class="titulo">Endereço</h3>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Rua" th:field="*{endereco.ruaEndereco}" required maxlength="25">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.ruaEndereco')}" th:errors="*{endereco.ruaEndereco}"></div>
     </label>
 
     <label class="label">
         <input type="number" class="input-bordas" placeholder="Número" th:field="*{endereco.numeroEndereco}" required>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.numeroEndereco')}" th:errors="*{endereco.numeroEndereco}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Complemento (opcional)" th:field="*{endereco.complementoEndereco}" maxlength="20">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.complementoEndereco')}" th:errors="*{endereco.complementoEndereco}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Bairro" th:field="*{endereco.bairroEndereco}" required maxlength="20">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.bairroEndereco')}" th:errors="*{endereco.bairroEndereco}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Cidade" th:field="*{endereco.cidadeEndereco}" required maxlength="30">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.cidadeEndereco')}" th:errors="*{endereco.cidadeEndereco}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="CEP (Ex: 00000-000)" th:field="*{endereco.cepEndereco}" required maxlength="9">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.cepEndereco')}" th:errors="*{endereco.cepEndereco}"></div>
     </label>
 
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Estado (UF)" th:field="*{endereco.estadoEndereco}" required maxlength="2">
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.estadoEndereco')}" th:errors="*{endereco.estadoEndereco}"></div>
     </label>
-
 
     <div class="botoes">
         <a href="/usuario" class="button-form borda-inversa botao-voltar">Voltar</a>
         <button class="button-form borda-inversa" type="submit">Salvar</button>
     </div>
-
-
-
-
 </form>
+
 </body>
 </html>

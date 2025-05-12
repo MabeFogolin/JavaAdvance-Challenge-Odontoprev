@@ -30,11 +30,14 @@ public class SecurityConfig {
             .passwordEncoder(passwordEncoder);
     }
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests( auth ->
                         auth.
-                                requestMatchers("/admin").hasRole("ADMIN")
+                                requestMatchers("/actuator/**").permitAll()
+//                                .requestMatchers("/usuario/**").permitAll()
+                                .requestMatchers("/admin").hasRole("ADMIN")
                                 .requestMatchers("/manager").hasAnyRole("ADMIN", "MANAGER")
                                 .requestMatchers("/usuariosecurity").hasAnyRole("ADMIN", "MANAGER", "USER")
                                 .anyRequest().permitAll())
@@ -49,14 +52,13 @@ public class SecurityConfig {
                         .permitAll())
                 .exceptionHandling(exception -> exception
                         .accessDeniedPage("/access-denied")
-                )
-        ;
+                ).csrf(csrf -> csrf.disable());
         return http.build();
     }
 
     public UserDetailsService userDetailsService() {
         return new InMemoryUserDetailsManager(
-                User.withUsername("admin").password("{noop}admin").roles("ADMIN").build());
+                User.withUsername("admin").password("admin123").roles("ADMIN").build());
     }
 
 

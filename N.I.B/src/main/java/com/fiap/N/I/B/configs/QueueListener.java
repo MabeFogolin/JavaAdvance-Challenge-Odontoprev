@@ -24,6 +24,7 @@ public class QueueListener {
      public void usuarioReceiveMessage(String message) {
          try {
              Usuario usuario = objectMapper.readValue(message, Usuario.class);
+             usuarioRepository.findByCpfUser(usuario.getCpfUser());
              usuarioRepository.save(usuario);
              System.out.println("✅ Usuário atualizado no banco de dados com sucesso!");
          } catch (Exception e) {
