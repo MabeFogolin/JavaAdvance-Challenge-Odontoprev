@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,7 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth ->
                         auth.
                                 requestMatchers("/actuator/**").permitAll()
-//                                .requestMatchers("/usuario/**").permitAll()
+                                .requestMatchers("/usuario/**").permitAll()
                                 .requestMatchers("/admin").hasRole("ADMIN")
                                 .requestMatchers("/manager").hasAnyRole("ADMIN", "MANAGER")
                                 .requestMatchers("/usuariosecurity").hasAnyRole("ADMIN", "MANAGER", "USER")
@@ -52,7 +53,7 @@ public class SecurityConfig {
                         .permitAll())
                 .exceptionHandling(exception -> exception
                         .accessDeniedPage("/access-denied")
-                ).csrf(csrf -> csrf.disable());
+                ).csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

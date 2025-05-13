@@ -40,7 +40,7 @@ spring:
       "[hibernate.generate_statistics]" : false
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
@@ -49,8 +49,6 @@ spring:
         message-converter: jackson2JsonMessageConverter
       deserialization:
         trusted-packages: com.fiap.N.I.B.model
-
-
 
 springdoc:
   api-docs:

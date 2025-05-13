@@ -1,24 +1,26 @@
-# Usa imagem do Maven para construir o projeto
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+# Etapa 1: Build da aplicação com Maven
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 
-# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia o pom.xml e o src da pasta N.I.B
+# Copia apenas arquivos necessários para evitar cache busting
 COPY N.I.B/pom.xml .
-COPY N.I.B/src ./src
+COPY src ./src
 
-# Faz o build do projeto
+# Executa o build do projeto (sem testes)
 RUN mvn clean package -DskipTests
 
-# Usa imagem do OpenJDK para rodar o projeto
-FROM openjdk:17-jdk
+# Etapa 2: Container leve apenas com o JAR gerado
+FROM eclipse-temurin:21-jdk-alpine
 
-# Define o diretório de trabalho no container
+# Define o diretório padrão do app no container
 WORKDIR /app
 
-# Copia o jar gerado do estágio anterior
-COPY --from=build /app/target/*.jar app.jar
+# Copia apenas o JAR gerado da etapa anterior
+COPY --from=build /app/target/N.I.B-0.0.1-SNAPSHOT.jar app.jar
 
-# Comando para rodar o projeto
+# Exponha a porta usada pelo Spring Boot
+EXPOSE 8080
+
+# Comando de execução
 ENTRYPOINT ["java", "-jar", "app.jar"]
