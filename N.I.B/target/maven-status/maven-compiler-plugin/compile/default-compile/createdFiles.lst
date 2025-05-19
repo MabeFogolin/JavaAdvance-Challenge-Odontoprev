@@ -17,7 +17,6 @@ com\fiap\N\I\B\controller\UserSecurityController.class
 com\fiap\N\I\B\ignore\usecases\Endereco\EnderecoAtualizarTotalmente.class
 com\fiap\N\I\B\configs\AuditEventConfig.class
 com\fiap\N\I\B\ignore\usecases\Usuario\UsuarioService.class
-com\fiap\N\I\B\controller\HomeController.class
 com\fiap\N\I\B\ignore\gateways\responses\EnderecoPostResponse.class
 com\fiap\N\I\B\ignore\Endereco$EnderecoBuilder.class
 com\fiap\N\I\B\ignore\usecases\Consulta\ConsultaService.class

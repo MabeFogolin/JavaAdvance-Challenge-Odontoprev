@@ -19,6 +19,7 @@ public class LoginController {
         if(logout != null) {
             model.addAttribute("logout","Deslogado com sucesso");
         }
-        return "/login";
+
+        return "Usuario/login";
     }
 }

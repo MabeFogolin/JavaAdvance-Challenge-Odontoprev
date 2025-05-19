@@ -1,9 +1,8 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
     <meta charset="UTF-8">
-        <html lang="pt-BR">
-        <head>
-        <meta charset="UTF-8">
-        <title>Novo Usuário</title>
+    <title>Novo Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,28 +43,19 @@
             text-align: center;
         }
 
-
         .formulario {
             max-width: 500px;
             margin: auto;
             background: white;
-            overflow: hidden;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-        }
-
-
-        :focus {
-            outline: none;
         }
 
         .label {
             float: left;
             width: 100%;
             margin-bottom: 25px;
-            position: relative;
         }
 
         .input-bordas {
@@ -78,18 +68,12 @@
             padding: 7px 14px 9px;
             transition: 0.4s;
         }
-        .botoes {
-            display: flex;
-            justify-content: center; /* Centraliza os botões */
-            gap: 20px; /* Espaçamento uniforme entre os botões */
-            margin-top: 15px; /* Espaço acima dos botões */
-        }
 
         .botoes {
             display: flex;
-            justify-content: space-between; /* Mantém os botões afastados */
-            width: 100%; /* Faz a div ocupar toda a largura do formulário */
-            margin-top: 20px; /* Adiciona um espaçamento entre os inputs e os botões */
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
         }
 
         .button-form {
@@ -99,32 +83,28 @@
             font-size: 1.2em;
             border: none;
             cursor: pointer;
-            width: 48%; /* Garante que os botões fiquem com largura uniforme */
+            width: 48%;
             text-align: center;
-            text-decoration: none; /* Remove sublinhado do link */
-            border-radius: 5px; /* Deixa os botões arredondados */
+            text-decoration: none;
+            border-radius: 5px;
         }
 
         .botao-voltar {
-            background-color: #ccc; /* Cor diferente para o botão "Voltar" */
-            color: #333; /* Define a cor do texto */
+            background-color: #ccc;
+            color: #333;
         }
 
         .borda-inversa {
-            display: inline-block;
-            vertical-align: middle;
             transition-duration: 0.5s;
             transition-property: background;
             box-shadow: inset 0 0 0 2px #39f, 0 0 1px rgba(0, 0, 0, 0);
         }
 
-        .borda-inversa:hover, .borda-inversa:focus, .borda-inversa:active {
+        .borda-inversa:hover,
+        .borda-inversa:focus,
+        .borda-inversa:active {
             background: none;
             color: #39f;
-        }
-
-        .naoexibir {
-            display: none;
         }
 
         .alert {
@@ -142,16 +122,16 @@
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
-            max-height: 100px; /* Define a altura máxima */
-
+            max-height: 100px;
         }
-
     </style>
 </head>
 <body>
+
 <div th:if="${sucesso}" class="alert alert-success">
     <p th:text="${sucesso}"></p>
 </div>
+
 <header class="cabecalho">
     <nav class="cabecalho__menu">
         <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
@@ -160,82 +140,121 @@
         <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
     </nav>
 </header>
+
 <h2 class="titulo">Novo Usuário</h2>
+
 <form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}">
     <div th:if="${erro}" class="alert alert-danger">
         <p th:text="${erro}"></p>
     </div>
 
+    <!-- CPF -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="CPF do Usuário" th:field="*{cpfUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('cpfUser')}" th:errors="*{cpfUser}"></div>
+        <input type="text" class="input-bordas" placeholder="CPF do Usuário"
+               th:field="*{cpfUser}" required
+               pattern="\d{3}\d{3}\d{3}\d{2}"
+               title="Digite um CPF válido com ou sem pontos (ex: 123.456.789-00)">
     </label>
 
+    <!-- Nome -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Nome do usuário" th:field="*{nomeUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('nomeUser')}" th:errors="*{nomeUser}"></div>
+        <input type="text" class="input-bordas" placeholder="Nome do usuário"
+               th:field="*{nomeUser}" required maxlength="30"
+               pattern="[A-Za-zÀ-ÿ\s]{2,}"
+               title="Nome deve conter ao menos 2 letras e apenas caracteres válidos.">
     </label>
 
+    <!-- Sobrenome -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Sobrenome do usuário" th:field="*{sobrenomeUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('sobrenomeUser')}" th:errors="*{sobrenomeUser}"></div>
+        <input type="text" class="input-bordas" placeholder="Sobrenome do usuário"
+               th:field="*{sobrenomeUser}" required maxlength="40"
+               pattern="[A-Za-zÀ-ÿ\s]{2,}"
+               title="Sobrenome deve conter ao menos 2 letras e apenas caracteres válidos.">
     </label>
 
+    <!-- Telefone -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Telefone do usuário" th:field="*{telefoneUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('telefoneUser')}" th:errors="*{telefoneUser}"></div>
+        <input type="text" class="input-bordas" placeholder="Telefone do usuário"
+               th:field="*{telefoneUser}" required
+               pattern="\d{2}\d{5}\d{4}"
+               title="Digite um número de telefone válido (ex: 11912345678)">
     </label>
 
-    <label for="dataNascimento" class="label">Data de Nascimento:
-        <input type="date" id="dataNascimento" class="input-bordas" th:field="*{dataNascimentoUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('dataNascimentoUser')}" th:errors="*{dataNascimentoUser}"></div>
+    <!-- Data de Nascimento -->
+    <label class="label">
+        <input type="date" id="dataNascimento" class="input-bordas"
+               th:field="*{dataNascimentoUser}" required>
     </label>
 
+    <!-- Plano -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Plano do usuário" th:field="*{planoUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('planoUser')}" th:errors="*{planoUser}"></div>
+        <input type="text" class="input-bordas" placeholder="Plano do usuário"
+               th:field="*{planoUser}" required maxlength="30"
+               pattern="[A-Za-zÀ-ÿ0-9\s\-]{2,}"
+               title="Plano deve conter letras, números ou hífens.">
     </label>
 
+    <!-- Email -->
     <label class="label">
-        <input type="email" class="input-bordas" placeholder="Email do usuário" th:field="*{emailUser}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('emailUser')}" th:errors="*{emailUser}"></div>
+        <input type="email" class="input-bordas" placeholder="Email do usuário"
+               th:field="*{emailUser}" required>
     </label>
 
     <h3 class="titulo">Endereço</h3>
 
+    <!-- Rua -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Rua" th:field="*{endereco.ruaEndereco}" required maxlength="25">
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.ruaEndereco')}" th:errors="*{endereco.ruaEndereco}"></div>
+        <input type="text" class="input-bordas" placeholder="Rua"
+               th:field="*{endereco.ruaEndereco}" required maxlength="25"
+               pattern="[A-Za-zÀ-ÿ0-9\s\-]{2,}"
+               title="Digite uma rua válida (mínimo 2 caracteres)">
     </label>
 
+    <!-- Número -->
     <label class="label">
-        <input type="number" class="input-bordas" placeholder="Número" th:field="*{endereco.numeroEndereco}" required>
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.numeroEndereco')}" th:errors="*{endereco.numeroEndereco}"></div>
+        <input type="number" class="input-bordas" placeholder="Número"
+               th:field="*{endereco.numeroEndereco}" required min="1" max="99999"
+               title="Digite um número válido para o endereço.">
     </label>
 
+    <!-- Complemento -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Complemento (opcional)" th:field="*{endereco.complementoEndereco}" maxlength="20">
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.complementoEndereco')}" th:errors="*{endereco.complementoEndereco}"></div>
+        <input type="text" class="input-bordas" placeholder="Complemento (opcional)"
+               th:field="*{endereco.complementoEndereco}" maxlength="20"
+               pattern="[A-Za-zÀ-ÿ0-9\s\-]{0,20}"
+               title="Complemento pode conter letras e números.">
     </label>
 
+    <!-- Bairro -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Bairro" th:field="*{endereco.bairroEndereco}" required maxlength="20">
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.bairroEndereco')}" th:errors="*{endereco.bairroEndereco}"></div>
+        <input type="text" class="input-bordas" placeholder="Bairro"
+               th:field="*{endereco.bairroEndereco}" required maxlength="20"
+               pattern="[A-Za-zÀ-ÿ0-9\s\-]{2,}"
+               title="Digite um bairro válido.">
     </label>
 
+    <!-- Cidade -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Cidade" th:field="*{endereco.cidadeEndereco}" required maxlength="30">
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.cidadeEndereco')}" th:errors="*{endereco.cidadeEndereco}"></div>
+        <input type="text" class="input-bordas" placeholder="Cidade"
+               th:field="*{endereco.cidadeEndereco}" required maxlength="30"
+               pattern="[A-Za-zÀ-ÿ\s\-]{2,}"
+               title="Digite uma cidade válida.">
     </label>
 
+    <!-- CEP -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="CEP (Ex: 00000-000)" th:field="*{endereco.cepEndereco}" required maxlength="9">
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.cepEndereco')}" th:errors="*{endereco.cepEndereco}"></div>
+        <input type="text" class="input-bordas" placeholder="CEP (Ex: 00000-000)"
+               th:field="*{endereco.cepEndereco}" required maxlength="9"
+               pattern="\d{5}-?\d{3}"
+               title="Digite um CEP válido (ex: 12345-678)">
     </label>
 
+    <!-- Estado -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Estado (UF)" th:field="*{endereco.estadoEndereco}" required maxlength="2">
-        <div class="alert alert-danger" th:if="${#fields.hasErrors('endereco.estadoEndereco')}" th:errors="*{endereco.estadoEndereco}"></div>
+        <input type="text" class="input-bordas" placeholder="Estado (UF)"
+               th:field="*{endereco.estadoEndereco}" required maxlength="2" minlength="2"
+               pattern="[A-Za-z]{2}"
+               title="Digite exatamente 2 letras (ex: SP)">
     </label>
 
     <div class="botoes">
