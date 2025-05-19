@@ -23,7 +23,7 @@ spring:
       "[hibernate.generate_statistics]" : false
 
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest

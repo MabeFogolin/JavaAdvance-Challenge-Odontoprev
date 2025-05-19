@@ -31,9 +31,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 userSecurity.getUsername(),
                 userSecurity.getPassword(),
                 userSecurity.isEnabled(),
-                true, // account not expired
-                true, // credentials not expired
-                true, // account not locked
+                true,
+                true,
+                true,
                 getAuthorities(userSecurity)
         );
     }
@@ -41,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> getAuthorities(UserSecurity userSecurity) {
         return userSecurity.getRoles().stream()
                 .map(Role::getName)
-                .map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 }

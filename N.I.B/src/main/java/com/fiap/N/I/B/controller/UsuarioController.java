@@ -1,10 +1,15 @@
 package com.fiap.N.I.B.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.N.I.B.Repositories.UsuarioRepository;
+import com.fiap.N.I.B.ignore.EnderecoRepository;
 import com.fiap.N.I.B.model.Usuario;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -20,6 +25,9 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioRepository usuarioRepository;
+    private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
+    private final EnderecoRepository enderecoRepository;
 
     @GetMapping
     public String listarUsuarios(Model model) {
@@ -82,23 +90,36 @@ public class UsuarioController {
     }
 
     @PostMapping("/editar")
-    public String atualizarUsuario(@Valid @ModelAttribute("usuario") Usuario usuario,
-                                   BindingResult result,
-                                   RedirectAttributes redirectAttributes,
-                                   Model model) {
+    public ModelAndView atualizarUsuario(@ModelAttribute Usuario usuarioParam) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioParam.getCpfUser());
 
-        if (result.hasErrors()) {
-            return "Usuario/editar-usuario";
+        if (usuarioOptional.isPresent()) {
+            Usuario usuarioCadastrado = usuarioOptional.get();
+            Usuario usuarioAtualizado = Usuario.builder()
+                    .cpfUser(usuarioCadastrado.getCpfUser())
+                    .planoUser(usuarioParam.getPlanoUser())
+                    .dataNascimentoUser(usuarioCadastrado.getDataNascimentoUser())
+                    .emailUser(usuarioParam.getEmailUser())
+                    .nomeUser(usuarioParam.getNomeUser())
+                    .sobrenomeUser(usuarioParam.getSobrenomeUser())
+                    .telefoneUser(usuarioParam.getTelefoneUser())
+                    .endereco(usuarioCadastrado.getEndereco())
+                    .diarios(usuarioCadastrado.getDiarios())
+                    .build();
+
+            try {
+                String usuarioJson = objectMapper.writeValueAsString(usuarioAtualizado);
+                rabbitTemplate.convertAndSend("usuarioExchange", "routingKey", usuarioJson);
+                System.out.println("📩 Mensagem enviada para a fila: " + usuarioJson);
+            } catch (JsonProcessingException e) {
+                System.err.println("❌ Erro ao serializar o objeto Usuario: " + e.getMessage());
+            }
+            return new ModelAndView("redirect:/usuario", "sucesso", "Usuário atualizado com sucesso!");
         }
 
-        if (usuario.getEndereco() != null) {
-            usuario.getEndereco().setUsuario(usuario);
-        }
-
-        usuarioRepository.save(usuario);
-        redirectAttributes.addFlashAttribute("sucesso", "Usuário atualizado com sucesso!");
-        return "redirect:/usuario";
+        return new ModelAndView("Usuario/editar-usuario", "erro", "Erro ao atualizar o usuário.");
     }
+
 
     @GetMapping("/deletar/{cpf}")
     public String deletarUsuario(@PathVariable String cpf, RedirectAttributes redirectAttributes) {

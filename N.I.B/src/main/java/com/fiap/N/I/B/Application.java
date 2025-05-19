@@ -143,8 +143,8 @@ public class Application {
 
 		System.out.println("Usuário, profissional e consulta criados com sucesso.");
 
-		Role roleAdmin = roleRepository.findByName("ROLE_ADMIN")
-				.orElseGet(() -> roleRepository.save(new Role(null, "ROLE_ADMIN")));
+		Role roleAdmin = roleRepository.findByName("ADMIN")
+				.orElseGet(() -> roleRepository.save(new Role(null, "ADMIN")));
 
 		UserSecurity admin = new UserSecurity();
 		admin.setUsername("admin");
