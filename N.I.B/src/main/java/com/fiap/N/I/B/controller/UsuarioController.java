@@ -56,8 +56,6 @@ public class UsuarioController {
             model.addAttribute("erro", "CPF já cadastrado.");
             return "Usuario/cadastrar-usuario";
         }
-
-        // Set inverso se necessário
         if (usuario.getEndereco() != null) {
             usuario.getEndereco().setUsuario(usuario);
         }

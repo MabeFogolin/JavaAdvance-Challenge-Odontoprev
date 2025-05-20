@@ -90,4 +90,12 @@ public class Usuario extends RepresentationModel<Usuario> implements Serializabl
         diario.setUsuario(this);
         this.diarios.add(diario);
     }
+
+    public void setCpfUser(String cpfUser) {
+        if (cpfUser != null) {
+            this.cpfUser = cpfUser.replaceAll("\\D+", ""); // Remove qualquer coisa que não seja número
+        } else {
+            this.cpfUser = null;
+        }
+    }
 }

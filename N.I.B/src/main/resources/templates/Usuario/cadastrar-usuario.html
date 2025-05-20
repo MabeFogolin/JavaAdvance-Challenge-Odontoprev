@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Novo Usuário</title>
@@ -122,7 +122,6 @@
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
-            max-height: 100px;
         }
     </style>
 </head>
@@ -143,28 +142,26 @@
 
 <h2 class="titulo">Novo Usuário</h2>
 
-<form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}">
+<form class="formulario" action="/usuario/novo" method="post" th:object="${usuario}" id="formUsuario">
+    <div id="erroCpf" class="alert alert-danger" style="display: none;">
+        CPF inválido. Verifique e tente novamente.
+    </div>
+
     <div th:if="${erro}" class="alert alert-danger">
         <p th:text="${erro}"></p>
     </div>
-
-    <!-- CPF -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="CPF do Usuário"
-               th:field="*{cpfUser}" required
-               pattern="\d{3}\d{3}\d{3}\d{2}"
-               title="Digite um CPF válido com ou sem pontos (ex: 123.456.789-00)">
+               th:field="*{cpfUser}" required id="cpf"
+               maxlength="14"
+               title="Digite um CPF válido no formato 000.000.000-00">
     </label>
-
-    <!-- Nome -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Nome do usuário"
                th:field="*{nomeUser}" required maxlength="30"
                pattern="[A-Za-zÀ-ÿ\s]{2,}"
                title="Nome deve conter ao menos 2 letras e apenas caracteres válidos.">
     </label>
-
-    <!-- Sobrenome -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Sobrenome do usuário"
                th:field="*{sobrenomeUser}" required maxlength="40"
@@ -172,7 +169,6 @@
                title="Sobrenome deve conter ao menos 2 letras e apenas caracteres válidos.">
     </label>
 
-    <!-- Telefone -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Telefone do usuário"
                th:field="*{telefoneUser}" required
@@ -180,13 +176,10 @@
                title="Digite um número de telefone válido (ex: 11912345678)">
     </label>
 
-    <!-- Data de Nascimento -->
     <label class="label">
         <input type="date" id="dataNascimento" class="input-bordas"
                th:field="*{dataNascimentoUser}" required>
     </label>
-
-    <!-- Plano -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Plano do usuário"
                th:field="*{planoUser}" required maxlength="30"
@@ -194,7 +187,6 @@
                title="Plano deve conter letras, números ou hífens.">
     </label>
 
-    <!-- Email -->
     <label class="label">
         <input type="email" class="input-bordas" placeholder="Email do usuário"
                th:field="*{emailUser}" required>
@@ -202,7 +194,6 @@
 
     <h3 class="titulo">Endereço</h3>
 
-    <!-- Rua -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Rua"
                th:field="*{endereco.ruaEndereco}" required maxlength="25"
@@ -210,14 +201,12 @@
                title="Digite uma rua válida (mínimo 2 caracteres)">
     </label>
 
-    <!-- Número -->
     <label class="label">
         <input type="number" class="input-bordas" placeholder="Número"
                th:field="*{endereco.numeroEndereco}" required min="1" max="99999"
                title="Digite um número válido para o endereço.">
     </label>
 
-    <!-- Complemento -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Complemento (opcional)"
                th:field="*{endereco.complementoEndereco}" maxlength="20"
@@ -225,15 +214,12 @@
                title="Complemento pode conter letras e números.">
     </label>
 
-    <!-- Bairro -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Bairro"
                th:field="*{endereco.bairroEndereco}" required maxlength="20"
                pattern="[A-Za-zÀ-ÿ0-9\s\-]{2,}"
                title="Digite um bairro válido.">
     </label>
-
-    <!-- Cidade -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="Cidade"
                th:field="*{endereco.cidadeEndereco}" required maxlength="30"
@@ -241,7 +227,6 @@
                title="Digite uma cidade válida.">
     </label>
 
-    <!-- CEP -->
     <label class="label">
         <input type="text" class="input-bordas" placeholder="CEP (Ex: 00000-000)"
                th:field="*{endereco.cepEndereco}" required maxlength="9"
@@ -249,12 +234,37 @@
                title="Digite um CEP válido (ex: 12345-678)">
     </label>
 
-    <!-- Estado -->
     <label class="label">
-        <input type="text" class="input-bordas" placeholder="Estado (UF)"
-               th:field="*{endereco.estadoEndereco}" required maxlength="2" minlength="2"
-               pattern="[A-Za-z]{2}"
-               title="Digite exatamente 2 letras (ex: SP)">
+        <select class="input-bordas" th:field="*{endereco.estadoEndereco}" required title="Selecione o estado">
+            <option value="">Selecione o estado</option>
+            <option value="AC">AC</option>
+            <option value="AL">AL</option>
+            <option value="AP">AP</option>
+            <option value="AM">AM</option>
+            <option value="BA">BA</option>
+            <option value="CE">CE</option>
+            <option value="DF">DF</option>
+            <option value="ES">ES</option>
+            <option value="GO">GO</option>
+            <option value="MA">MA</option>
+            <option value="MT">MT</option>
+            <option value="MS">MS</option>
+            <option value="MG">MG</option>
+            <option value="PA">PA</option>
+            <option value="PB">PB</option>
+            <option value="PR">PR</option>
+            <option value="PE">PE</option>
+            <option value="PI">PI</option>
+            <option value="RJ">RJ</option>
+            <option value="RN">RN</option>
+            <option value="RS">RS</option>
+            <option value="RO">RO</option>
+            <option value="RR">RR</option>
+            <option value="SC">SC</option>
+            <option value="SP">SP</option>
+            <option value="SE">SE</option>
+            <option value="TO">TO</option>
+        </select>
     </label>
 
     <div class="botoes">
@@ -262,6 +272,61 @@
         <button class="button-form borda-inversa" type="submit">Salvar</button>
     </div>
 </form>
+
+<script>
+    const cpfInput = document.getElementById('cpf');
+    const erroCpf = document.getElementById('erroCpf');
+    const form = document.getElementById('formUsuario');
+
+    // Máscara CPF
+    cpfInput.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 11) value = value.slice(0, 11);
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        e.target.value = value;
+    });
+
+    // Validação CPF
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = 11 - (soma % 11);
+        let dig1 = resto >= 10 ? 0 : resto;
+
+        if (dig1 !== parseInt(cpf.charAt(9))) return false;
+
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        let dig2 = resto >= 10 ? 0 : resto;
+
+        return dig2 === parseInt(cpf.charAt(10));
+    }
+
+    // Ao submeter: valida e remove máscara
+    form.addEventListener('submit', function (e) {
+        let cpfNumerico = cpfInput.value.replace(/[^\d]+/g, '');
+
+        if (!validarCPF(cpfNumerico)) {
+            e.preventDefault();
+            erroCpf.style.display = 'block';
+            cpfInput.focus();
+        } else {
+            erroCpf.style.display = 'none';
+            cpfInput.value = cpfNumerico; // remove máscara antes de enviar
+        }
+    });
+</script>
+
 
 </body>
 </html>
