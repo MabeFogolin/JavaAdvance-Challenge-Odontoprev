@@ -22,7 +22,6 @@ public class ImagemController {
     @Autowired
     private ImagemRepository imagemRepository;
 
-    // Upload via URL (mantido)
     @PostMapping("/upload-url")
     public ResponseEntity<String> uploadImagemPorUrl(@RequestBody ImagemUrlRequest request) {
         try {
