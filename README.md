@@ -24,11 +24,6 @@
   <li>📱 <strong>Aplicativo:</strong> Construção de aplicativo de tela com a linguagem Kotlin.</li>
 </ul>
 
-<h2 align="left"> 📹 Link do vídeo</h2>
-
-```bash
-https://www.youtube.com/watch?v=4L5RpHhTqTg
-```
 
 <h2 align="left"> 🏠 Relacionamentos: Visão banco</h2>
 
