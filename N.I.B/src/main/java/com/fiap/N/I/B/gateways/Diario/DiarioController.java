@@ -207,16 +207,22 @@ public class DiarioController {
                     diarioRequest.getUsoFioDiario() > 0 &&
                     diarioRequest.getUsoEnxaguanteDiario() > 0;
 
-            if (houveHigiene && ultimoRegistro != null) {
-                long diferencaDias = ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
-                if (diferencaDias == 1) {
-                    usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
-                } else if (diferencaDias > 1) {
+            if (houveHigiene) {
+                if (ultimoRegistro != null) {
+                    long diferencaDias = ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
+                    if (diferencaDias == 1) {
+                        usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
+                    } else {
+                        usuario.setSequenciaDias(1);
+                    } {
+                        usuario.setSequenciaDias(usuario.getSequenciaDias());
+                    }
+                } else {
+
                     usuario.setSequenciaDias(1);
-                } {
-                    usuario.setSequenciaDias(usuario.getSequenciaDias());
                 }
             }
+
 
             usuario.setPontos(usuario.getPontos() + 1);
             usuarioRepository.save(usuario);
