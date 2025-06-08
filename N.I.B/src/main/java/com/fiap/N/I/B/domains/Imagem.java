@@ -14,9 +14,9 @@ public class Imagem {
 
     @Id
     private String id;
-
     private String nome;
     private String contentType;
     private byte[] dados;
+    private int verificado;
 
 }
