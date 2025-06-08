@@ -23,15 +23,40 @@ public class DiarioServiceImpl implements DiarioService {
 
     @Override
     public DiarioPostResponse inserirNoDiario(String cpfUser, Diario registroParaInserir) {
-        Optional<Usuario> usuario = usuarioRepository.findByCpfUser(cpfUser);
-        if (usuario.isPresent()) {
-            registroParaInserir.setUsuario(usuario.get());
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByCpfUser(cpfUser);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+
+            // Verifica se há registros anteriores e obtém o último
+            List<Diario> registrosAnteriores = diarioRepository.findByUsuario_CpfUser(cpfUser);
+            registrosAnteriores.sort((a, b) -> b.getDataRegistro().compareTo(a.getDataRegistro()));
+            Diario ultimoRegistro = registrosAnteriores.isEmpty() ? null : registrosAnteriores.get(0);
+
+            boolean houveHigiene = registroParaInserir.getEscovacaoDiario() > 0;
+
+            if (houveHigiene && ultimoRegistro != null) {
+                long diferencaDias = java.time.temporal.ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), registroParaInserir.getDataRegistro());
+
+                if (diferencaDias == 1) {
+                    usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
+                } else {
+                    usuario.setSequenciaDias(1);
+                }
+            }
+
+            usuario.setPontos(usuario.getPontos() + 1);
+
+            usuarioRepository.save(usuario);
+            registroParaInserir.setUsuario(usuario);
             diarioRepository.save(registroParaInserir);
-            return new DiarioPostResponse("Novo registro adicionado ao diário", registroParaInserir);
+
+            return new DiarioPostResponse("Novo registro adicionado ao diário e pontos incrementados", registroParaInserir);
         } else {
             return new DiarioPostResponse("Registro não adicionado, não foi encontrado o usuário para atribuição", null);
         }
     }
+
 
     @Override
     public List<Diario> buscarRegistrosPorUsuario(String cpfUser) {

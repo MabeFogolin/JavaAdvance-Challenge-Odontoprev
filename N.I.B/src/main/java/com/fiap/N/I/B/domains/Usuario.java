@@ -63,4 +63,10 @@ public class Usuario extends RepresentationModel<Usuario> {
 
     @OneToOne
     private Endereco endereco;
+
+    private int pontos = 0;
+
+    private double nota = 0;
+
+    private int sequenciaDias = 0;
 }

@@ -33,7 +33,7 @@ public class DiarioController {
             @RequestParam String cpfUser,
             @RequestBody Diario diarioParaCriar) {
         DiarioPostResponse respostaCriacao = diarioService.inserirNoDiario(cpfUser, diarioParaCriar);
-        if (respostaCriacao.getMensagem().equals("Novo registro adicionado ao diário")) {
+        if (respostaCriacao.getMensagem().equals("Novo registro adicionado ao diário e pontos incrementados")) {
             EntityModel<DiarioPostResponse> resource = EntityModel.of(respostaCriacao);
             resource.add(linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withRel("usuario-diario"));
             return ResponseEntity.status(201).body(resource);

@@ -2,25 +2,15 @@ spring:
 
   application:
     name: N.I.B
-#  datasource:
-#    url: jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl
-#    username: rm552669
-#    password: fiap24
-#  jpa:
-#    hibernate:
-#      ddl-auto: create
-#    database-platform: org.hibernate.dialect.OracleDialect
   datasource:
-    url: jdbc:sqlserver://sqlserver-global.database.windows.net:1433;database=NIM-2TDSPR-GlobalSolution;encrypt=true;trustServerCertificate=false;loginTimeout=30;
-    username: NIM
-    password: devops@Fiap2tds
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:oracle:thin:@localhost:1521
+    username: system
+    password: 251084
   jpa:
     hibernate:
       ddl-auto: create
-    database-platform: org.hibernate.dialect.SQLServerDialect
-    properties:
-      "[hibernate.generate_statistics]": false
+    database-platform: org.hibernate.dialect.OracleDialect
+
 springdoc:
   api-docs:
     path: /api-docs
@@ -32,4 +22,4 @@ logging:
     org.hibernate.SQL: DEBUG
 
 server:
-  port: 8082
+  port: 8080
