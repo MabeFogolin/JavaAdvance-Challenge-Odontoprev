@@ -47,7 +47,7 @@ public class ImagemController {
         }
     }
 
-    // Novo: upload direto via POST multipart/form-data
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadImagemDireta(@RequestParam("nome") String nome,
                                                      @RequestParam("imagem") MultipartFile imagemArquivo) {
@@ -98,7 +98,6 @@ public class ImagemController {
     public ResponseEntity<?> listarNomesEIds() {
         var imagens = imagemRepository.findAll();
 
-        // Cria uma lista de mapas com id e nome
         var listaSimples = imagens.stream()
                 .map(img -> Map.of("id", img.getId(), "nome", img.getNome()))
                 .toList();

@@ -1,8 +1,14 @@
 package com.fiap.N.I.B.gateways.Diario;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.N.I.B.domains.Diario;
+import com.fiap.N.I.B.domains.Usuario;
+import com.fiap.N.I.B.gateways.Repositories.ConsultaRepository;
+import com.fiap.N.I.B.gateways.Repositories.DiarioRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.gateways.requests.DiarioPatch;
 import com.fiap.N.I.B.gateways.responses.DiarioPostResponse;
+import com.fiap.N.I.B.gateways.responses.DiarioResponse;
 import com.fiap.N.I.B.usecases.Diario.DiarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,11 +16,20 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,21 +41,113 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 public class DiarioController {
 
     private final DiarioService diarioService;
+    private final DiarioRepository diarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    // Criar novo registro no diário
+//    // Criar novo registro no diário
+//    @PostMapping("/criar")
+//    public ResponseEntity<EntityModel<DiarioPostResponse>> criarRegistro(
+//            @RequestParam String cpfUser,
+//            @RequestBody Diario diarioParaCriar) {
+//        DiarioPostResponse respostaCriacao = diarioService.inserirNoDiario(cpfUser, diarioParaCriar);
+//        if (respostaCriacao.getMensagem().equals("Novo registro adicionado ao diário e pontos incrementados")) {
+//            EntityModel<DiarioPostResponse> resource = EntityModel.of(respostaCriacao);
+//            resource.add(linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withRel("usuario-diario"));
+//            return ResponseEntity.status(201).body(resource);
+//        } else {
+//            return ResponseEntity.status(409).body(EntityModel.of(respostaCriacao));
+//        }
+//    }
+
     @PostMapping("/criar")
-    public ResponseEntity<EntityModel<DiarioPostResponse>> criarRegistro(
-            @RequestParam String cpfUser,
-            @RequestBody Diario diarioParaCriar) {
-        DiarioPostResponse respostaCriacao = diarioService.inserirNoDiario(cpfUser, diarioParaCriar);
-        if (respostaCriacao.getMensagem().equals("Novo registro adicionado ao diário e pontos incrementados")) {
-            EntityModel<DiarioPostResponse> resource = EntityModel.of(respostaCriacao);
-            resource.add(linkTo(methodOn(DiarioController.class).buscarRegistrosPorUsuario(cpfUser)).withRel("usuario-diario"));
-            return ResponseEntity.status(201).body(resource);
-        } else {
-            return ResponseEntity.status(409).body(EntityModel.of(respostaCriacao));
+    public ResponseEntity<String> criarRegistro(@RequestBody Diario diarioRequest, @RequestParam String cpfUser) {
+        try {
+            Optional<Usuario> usuarioOpt = usuarioRepository.findByCpfUser(cpfUser);
+            if (usuarioOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+            }
+
+            Usuario usuario = usuarioOpt.get();
+
+            List<Diario> registrosDiario = diarioRepository.findByUsuario_CpfUser(cpfUser);
+            Diario ultimoRegistro = registrosDiario.stream()
+                    .max(Comparator.comparing(Diario::getDataRegistro))
+                    .orElse(null);
+
+            boolean houveHigiene = diarioRequest.getEscovacaoDiario() > 0 &&
+                    diarioRequest.getUsoFioDiario() > 0 &&
+                    diarioRequest.getUsoEnxaguanteDiario() > 0;
+
+            if (houveHigiene && ultimoRegistro != null) {
+                long diferencaDias = java.time.temporal.ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
+
+                if (diferencaDias == 1) {
+                    usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
+                } else if (diferencaDias > 1) {
+                    usuario.setSequenciaDias(1);
+                }{
+                    usuario.setSequenciaDias(usuario.getSequenciaDias());
+                }
+            }
+
+
+            usuario.setPontos(usuario.getPontos() + 1);
+            usuarioRepository.save(usuario);
+
+
+            diarioRequest.setUsuario(usuario);
+            diarioRepository.save(diarioRequest);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonInput = objectMapper.writeValueAsString(Map.of(
+                    "novo_usuario", List.of(
+                            List.of(
+                                    diarioRequest.getEscovacaoDiario(),
+                                    diarioRequest.getUsoFioDiario(),
+                                    diarioRequest.getUsoEnxaguanteDiario(),
+                                    usuario.getSequenciaDias()
+                            )
+                    )
+            ));
+
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:5000/predict")) // URL do Flask
+                    .header("Content-Type", "application/json; charset=UTF-8")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonInput))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("Resposta do Flask: " + response.body());
+
+
+                DiarioResponse updatedData = objectMapper.readValue(response.body(), DiarioResponse.class);
+
+                usuario.setNota(updatedData.getScore());
+                usuarioRepository.save(usuario);
+
+                return ResponseEntity.ok("Registro no diário criado e nota do usuário atualizada.");
+            } else {
+                System.err.println("Erro ao receber resposta do Flask: " + response.body());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Erro ao processar resposta do Flask.");
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao enviar ou processar dados: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro inesperado ao processar requisição.");
         }
     }
+
 
     // Buscar registros do diário por usuário
     @GetMapping("/usuario")
