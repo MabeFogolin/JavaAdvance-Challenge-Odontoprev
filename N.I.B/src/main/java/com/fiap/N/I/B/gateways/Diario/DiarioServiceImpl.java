@@ -28,20 +28,23 @@ public class DiarioServiceImpl implements DiarioService {
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
 
-            // Verifica se há registros anteriores e obtém o último
             List<Diario> registrosAnteriores = diarioRepository.findByUsuario_CpfUser(cpfUser);
             registrosAnteriores.sort((a, b) -> b.getDataRegistro().compareTo(a.getDataRegistro()));
             Diario ultimoRegistro = registrosAnteriores.isEmpty() ? null : registrosAnteriores.get(0);
+
 
             boolean houveHigiene = registroParaInserir.getEscovacaoDiario() > 0;
 
             if (houveHigiene && ultimoRegistro != null) {
                 long diferencaDias = java.time.temporal.ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), registroParaInserir.getDataRegistro());
 
-                if (diferencaDias == 1) {
+                if (diferencaDias == 1 ) {
                     usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
-                } else {
+                } else if (diferencaDias > 1) {
                     usuario.setSequenciaDias(1);
+                }
+                {
+                    usuario.setSequenciaDias(usuario.getSequenciaDias());
                 }
             }
 
@@ -56,6 +59,7 @@ public class DiarioServiceImpl implements DiarioService {
             return new DiarioPostResponse("Registro não adicionado, não foi encontrado o usuário para atribuição", null);
         }
     }
+
 
 
     @Override
