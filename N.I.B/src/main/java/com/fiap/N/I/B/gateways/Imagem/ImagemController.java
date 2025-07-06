@@ -59,38 +59,33 @@ public class ImagemController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImagemDireta(@RequestParam(value = "nome", required = false) String nome,
-                                                     @RequestParam("imagem") MultipartFile imagemArquivo) {
+    public ResponseEntity<String> uploadImagemDireta(@RequestParam("imagem") MultipartFile file) {
+        System.out.println("Arquivo recebido: " + file.getOriginalFilename());
         try {
-            // Se "nome" não for enviado, atribuir um nome padrão
+            String nome = file.getOriginalFilename();
             if (nome == null || nome.isBlank()) {
                 nome = "imagem_padrao.jpg";
             }
 
-            byte[] dados = imagemArquivo.getBytes();
-
-            // Converter a imagem para Base64
+            byte[] dados = file.getBytes();
             String imagemBase64 = Base64.getEncoder().encodeToString(dados);
 
-            // Criar a entidade Imagem para salvar localmente
             Imagem imagem = new Imagem();
             imagem.setNome(nome);
-            imagem.setContentType(imagemArquivo.getContentType());
+            imagem.setContentType(file.getContentType());
             imagem.setDados(dados);
-            imagem.setVerificado(0); // Inicialmente, não verificado
+            imagem.setVerificado(0);
             imagemRepository.save(imagem);
 
-            // Criar o JSON para enviar ao Flask
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonInput = objectMapper.writeValueAsString(Map.of("image_base64", imagemBase64));
 
-            // Configurar a requisição para o Flask
             HttpClient client = HttpClient.newBuilder()
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:6000/detect")) // URL do Flask
+                    .uri(URI.create("http://localhost:6000/detect"))
                     .header("Content-Type", "application/json; charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonInput))
                     .build();
@@ -98,16 +93,17 @@ public class ImagemController {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                System.out.println("Resposta do Flask: " + response.body());
-
                 JsonNode responseJson = objectMapper.readTree(response.body());
                 int verificado = responseJson.has("verificado") ? responseJson.get("verificado").asInt() : 0;
 
-                // Atualizar imagem se verificado for 1
                 imagem.setVerificado(verificado);
                 imagemRepository.save(imagem);
 
-                return ResponseEntity.ok("Imagem enviada e verificação realizada. Status: " + verificado);
+                if (verificado == 0){
+                    return ResponseEntity.ok("Imagem não válida: " + verificado);
+                }
+
+                return ResponseEntity.ok("Imagem enviada e analisada com sucesso. Status verificado: " + verificado);
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Erro ao processar imagem no Flask: " + response.body());
@@ -120,7 +116,6 @@ public class ImagemController {
                     .body("Erro inesperado ao processar upload.");
         }
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getImagem(@PathVariable String id) {

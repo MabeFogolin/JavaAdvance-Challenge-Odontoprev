@@ -23,3 +23,6 @@ logging:
 
 server:
   port: 8080
+  servlet:
+    multipart:
+      enabled: true

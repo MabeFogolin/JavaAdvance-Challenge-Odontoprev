@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/diario")
 @RequiredArgsConstructor
@@ -63,99 +64,8 @@ public class DiarioController {
 //        }
 //    }
 
-// @PostMapping("/criar")
-//    public ResponseEntity<String> criarRegistro(@RequestBody Diario diarioRequest, @RequestParam String cpfUser) {
-//        try {
-//            Optional<Usuario> usuarioOpt = usuarioRepository.findByCpfUser(cpfUser);
-//            if (usuarioOpt.isEmpty()) {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
-//            }
-//
-//            Usuario usuario = usuarioOpt.get();
-//
-//            List<Diario> registrosDiario = diarioRepository.findByUsuario_CpfUser(cpfUser);
-//            Diario ultimoRegistro = registrosDiario.stream()
-//                    .max(Comparator.comparing(Diario::getDataRegistro))
-//                    .orElse(null);
-//
-//            boolean houveHigiene = diarioRequest.getEscovacaoDiario() > 0 &&
-//                    diarioRequest.getUsoFioDiario() > 0 &&
-//                    diarioRequest.getUsoEnxaguanteDiario() > 0;
-//
-//            if (houveHigiene && ultimoRegistro != null) {
-//                long diferencaDias = java.time.temporal.ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
-//
-//                if (diferencaDias == 1) {
-//                    usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
-//                } else if (diferencaDias > 1) {
-//                    usuario.setSequenciaDias(1);
-//                }{
-//                    usuario.setSequenciaDias(usuario.getSequenciaDias());
-//                }
-//            }
-//
-//
-//            usuario.setPontos(usuario.getPontos() + 1);
-//            usuarioRepository.save(usuario);
-//
-//
-//            diarioRequest.setUsuario(usuario);
-//            diarioRepository.save(diarioRequest);
-//
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            String jsonInput = objectMapper.writeValueAsString(Map.of(
-//                    "novo_usuario", List.of(
-//                            List.of(
-//                                    diarioRequest.getEscovacaoDiario(),
-//                                    diarioRequest.getUsoFioDiario(),
-//                                    diarioRequest.getUsoEnxaguanteDiario(),
-//                                    usuario.getSequenciaDias()
-//                            )
-//                    )
-//            ));
-//
-//            HttpClient client = HttpClient.newBuilder()
-//                    .connectTimeout(Duration.ofSeconds(10))
-//                    .build();
-//
-//            HttpRequest request = HttpRequest.newBuilder()
-//                    .uri(URI.create("http://localhost:5000/predict")) // URL do Flask
-//                    .header("Content-Type", "application/json; charset=UTF-8")
-//                    .POST(HttpRequest.BodyPublishers.ofString(jsonInput))
-//                    .build();
-//
-//            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//
-//            if (response.statusCode() == 200) {
-//                System.out.println("Resposta do Flask: " + response.body());
-//
-//
-//                DiarioResponse updatedData = objectMapper.readValue(response.body(), DiarioResponse.class);
-//
-//                usuario.setNota(updatedData.getScore());
-//                usuarioRepository.save(usuario);
-//
-//                return ResponseEntity.ok("Registro no diário criado e nota do usuário atualizada.");
-//            } else {
-//                System.err.println("Erro ao receber resposta do Flask: " + response.body());
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                        .body("Erro ao processar resposta do Flask.");
-//            }
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Erro ao enviar ou processar dados: " + e.getMessage());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body("Erro inesperado ao processar requisição.");
-//        }
-//    }
-
-    @PostMapping(value = "/criar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> criarRegistroComImagem(@RequestPart("diario") Diario diarioRequest,
-                                                         @RequestPart("imagem") MultipartFile imagemArquivo,
-                                                         @RequestParam String cpfUser) {
+ @PostMapping("/criar")
+    public ResponseEntity<String> criarRegistro(@RequestBody Diario diarioRequest, @RequestParam String cpfUser) {
         try {
             Optional<Usuario> usuarioOpt = usuarioRepository.findByCpfUser(cpfUser);
             if (usuarioOpt.isEmpty()) {
@@ -164,42 +74,8 @@ public class DiarioController {
 
             Usuario usuario = usuarioOpt.get();
 
-            byte[] dadosImagem = imagemArquivo.getBytes();
-            String imagemBase64 = Base64.getEncoder().encodeToString(dadosImagem);
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonInputImagem = objectMapper.writeValueAsString(Map.of("image_base64", imagemBase64));
-
-            HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
-
-            HttpRequest requestImagem = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:6000/detect")) // URL do Flask
-                    .header("Content-Type", "application/json; charset=UTF-8")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonInputImagem))
-                    .build();
-
-            HttpResponse<String> responseImagem = client.send(requestImagem, HttpResponse.BodyHandlers.ofString());
-
-            if (responseImagem.statusCode() != 200) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Erro ao verificar imagem no Flask.");
-            }
-
-            // Criar objeto Imagem com dados e verificação
-            JsonNode responseJson = objectMapper.readTree(responseImagem.body());
-            int verificado = responseJson.has("verificado") ? responseJson.get("verificado").asInt() : 0;
-
-            Imagem imagem = new Imagem();
-            imagem.setNome(imagemArquivo.getOriginalFilename());
-            imagem.setContentType(imagemArquivo.getContentType());
-            imagem.setDados(dadosImagem);
-            imagem.setVerificado(verificado);
-
-            imagemRepository.save(imagem);
-
-            // Regras de pontuação e sequência
-            List<Diario> registros = diarioRepository.findByUsuario_CpfUser(cpfUser);
-            Diario ultimoRegistro = registros.stream()
+            List<Diario> registrosDiario = diarioRepository.findByUsuario_CpfUser(cpfUser);
+            Diario ultimoRegistro = registrosDiario.stream()
                     .max(Comparator.comparing(Diario::getDataRegistro))
                     .orElse(null);
 
@@ -207,10 +83,10 @@ public class DiarioController {
                     diarioRequest.getUsoFioDiario() > 0 &&
                     diarioRequest.getUsoEnxaguanteDiario() > 0;
 
-            if (houveHigiene) {
-                if (ultimoRegistro != null) {
-                    long diferencaDias = ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
-                    if (diferencaDias == 1) {
+            if (houveHigiene && ultimoRegistro != null) {
+                long diferencaDias = java.time.temporal.ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
+
+                if (diferencaDias == 1) {
                         usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
                     } else {
                         usuario.setSequenciaDias(1);
@@ -221,17 +97,14 @@ public class DiarioController {
 
                     usuario.setSequenciaDias(1);
                 }
-            }
-
-
             usuario.setPontos(usuario.getPontos() + 1);
             usuarioRepository.save(usuario);
 
-            diarioRequest.setImagemId(imagem.getId());
+
             diarioRequest.setUsuario(usuario);
             diarioRepository.save(diarioRequest);
 
-            // Previsão com Flask (nota)
+            ObjectMapper objectMapper = new ObjectMapper();
             String jsonInput = objectMapper.writeValueAsString(Map.of(
                     "novo_usuario", List.of(
                             List.of(
@@ -243,34 +116,161 @@ public class DiarioController {
                     )
             ));
 
-            HttpRequest requestNota = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:5000/predict"))
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:5000/predict")) // URL do Flask
                     .header("Content-Type", "application/json; charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonInput))
                     .build();
 
-            HttpResponse<String> responseNota = client.send(requestNota, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (responseNota.statusCode() == 200) {
-                DiarioResponse updatedData = objectMapper.readValue(responseNota.body(), DiarioResponse.class);
+            if (response.statusCode() == 200) {
+                System.out.println("Resposta do Flask: " + response.body());
+
+
+                DiarioResponse updatedData = objectMapper.readValue(response.body(), DiarioResponse.class);
+
                 usuario.setNota(updatedData.getScore());
                 usuarioRepository.save(usuario);
-                return ResponseEntity.ok("Registro criado com imagem e nota atualizada.");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Erro ao calcular nota do usuário no Flask.");
-            }
 
+                return ResponseEntity.ok("Registro no diário criado e nota do usuário atualizada.");
+            } else {
+                System.err.println("Erro ao receber resposta do Flask: " + response.body());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Erro ao processar resposta do Flask.");
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao processar imagem ou requisição: " + e.getMessage());
+                    .body("Erro ao enviar ou processar dados: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro inesperado.");
+                    .body("Erro inesperado ao processar requisição.");
         }
     }
+
+//    @PostMapping(value = "/criar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<String> criarRegistroComImagem(@RequestPart("diario") Diario diarioRequest,
+//                                                         @RequestPart("imagem") MultipartFile imagemArquivo,
+//                                                         @RequestParam String cpfUser) {
+//        try {
+//            Optional<Usuario> usuarioOpt = usuarioRepository.findByCpfUser(cpfUser);
+//            if (usuarioOpt.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+//            }
+//
+//            Usuario usuario = usuarioOpt.get();
+//
+//            byte[] dadosImagem = imagemArquivo.getBytes();
+//            String imagemBase64 = Base64.getEncoder().encodeToString(dadosImagem);
+//
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String jsonInputImagem = objectMapper.writeValueAsString(Map.of("image_base64", imagemBase64));
+//
+//            HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
+//
+//            HttpRequest requestImagem = HttpRequest.newBuilder()
+//                    .uri(URI.create("http://localhost:6000/detect")) // URL do Flask
+//                    .header("Content-Type", "application/json; charset=UTF-8")
+//                    .POST(HttpRequest.BodyPublishers.ofString(jsonInputImagem))
+//                    .build();
+//
+//            HttpResponse<String> responseImagem = client.send(requestImagem, HttpResponse.BodyHandlers.ofString());
+//
+//            if (responseImagem.statusCode() != 200) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body("Erro ao verificar imagem no Flask.");
+//            }
+//
+//            // Criar objeto Imagem com dados e verificação
+//            JsonNode responseJson = objectMapper.readTree(responseImagem.body());
+//            int verificado = responseJson.has("verificado") ? responseJson.get("verificado").asInt() : 0;
+//
+//            Imagem imagem = new Imagem();
+//            imagem.setNome(imagemArquivo.getOriginalFilename());
+//            imagem.setContentType(imagemArquivo.getContentType());
+//            imagem.setDados(dadosImagem);
+//            imagem.setVerificado(verificado);
+//
+//            imagemRepository.save(imagem);
+//
+//            // Regras de pontuação e sequência
+//            List<Diario> registros = diarioRepository.findByUsuario_CpfUser(cpfUser);
+//            Diario ultimoRegistro = registros.stream()
+//                    .max(Comparator.comparing(Diario::getDataRegistro))
+//                    .orElse(null);
+//
+//            boolean houveHigiene = diarioRequest.getEscovacaoDiario() > 0 ;
+//
+//            if (houveHigiene) {
+//                if (ultimoRegistro != null) {
+//                    long diferencaDias = ChronoUnit.DAYS.between(ultimoRegistro.getDataRegistro(), diarioRequest.getDataRegistro());
+//                    if (diferencaDias == 1) {
+//                        usuario.setSequenciaDias(usuario.getSequenciaDias() + 1);
+//                    } else {
+//                        usuario.setSequenciaDias(1);
+//                    } {
+//                        usuario.setSequenciaDias(usuario.getSequenciaDias());
+//                    }
+//                } else {
+//
+//                    usuario.setSequenciaDias(1);
+//                }
+//            }
+//
+//
+//            usuario.setPontos(usuario.getPontos() + 1);
+//            usuarioRepository.save(usuario);
+//
+//            diarioRequest.setImagemId(imagem.getId());
+//            diarioRequest.setUsuario(usuario);
+//            diarioRepository.save(diarioRequest);
+//
+//            // Previsão com Flask (nota)
+//            String jsonInput = objectMapper.writeValueAsString(Map.of(
+//                    "novo_usuario", List.of(
+//                            List.of(
+//                                    diarioRequest.getEscovacaoDiario(),
+//                                    diarioRequest.getUsoFioDiario(),
+//                                    diarioRequest.getUsoEnxaguanteDiario(),
+//                                    usuario.getSequenciaDias()
+//                            )
+//                    )
+//            ));
+//
+//            HttpRequest requestNota = HttpRequest.newBuilder()
+//                    .uri(URI.create("http://localhost:5000/predict"))
+//                    .header("Content-Type", "application/json; charset=UTF-8")
+//                    .POST(HttpRequest.BodyPublishers.ofString(jsonInput))
+//                    .build();
+//
+//            HttpResponse<String> responseNota = client.send(requestNota, HttpResponse.BodyHandlers.ofString());
+//
+//            if (responseNota.statusCode() == 200) {
+//                DiarioResponse updatedData = objectMapper.readValue(responseNota.body(), DiarioResponse.class);
+//                usuario.setNota(updatedData.getScore());
+//                usuarioRepository.save(usuario);
+//                return ResponseEntity.ok("Registro criado com imagem e nota atualizada.");
+//            } else {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                        .body("Erro ao calcular nota do usuário no Flask.");
+//            }
+//
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Erro ao processar imagem ou requisição: " + e.getMessage());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Erro inesperado.");
+//        }
+//    }
 
 
 
