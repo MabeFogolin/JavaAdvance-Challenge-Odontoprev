@@ -50,6 +50,9 @@ public class Usuario extends RepresentationModel<Usuario> {
     private String planoUser;
 
     @NotNull
+    private String senhaUser;
+
+    @NotNull
     @Email(message = "Informe um e-mail válido")
     @Size(max = 50, message = "Email deve ter no máximo 50 caracteres")
     private String emailUser;

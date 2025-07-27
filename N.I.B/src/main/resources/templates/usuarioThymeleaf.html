@@ -36,47 +36,52 @@
     }
 
     .titulo {
-      color: #757575;
-      font-size: 1.5em;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      text-align: center;
-    }
-
-    .style-tabela table {
-      float: left;
-      border: 1px solid #ccc;
-      border-bottom: 0;
-      border-right: 0;
-      font-size: 0.9em;
-      width: 100%;
-    }
-
-    .style-tabela table tr td {
-      padding: 0.5em;
-      border: 1px solid #ccc;
-      border-top: 0;
-      border-left: 0;
-      text-align: center;
-    }
-
-    .style-tabela table td.top {
-      background-color: #003EA6;
-      color: #fff;
-      font-size: 1em;
-    }
-
-    .style-tabela table td.top.center {
-      text-align: center;
-    }
-
-    .style-tabela tbody tr {
-      background-color: #fff;
       color: #333;
+      font-size: 2em;
+      margin: 1rem auto;
+      text-align: center;
     }
 
-    .style-tabela tbody tr:hover {
-      background-color: #eef;
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      padding: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin: 0 0 0.5rem;
+      color: #003EA6;
+    }
+
+    .card p {
+      margin: 0.3rem 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .card .badge {
+      display: inline-block;
+      background-color: #003EA6;
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
     }
   </style>
 </head>
@@ -90,7 +95,7 @@
   </nav>
 </header>
 
-<h2 class="titulo">Ranking dos Usuários por Nota</h2>
+<h2 class="titulo">Ranking dos Usuários</h2>
 
 <div th:if="${sucesso}" class="alert alert-success">
   <p th:text="${sucesso}"></p>
@@ -99,35 +104,18 @@
   <p th:text="${erro}"></p>
 </div>
 
-<div class="style-tabela">
-  <table border="0" cellpadding="0" cellspacing="0">
-    <thead>
-    <tr>
-      <td class="top center"><strong>Nota</strong></td>
-      <td class="top center"><strong>Nome Completo</strong></td>
-      <td class="top center"><strong>CPF</strong></td>
-      <td class="top center"><strong>Email</strong></td>
-      <td class="top center"><strong>Plano</strong></td>
-      <td class="top center"><strong>Telefone</strong></td>
-      <td class="top center"><strong>Data de Nascimento</strong></td>
-      <td class="top center"><strong>Pontos</strong></td>
-      <td class="top center"><strong>Sequência de Dias</strong></td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="usuario : ${usuarios}">
-      <td th:text="${usuario.nota}"></td>
-      <td th:text="${usuario.nomeUser + ' ' + usuario.sobrenomeUser}"></td>
-      <td th:text="${usuario.cpfUser}"></td>
-      <td th:text="${usuario.emailUser}"></td>
-      <td th:text="${usuario.planoUser}"></td>
-      <td th:text="${usuario.telefoneUser}"></td>
-      <td th:text="${usuario.dataNascimentoUser}"></td>
-      <td th:text="${usuario.pontos}"></td>
-      <td th:text="${usuario.sequenciaDias}"></td>
-    </tr>
-    </tbody>
-  </table>
+<div class="cards-container">
+  <div class="card" th:each="usuario : ${usuarios}">
+    <div class="badge" th:text="'Nota: ' + ${usuario.nota}"></div>
+    <h3 th:text="${usuario.nomeUser + ' ' + usuario.sobrenomeUser}"></h3>
+    <p><strong>CPF:</strong> <span th:text="${usuario.cpfUser}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${usuario.emailUser}"></span></p>
+    <p><strong>Plano:</strong> <span th:text="${usuario.planoUser}"></span></p>
+    <p><strong>Telefone:</strong> <span th:text="${usuario.telefoneUser}"></span></p>
+    <p><strong>Nascimento:</strong> <span th:text="${usuario.dataNascimentoUser}"></span></p>
+    <p><strong>Pontos:</strong> <span th:text="${usuario.pontos}"></span></p>
+    <p><strong>Sequência de Dias:</strong> <span th:text="${usuario.sequenciaDias}"></span></p>
+  </div>
 </div>
 </body>
 </html>
