@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -22,5 +24,15 @@ public class UsuarioThymeleafController {
             model.addAttribute("usuarios", usuarios);
             return "usuarioThymeleaf";
         }
+
+    @GetMapping("/{cpf}")
+    public String listarUsuario(@PathVariable String cpf, Model model, RedirectAttributes redirectAttributes) {
+        return usuarioRepository.findById(cpf).map(usuario -> {
+            model.addAttribute("usuario", usuario);
+            return "listar-usuario";
+        }).orElseGet(() -> {
+            return "redirect:/usuarioThymeleaf";
+        });
+    }
 
 }

@@ -88,10 +88,7 @@
 <body>
 <header class="cabecalho">
   <nav class="cabecalho__menu">
-    <a class="cabecalho__menu__link" href="/usuario">Usuários</a>
-    <a class="cabecalho__menu__link" href="/consultas">Consultas</a>
-    <a class="cabecalho__menu__link" href="/profissional">Profissionais</a>
-    <a class="cabecalho__menu__link" href="/diarios">Registros diários dos usuários</a>
+    <a class="cabecalho__menu__link" href="usuarioThymeleaf">Usuários</a>
   </nav>
 </header>
 
@@ -105,17 +102,16 @@
 </div>
 
 <div class="cards-container">
-  <div class="card" th:each="usuario : ${usuarios}">
+  <a class="card" th:each="usuario : ${usuarios}" th:href="@{usuarioThymeleaf/{cpfUser}(cpfUser=${usuario.cpfUser})}" style="text-decoration: none;">
     <div class="badge" th:text="'Nota: ' + ${usuario.nota}"></div>
     <h3 th:text="${usuario.nomeUser + ' ' + usuario.sobrenomeUser}"></h3>
-    <p><strong>CPF:</strong> <span th:text="${usuario.cpfUser}"></span></p>
     <p><strong>Email:</strong> <span th:text="${usuario.emailUser}"></span></p>
-    <p><strong>Plano:</strong> <span th:text="${usuario.planoUser}"></span></p>
     <p><strong>Telefone:</strong> <span th:text="${usuario.telefoneUser}"></span></p>
     <p><strong>Nascimento:</strong> <span th:text="${usuario.dataNascimentoUser}"></span></p>
     <p><strong>Pontos:</strong> <span th:text="${usuario.pontos}"></span></p>
     <p><strong>Sequência de Dias:</strong> <span th:text="${usuario.sequenciaDias}"></span></p>
-  </div>
+  </a>
+
 </div>
 </body>
 </html>
