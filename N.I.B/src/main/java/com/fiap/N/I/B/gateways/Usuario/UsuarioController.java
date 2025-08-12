@@ -152,7 +152,6 @@ public class UsuarioController {
             EntityModel<Usuario> resource = EntityModel.of(u);
             Link selfLink = linkTo(methodOn(UsuarioController.class).buscarPorCpf(cpfUser)).withSelfRel();
             Link allUsersLink = linkTo(methodOn(UsuarioController.class).buscarUsuarios()).withRel("all-users");
-
             resource.add(selfLink);
             resource.add(allUsersLink);
 

@@ -72,7 +72,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioExistente.isPresent()) {
             Usuario usuarioNovo = usuarioExistente.get();
             usuarioNovo.setEmailUser(usuarioNovoEmailPlano.getEmailUser());
-            usuarioNovo.setPlanoUser(usuarioNovoEmailPlano.getPlanoUser());
+            usuarioNovo.setTelefoneUser(String.valueOf(usuarioNovoEmailPlano.getTelefoneUser()));
             Usuario usuarioAtualizado = usuarioRepository.save(usuarioNovo);
             return Optional.of(usuarioAtualizado);
         } else {

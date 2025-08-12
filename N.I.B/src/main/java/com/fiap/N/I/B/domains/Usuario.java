@@ -39,7 +39,6 @@ public class Usuario extends RepresentationModel<Usuario> {
     private String sobrenomeUser;
 
     @NotNull
-    @Pattern(regexp = "\\d{10,11}", message = "Telefone deve conter 10 a 11 dígitos")
     private String telefoneUser;
 
     @NotNull

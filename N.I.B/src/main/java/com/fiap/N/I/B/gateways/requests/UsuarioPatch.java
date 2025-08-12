@@ -6,9 +6,12 @@ import lombok.Data;
 @Data
 public class UsuarioPatch {
 
-    @NotNull
-    private String planoUser;
+//    @NotNull
+//    private String planoUser;
     @NotNull
     private String emailUser;
+
+    @NotNull
+    private long telefoneUser;
 
 }
