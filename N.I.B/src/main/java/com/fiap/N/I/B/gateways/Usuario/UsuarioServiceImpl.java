@@ -5,6 +5,7 @@ import com.fiap.N.I.B.gateways.requests.UsuarioPatch;
 import com.fiap.N.I.B.gateways.responses.UsuarioPostResponse;
 import com.fiap.N.I.B.usecases.Usuario.UsuarioService;
 import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +53,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findUsuariosByDataNascimentoUser(dataNascimentoUser);
     }
 
+    @Transactional
     @Override
     public Optional<Usuario> atualizarUsuario(String cpf, Usuario usuarioAtualizado) {
         return usuarioRepository.findByCpfUser(cpf)

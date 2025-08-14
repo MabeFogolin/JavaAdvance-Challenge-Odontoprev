@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/usuarioThymeleaf")
@@ -21,7 +23,13 @@ public class UsuarioThymeleafController {
         @GetMapping
         public String listarUsuarios(Model model) {
             List<Usuario> usuarios = usuarioRepository.findAll();
-            model.addAttribute("usuarios", usuarios);
+            List<Usuario> usuariosOrdenados = usuarios.stream()
+                    .sorted(Comparator
+                            .comparing(Usuario::getNota, Comparator.nullsLast(Comparator.reverseOrder()))
+                            .thenComparing(Usuario::getSequenciaDias, Comparator.nullsLast(Comparator.reverseOrder())))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("usuarios", usuariosOrdenados);
             return "usuarioThymeleaf";
         }
 
