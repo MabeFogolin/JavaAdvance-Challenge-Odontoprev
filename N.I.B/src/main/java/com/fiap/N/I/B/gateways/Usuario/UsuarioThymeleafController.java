@@ -26,7 +26,8 @@ public class UsuarioThymeleafController {
             List<Usuario> usuariosOrdenados = usuarios.stream()
                     .sorted(Comparator
                             .comparing(Usuario::getNota, Comparator.nullsLast(Comparator.reverseOrder()))
-                            .thenComparing(Usuario::getSequenciaDias, Comparator.nullsLast(Comparator.reverseOrder())))
+                            .thenComparing(Usuario::getSequenciaDias, Comparator.nullsLast(Comparator.reverseOrder()))
+                            .thenComparing(Usuario::getNomeUser, Comparator.nullsLast(Comparator.naturalOrder())))
                     .collect(Collectors.toList());
 
             model.addAttribute("usuarios", usuariosOrdenados);

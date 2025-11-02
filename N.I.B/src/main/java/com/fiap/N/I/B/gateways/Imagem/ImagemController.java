@@ -3,8 +3,11 @@ package com.fiap.N.I.B.gateways.Imagem;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.N.I.B.domains.Imagem;
+import com.fiap.N.I.B.domains.Usuario;
 import com.fiap.N.I.B.gateways.Repositories.ImagemRepository;
+import com.fiap.N.I.B.gateways.Repositories.UsuarioRepository;
 import com.fiap.N.I.B.gateways.requests.ImagemUrlRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +23,17 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/imagens")
+@RequiredArgsConstructor
 public class ImagemController {
 
     @Autowired
     private ImagemRepository imagemRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @PostMapping("/upload-url")
     public ResponseEntity<String> uploadImagemPorUrl(@RequestBody ImagemUrlRequest request) {
@@ -67,9 +69,31 @@ public class ImagemController {
                 nome = "imagem_padrao.jpg";
             }
 
+            // Extrair o CPF do nome do arquivo
+            // Exemplo: "12345678900_1730571285312.jpg" → "12345678900"
+            String cpf = null;
+            if (nome.contains("_")) {
+                cpf = nome.substring(0, nome.indexOf("_"));
+                System.out.println("CPF extraído: " + cpf);
+            }
+
+            if (cpf == null || cpf.isBlank()) {
+                return ResponseEntity.badRequest().body("Não foi possível extrair o CPF do nome do arquivo.");
+            }
+
+            // Buscar usuário no banco pelo CPF
+            Optional<Usuario> optionalUsuario = usuarioRepository.findByCpfUser(cpf);
+            if (optionalUsuario.isEmpty()) {
+                return ResponseEntity.badRequest().body("Usuário com CPF " + cpf + " não encontrado.");
+            }
+
+            Usuario usuario = optionalUsuario.get();
+
+            // Converter imagem para base64
             byte[] dados = file.getBytes();
             String imagemBase64 = Base64.getEncoder().encodeToString(dados);
 
+            // Salvar imagem no banco
             Imagem imagem = new Imagem();
             imagem.setNome(nome);
             imagem.setContentType(file.getContentType());
@@ -77,6 +101,7 @@ public class ImagemController {
             imagem.setVerificado(0);
             imagemRepository.save(imagem);
 
+            // Montar JSON para enviar ao Flask
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonInput = objectMapper.writeValueAsString(Map.of("image_base64", imagemBase64));
 
@@ -99,11 +124,15 @@ public class ImagemController {
                 imagem.setVerificado(verificado);
                 imagemRepository.save(imagem);
 
-                if (verificado == 0){
+                if (verificado == 0) {
                     return ResponseEntity.ok("Imagem não válida: " + verificado);
-                }
+                } else {
+                    // Atualiza os pontos do usuário
+                    usuario.setPontos(usuario.getPontos() + 1);
+                    usuarioRepository.save(usuario);
 
-                return ResponseEntity.ok("Imagem enviada e analisada com sucesso. Status verificado: " + verificado);
+                    return ResponseEntity.ok("Imagem enviada e analisada com sucesso. Status verificado: " + verificado);
+                }
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Erro ao processar imagem no Flask: " + response.body());
@@ -113,9 +142,10 @@ public class ImagemController {
                     .body("Erro ao enviar imagem para Flask: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro inesperado ao processar upload.");
+                    .body("Erro inesperado ao processar upload: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getImagem(@PathVariable String id) {

@@ -62,7 +62,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuariosPorPlanoComLinks);
     }
 
-    @Operation(summary = "Busca todos os alunos", description = "Traz todos os alunos cadastrados, com os links atribuídos individualmente")
+    @Operation(summary = "Busca todos os usuários", description = "Traz todos os usuários cadastrados, com os links atribuídos individualmente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", links = {
                     @io.swagger.v3.oas.annotations.links.Link(name = "teste", operationRef = "GET")
