@@ -61,6 +61,9 @@ public class Usuario extends RepresentationModel<Usuario> {
     private List<Consulta> consultas = new ArrayList<>();
 
     @OneToOne
+    private Historico historico;
+
+    @OneToOne
     private Endereco endereco;
 
     private int pontos = 0;

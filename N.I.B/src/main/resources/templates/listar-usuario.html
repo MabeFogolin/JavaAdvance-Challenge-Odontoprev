@@ -108,7 +108,47 @@
     <div class="info"><i class="fa fa-trophy icon"></i><strong>Pontos:</strong>&nbsp;<span th:text="${usuario.pontos}"></span></div>
     <div class="info"><i class="fa fa-fire icon"></i><strong>Sequência de Dias:</strong>&nbsp;<span th:text="${usuario.sequenciaDias}"></span></div>
 
+    <div th:if="${historico != null}">
+        <h2 class="titulo">Histórico Médico</h2>
+
+        <div class="info">
+            <i class="fa fa-tooth icon"></i><strong>Tratamento:</strong>&nbsp;
+            <span th:text="${historico.tratamentoHistorico}"></span>
+        </div>
+
+        <div class="info">
+            <i class="fa fa-bacteria icon"></i><strong>Canal:</strong>&nbsp;
+            <span th:text="${historico.canalHistorico}"></span>
+        </div>
+
+        <div class="info">
+            <i class="fa fa-water icon"></i><strong>Limpeza:</strong>&nbsp;
+            <span th:text="${historico.limpezaHistorico}"></span>
+        </div>
+
+        <div class="info">
+            <i class="fa fa-bug icon"></i><strong>Cárie:</strong>&nbsp;
+            <span th:text="${historico.carieHistorico}"></span>
+        </div>
+
+        <div class="info">
+            <i class="fa fa-teeth-open icon"></i><strong>Ortodontia:</strong>&nbsp;
+            <span th:text="${historico.ortodonticoHistorico}"></span>
+        </div>
+
+        <div class="info">
+            <i class="fa fa-syringe icon"></i><strong>Cirurgia:</strong>&nbsp;
+            <span th:text="${historico.cirurgiaHistorico}"></span>
+        </div>
+    </div>
+
+    <div th:if="${historico == null}">
+        <h3 class="titulo">Histórico Médico</h3>
+        <p style="text-align:center; color:#777;">Nenhum histórico médico cadastrado para este usuário.</p>
+    </div>
+
     <a href="usuarioThymeleaf" class="button">Voltar</a>
+
 </div>
 
 </body>

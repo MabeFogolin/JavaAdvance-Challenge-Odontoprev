@@ -9,6 +9,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,7 @@ public class HistoricoController {
                     linkTo(methodOn(HistoricoController.class).buscarHistoricoPorUsuario(cpfUser)).withRel("buscar-historico"),
                     linkTo(methodOn(HistoricoController.class).listarTodos()).withRel("listar-todos"));
 
-            return ResponseEntity.created(linkTo(methodOn(HistoricoController.class).inserirNoHistorico(cpfUser, historico)).toUri())
-                    .body(entityModel);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(404).body(null);
         }
