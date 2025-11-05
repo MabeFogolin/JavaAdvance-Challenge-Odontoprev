@@ -12,5 +12,8 @@ public class UsuarioPatch {
     private String sobrenomeUser;
     private String telefoneUser;
     private String emailUser;
+    private Integer pontos;
+    private Double nota;
+    private Integer sequenciaDias;
 
 }

@@ -146,7 +146,7 @@
         <div th:if="${usuario.historico == null}" class="alerta-historico">!</div>
 
 
-        <h3 th:text="${usuario.nomeUser + ' ' + usuario.sobrenomeUser}"></h3>
+        <h3 th:text="${usuario.nomeUser}"></h3>
         <p><strong>Email:</strong> <span th:text="${usuario.emailUser}"></span></p>
         <p><strong>Telefone:</strong> <span th:text="${usuario.telefoneUser}"></span></p>
         <p><strong>Nascimento:</strong> <span th:text="${usuario.dataNascimentoUser}"></span></p>

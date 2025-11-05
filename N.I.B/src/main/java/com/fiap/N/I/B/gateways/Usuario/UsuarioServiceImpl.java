@@ -112,6 +112,24 @@ public class UsuarioServiceImpl implements UsuarioService {
                         houveAlteracao = true;
                     }
 
+                    if (usuarioAtualizado.getPontos() != null
+                            && !usuarioAtualizado.getPontos().equals(usuarioExistente.getPontos())) {
+                        usuarioExistente.setPontos(usuarioAtualizado.getPontos());
+                        houveAlteracao = true;
+                    }
+
+                    if (usuarioAtualizado.getNota() != null
+                            && !usuarioAtualizado.getNota().equals(usuarioExistente.getNota())) {
+                        usuarioExistente.setNota(usuarioAtualizado.getNota());
+                        houveAlteracao = true;
+                    }
+
+                    if (usuarioAtualizado.getSequenciaDias() != null
+                            && !usuarioAtualizado.getSequenciaDias().equals(usuarioExistente.getSequenciaDias())) {
+                        usuarioExistente.setSequenciaDias(usuarioAtualizado.getSequenciaDias());
+                        houveAlteracao = true;
+                    }
+
                     if (houveAlteracao) {
                         return usuarioRepository.save(usuarioExistente);
                     }
