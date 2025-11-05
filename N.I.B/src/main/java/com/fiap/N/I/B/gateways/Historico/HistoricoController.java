@@ -94,7 +94,7 @@ public class HistoricoController {
         if (deletado) {
             return ResponseEntity.noContent().build(); // 204 No Content
         } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found
+            return ResponseEntity.noContent().build(); // 404 Not Found
         }
     }
 
