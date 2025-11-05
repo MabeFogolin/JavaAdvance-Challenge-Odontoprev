@@ -31,11 +31,9 @@ public class Usuario extends RepresentationModel<Usuario> {
     private String cpfUser;
 
     @NotNull
-    @Size(max = 30, message = "Nome deve ter no máximo 30 caracteres")
     private String nomeUser;
 
     @NotNull
-    @Size(max = 30, message = "Sobrenome deve ter no máximo 30 caracteres")
     private String sobrenomeUser;
 
     @NotNull
