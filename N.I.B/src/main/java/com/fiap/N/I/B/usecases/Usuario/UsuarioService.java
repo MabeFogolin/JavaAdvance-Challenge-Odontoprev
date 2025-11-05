@@ -33,6 +33,8 @@ public interface UsuarioService {
     //Atualizar email e plano do usuário
     Optional<Usuario> atualizarEmailPlano(String cpf, UsuarioPatch usuarioNovoEmailPlano);
 
+    Optional<Usuario> atualizarPatch(String cpf, UsuarioPatch usuarioNovoEmailPlano);
+
     // Deletar um usuário
     boolean deletarUsuario(String cpf);
 }

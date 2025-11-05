@@ -146,7 +146,7 @@ public class UsuarioController {
             @PathVariable String cpfUser,
             @RequestBody @Valid UsuarioPatch userEmailPlano) {
 
-        Optional<Usuario> usuarioAtualizado = usuarioService.atualizarEmailPlano(cpfUser, userEmailPlano);
+        Optional<Usuario> usuarioAtualizado = usuarioService.atualizarPatch(cpfUser, userEmailPlano);
 
         return usuarioAtualizado.map(u -> {
             EntityModel<Usuario> resource = EntityModel.of(u);

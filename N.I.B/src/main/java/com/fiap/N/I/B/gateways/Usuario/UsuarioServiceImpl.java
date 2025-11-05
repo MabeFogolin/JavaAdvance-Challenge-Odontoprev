@@ -83,6 +83,45 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public Optional<Usuario> atualizarPatch(String cpf, UsuarioPatch usuarioAtualizado) {
+        return usuarioRepository.findByCpfUser(cpf)
+                .map(usuarioExistente -> {
+                    boolean houveAlteracao = false;
+
+                    if (usuarioAtualizado.getNomeUser() != null
+                            && !usuarioAtualizado.getNomeUser().equals(usuarioExistente.getNomeUser())) {
+                        usuarioExistente.setNomeUser(usuarioAtualizado.getNomeUser());
+                        houveAlteracao = true;
+                    }
+
+                    if (usuarioAtualizado.getSobrenomeUser() != null
+                            && !usuarioAtualizado.getSobrenomeUser().equals(usuarioExistente.getSobrenomeUser())) {
+                        usuarioExistente.setSobrenomeUser(usuarioAtualizado.getSobrenomeUser());
+                        houveAlteracao = true;
+                    }
+
+                    if (usuarioAtualizado.getTelefoneUser() != null
+                            && !usuarioAtualizado.getTelefoneUser().equals(usuarioExistente.getTelefoneUser())) {
+                        usuarioExistente.setTelefoneUser(usuarioAtualizado.getTelefoneUser());
+                        houveAlteracao = true;
+                    }
+
+                    if (usuarioAtualizado.getEmailUser() != null
+                            && !usuarioAtualizado.getEmailUser().equals(usuarioExistente.getEmailUser())) {
+                        usuarioExistente.setEmailUser(usuarioAtualizado.getEmailUser());
+                        houveAlteracao = true;
+                    }
+
+                    if (houveAlteracao) {
+                        return usuarioRepository.save(usuarioExistente);
+                    }
+
+                    return usuarioExistente; // retorna sem salvar, pois nada mudou
+                });
+    }
+
+
+    @Override
     public boolean deletarUsuario(String cpf) {
         return usuarioRepository.findByCpfUser(cpf)
                 .map(usuario -> {

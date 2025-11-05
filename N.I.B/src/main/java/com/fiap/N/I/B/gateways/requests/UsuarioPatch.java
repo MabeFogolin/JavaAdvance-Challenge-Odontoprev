@@ -8,10 +8,9 @@ public class UsuarioPatch {
 
 //    @NotNull
 //    private String planoUser;
-    @NotNull
+    private String nomeUser;
+    private String sobrenomeUser;
+    private String telefoneUser;
     private String emailUser;
-
-    @NotNull
-    private long telefoneUser;
 
 }
