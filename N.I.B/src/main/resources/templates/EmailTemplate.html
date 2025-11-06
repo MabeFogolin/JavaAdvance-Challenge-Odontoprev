@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Não esqueça de preencher seu histórico médico!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+            background-color: #0066ff;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+
+        .titulo {
+            color: #003EA6;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #0066ff;
+            padding-bottom: 0.5rem;
+        }
+
+        .mensagem {
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+            line-height: 1.6em;
+            margin-top: 1.5rem;
+        }
+
+        .email-destinatario {
+            text-align: center;
+            color: #555;
+            font-size: 0.95em;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #0066ff;
+            color: white;
+            padding: 0.8rem 1.6rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 2rem auto;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0052cc;
+        }
+
+        .assinatura {
+            border-top: 1px solid #e0e0e0;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .assinatura img {
+            width: 150px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="cabecalho">
+    <h1>Odontoprev</h1>
+</header>
+
+<div class="container">
+    <h2 class="titulo">Não esqueça de preencher seu histórico médico!</h2>
+
+    <!-- Exibe o e-mail do destinatário -->
+    <p class="email-destinatario">
+        <i class="fa fa-envelope"></i> E-mail enviado para:
+        <strong th:text="${emailUser}">usuario@exemplo.com</strong>
+    </p>
+
+    <p class="mensagem">
+        Olá, <strong th:text="${name}">usuário</strong>! <br><br>
+        Vimos que você ainda não preencheu seu histórico médico.<br>
+        Que tal tirar 1 minutinho para preencher essa informação essencial<br>
+        para nós — e muito importante para o seu próprio cuidado?
+    </p>
+
+    <div style="text-align:center;">
+        <a th:href="${link}" class="button">Preencher Histórico Médico</a>
+    </div>
+
+    <div class="assinatura">
+        <p>Atenciosamente,</p>
+        <p><strong>Equipe Odontoprev</strong></p>
+        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fodontoprevsite.com.br%2F&psig=AOvVaw0BMgHO73MWgYlyqdTbRhzr&ust=1762481021687000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCPi9_9S33JADFQAAAAAdAAAAABAE" alt="Logo Odontoprev">
+    </div>
+</div>
+
+</body>
+</html>

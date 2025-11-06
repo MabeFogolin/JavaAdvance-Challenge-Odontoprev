@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vamos melhorar sua nota?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+        }
+
+        .cabecalho {
+          background-color: #0066ff;
+          color: white;
+          padding: 1rem 0;
+          text-align: center;
+        }
+
+        .container {
+          max-width: 800px;
+          margin: 2rem auto;
+          padding: 2rem;
+          background-color: white;
+          border-radius: 10px;
+          box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+
+        .titulo {
+          color: #003EA6;
+          font-size: 1.8em;
+          font-weight: 900;
+          margin-bottom: 1.5rem;
+          text-align: center;
+          border-bottom: 2px solid #0066ff;
+          padding-bottom: 0.5rem;
+        }
+
+        .mensagem-intro {
+          font-size: 1.1em;
+          color: #333;
+          text-align: center;
+          line-height: 1.6em;
+          margin-bottom: 2rem;
+        }
+
+        .bloco-dica {
+          margin-bottom: 2rem;
+        }
+
+        .bloco-dica h3 {
+          color: #003EA6;
+          font-size: 1.2em;
+          font-weight: bold;
+          margin-bottom: 0.3rem;
+          text-transform: uppercase;
+        }
+
+        .bloco-dica p {
+          color: #555;
+          line-height: 1.5;
+          margin: 0;
+          font-size: 1em;
+        }
+
+        .button {
+          display: inline-block;
+          background-color: #0066ff;
+          color: white;
+          padding: 0.8rem 1.6rem;
+          text-decoration: none;
+          border-radius: 6px;
+          font-weight: bold;
+          margin: 2rem auto;
+          text-align: center;
+          transition: background 0.3s ease;
+        }
+
+        .button:hover {
+          background-color: #0052cc;
+        }
+
+        .assinatura {
+          border-top: 1px solid #e0e0e0;
+          margin-top: 2rem;
+          padding-top: 1rem;
+          text-align: center;
+          color: #666;
+          font-size: 0.9em;
+        }
+
+        .assinatura img {
+          width: 150px;
+          margin-top: 10px;
+        }
+
+        .emoji {
+          font-size: 1.5em;
+          margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="cabecalho">
+    <h1>Odontoprev</h1>
+</header>
+
+<div class="container">
+    <h2 class="titulo">Como aumentar minha nota no Teeth Diary? 🤔</h2>
+
+    <p class="mensagem-intro">
+        Olá, <strong th:text="${name}">usuário</strong>!<br><br>
+        Notamos que sua nota pode melhorar — e nós queremos te ajudar nisso 💪<br>
+        Confira abaixo algumas dicas simples que podem fazer toda a diferença:
+    </p>
+
+    <div class="bloco-dica">
+        <h3>ENVIE SEUS REGISTROS TODOS OS DIAS</h3>
+        <p>
+            Quanto maior a sequência de dias enviando registros, melhor será sua nota!
+            A consistência é o segredo do sucesso.
+        </p>
+    </div>
+
+    <div class="bloco-dica">
+        <h3>ESCOVE MAIS OS DENTES</h3>
+        <p>
+            A escovação é fundamental para uma boa saúde bucal.
+            Escove os dentes mais vezes ao dia e registre no aplicativo!
+        </p>
+    </div>
+
+    <div class="bloco-dica">
+        <h3>NÃO ESQUEÇA DO FIO DENTAL</h3>
+        <p>
+            Assim como a escovação, o fio dental é essencial para manter os dentes e gengivas saudáveis.
+            Use-o diariamente e registre seu uso no app.
+        </p>
+    </div>
+
+
+    <div class="assinatura">
+        <p>Teeth Diary - Mais que um aplicativo, é o seu lembrete de que cuidar da saúde compensa!</p>
+        <p><strong>Equipe Odontoprev</strong></p>
+        <img src="https://images.seeklogo.com/logo-png/21/1/odontoprev-especialistas-em-odontologia-logo-png_seeklogo-212557.png" alt="Logo Odontoprev">
+    </div>
+</div>
+
+</body>
+</html>

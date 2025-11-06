@@ -1,15 +1,28 @@
 spring:
-
   application:
     name: N.I.B
+
   datasource:
     url: jdbc:oracle:thin:@localhost:1521
     username: system
     password: 251084
+
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.OracleDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mariafogolin08@gmail.com
+    password: pvgxxsmsoqgxvwpb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 springdoc:
   api-docs:

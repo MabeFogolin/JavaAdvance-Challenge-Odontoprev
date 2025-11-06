@@ -56,8 +56,11 @@
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           width: 300px;
           padding: 1rem;
-          position: relative; /* necessário para posicionar ícone de alerta */
+          position: relative;
           transition: transform 0.2s;
+          text-decoration: none;
+          color: inherit;
+          cursor: pointer;
         }
 
         .card:hover {
@@ -75,17 +78,32 @@
           color: #555;
         }
 
-        .card .badge {
+        /* Badge da nota */
+        .badge {
           display: inline-block;
-          background-color: #003EA6;
-          color: white;
-          padding: 0.3rem 0.6rem;
+          padding: 0.4rem 0.8rem;
           border-radius: 5px;
           font-weight: bold;
           margin-bottom: 0.5rem;
+          cursor: pointer;
+          transition: transform 0.2s;
         }
 
-        /* Ícone de alerta em círculo vermelho */
+        .badge:hover {
+          transform: scale(1.05);
+        }
+
+        .badge.alta-nota {
+          background-color: #003EA6;
+          color: white;
+        }
+
+        .badge.baixa-nota {
+          background-color: #ffcc00;
+          color: #333;
+        }
+
+        /* Ícone de alerta (histórico) */
         .alerta-historico {
           position: absolute;
           top: 10px;
@@ -101,11 +119,11 @@
           font-size: 16px;
           font-weight: bold;
           box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-          cursor: default;
+          cursor: pointer;
         }
 
         .alerta-historico:hover::after {
-          content: 'Histórico não preenchido';
+          content: 'Enviar lembrete por e-mail';
           position: absolute;
           top: 36px;
           right: 0;
@@ -115,6 +133,20 @@
           border-radius: 4px;
           font-size: 0.8rem;
           white-space: nowrap;
+        }
+
+        .mensagem-feedback {
+          text-align: center;
+          margin-top: 1rem;
+          font-weight: bold;
+        }
+
+        .sucesso {
+          color: green;
+        }
+
+        .erro {
+          color: red;
         }
     </style>
 </head>
@@ -127,24 +159,30 @@
 
 <h2 class="titulo">Ranking dos Usuários</h2>
 
-<div th:if="${sucesso}" class="alert alert-success">
-    <p th:text="${sucesso}"></p>
-</div>
-<div th:if="${erro}" class="alert alert-danger">
-    <p th:text="${erro}"></p>
-</div>
+<div id="mensagem" class="mensagem-feedback"></div>
 
 <div class="cards-container">
-    <a class="card" th:each="usuario : ${usuarios}"
-       th:href="@{usuarioThymeleaf/{cpfUser}(cpfUser=${usuario.cpfUser})}"
-       style="text-decoration: none;">
+    <div class="card"
+         th:each="usuario : ${usuarios}"
+         th:attr="data-href=@{usuarioThymeleaf/{cpfUser}(cpfUser=${usuario.cpfUser})},
+                  data-email=${usuario.emailUser},
+                  data-nome=${usuario.nomeUser},
+                  data-nota=${usuario.nota}"
+         onclick="abrirPerfil(this)">
+
+        <!-- Ícone de alerta clicável -->
+        <div class="alerta-historico"
+             th:if="${usuario.historico == null}"
+             th:attr="data-email=${usuario.emailUser}, data-nome=${usuario.nomeUser}"
+             onclick="event.stopPropagation(); enviarEmailHistorico(this)">!
+        </div>
 
         <!-- Badge da nota -->
-        <div class="badge" th:text="'Nota: ' + ${usuario.nota}"></div>
-
-        <!-- Ícone de alerta se histórico não preenchido -->
-        <div th:if="${usuario.historico == null}" class="alerta-historico">!</div>
-
+        <div th:class="'badge ' + (${usuario.nota} < 60 ? 'baixa-nota' : 'alta-nota')"
+             th:text="'Nota: ' + ${usuario.nota} + '%'"
+             th:attr="data-email=${usuario.emailUser}, data-nome=${usuario.nomeUser}, data-nota=${usuario.nota}"
+             onclick="event.stopPropagation(); enviarEmailMelhorarNota(this)">
+        </div>
 
         <h3 th:text="${usuario.nomeUser}"></h3>
         <p><strong>Email:</strong> <span th:text="${usuario.emailUser}"></span></p>
@@ -152,7 +190,56 @@
         <p><strong>Nascimento:</strong> <span th:text="${usuario.dataNascimentoUser}"></span></p>
         <p><strong>Pontos:</strong> <span th:text="${usuario.pontos}"></span></p>
         <p><strong>Sequência de Dias:</strong> <span th:text="${usuario.sequenciaDias}"></span></p>
-    </a>
+    </div>
 </div>
+
+<script>
+    // Abre a página do usuário ao clicar no card
+    function abrirPerfil(element) {
+      const href = element.getAttribute('data-href');
+      if (href) window.location.href = href;
+    }
+
+    // Envia e-mail de incentivo (ao clicar na nota)
+    function enviarEmailMelhorarNota(element) {
+      const nota = parseFloat(element.getAttribute('data-nota'));
+      if (nota >= 60) return; // apenas notas baixas
+
+      const email = element.getAttribute('data-email');
+      const nome = element.getAttribute('data-nome');
+
+      fetch('/email/sendMelhorarNota', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: email,
+          name: nome,
+          subject: 'Vamos melhorar sua nota?'
+        })
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert('Erro ao enviar o e-mail: ' + err));
+    }
+
+    // Envia e-mail do histórico (ícone vermelho)
+    function enviarEmailHistorico(element) {
+      event.stopPropagation();
+      const email = element.getAttribute('data-email');
+      const nome = element.getAttribute('data-nome');
+
+      fetch('/email/sendHistorico', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: email,
+          name: nome
+        })
+      })
+      .then(res => res.text())
+      .then(msg => alert(msg))
+      .catch(err => alert('Erro ao enviar o e-mail: ' + err));
+    }
+</script>
 </body>
 </html>
